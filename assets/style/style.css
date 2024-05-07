@@ -1,0 +1,59 @@
+*{
+    padding: 0px;
+    margin: 0px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+body{
+    background-color: #D8E5F1;
+}
+
+a{
+    text-decoration: none;
+}
+
+.material-symbols-outlined {
+  font-variation-settings:
+  'FILL' 1,
+  'wght' 400,
+  'GRAD' 0,
+  'opsz' 24
+}
+
+.navContactImgLogo{
+    width:45px;
+}
+
+.navBgColor{
+ background-color: #337AB7;
+}
+
+.loginTxtClr{
+    color:#337EBE;
+}
+
+.loginBtn{
+    border: 2px #337EBE;
+}
+
+.login{
+    width:130px;
+    height:150px;
+}
+
+input{
+    border: none;
+    outline:none;
+}
+
+.fontSize14{
+    font-size: 14px;
+}
+
+.formWidth{
+    width:30%;
+}
+
+.errorMsgHeight{
+    height:20px;
+}
