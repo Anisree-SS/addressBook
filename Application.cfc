@@ -18,6 +18,8 @@ component
 
 	function onSessionStart(){
 		session.islogin=false;
+		session.userId=0;
+		session.fullName='';
 	}
 
 	function onRequestStart( String scriptName ){

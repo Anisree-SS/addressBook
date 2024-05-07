@@ -1,3 +1,4 @@
+<cfset result=createObject("component","controllers.contact").checkLogin()>
 <cfoutput>
     <div class="d-flex justify-content-center align-item-center postion-fixed-center mt-5 border">
         <div class="navBgColor d-flex justify-content-center align-item-center p-5 border rounded-start">
@@ -28,7 +29,7 @@
                         <input type="password"  id="strConfirmPass" name="strConfirmPass" placeholder="Confirm Password">
                     </div>
                     <center>
-                        <input type="submit" class="btn btn-outline-primary px-5" value="Register" id="signUp"> 
+                        <input type="submit" class="btn btn-outline-primary buttonStyle" value="Register" id="signUp"> 
                     </center>
                 </form> 
             </div>

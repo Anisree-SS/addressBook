@@ -1,3 +1,4 @@
+<cfset result=createObject("component","controllers.contact").checkLogin()>
 <cfoutput>
     <div class="d-flex justify-content-center align-item-center postion-fixed-center mt-5 pt-5 border">
         <div class="navBgColor d-flex justify-content-center align-item-center p-5 border rounded-start">
@@ -12,14 +13,14 @@
             </div>
             <div class="d-flex-column justify-content-center align-item-center pt-5">
                 <form action="?action=display" method="post">
-                    <div class="mb-4 border-bottom">
+                    <div class="mb-4 border-secondary border-bottom">
                         <input type="text"  id="strUserName" name="strUserName" placeholder="Username">
                     </div>
-                    <div class="mb-4 border-bottom">
+                    <div class="mb-4 border-secondary border-bottom">
                         <input type="password" class="" id="strPassword" name="strPassword" placeholder="Password">
                     </div>
                     <center>
-                        <input type="submit" class="btn btn-outline-primary px-5" value="Login" id="login"> </center>
+                        <input type="submit" class="btn btn-outline-primary buttonStyle" value="Login" id="login"> </center>
                     </center>
                 </form> 
             </div>

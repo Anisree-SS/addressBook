@@ -3,7 +3,7 @@
         <cfargument name="strUserName" required="true" type="string">
         <cfargument name="strPassword" required="true" type="string">
         <cfquery name="qryDoLogin">
-            select userId 
+            select userId,fullName
             from addressBookLogin
             where userName=<cfqueryparam value="#arguments.strUserName#" cfsqltype="cf_sql_varchar">
             and password=<cfqueryparam value="#arguments.strPassword#" cfsqltype="cf_sql_varchar">
@@ -59,6 +59,17 @@
             </cfcatch>
         </cftry>
         <cfreturn local.success>
+    </cffunction>
+
+    <cffunction name="checkContact" access="remote" returnType="query">
+        <cfargument name="strEmailId" required="true" type="string">
+        <cfquery name='qryCheckContact'>
+            select 1 
+            from contactTable
+            where email=<cfqueryparam value="#arguments.strEmailId#" cfsqltype="cf_sql_varchar">
+            AND userId=<cfqueryparam value="#session.userId#" cfsqltype="cf_sql_varchar">
+        </cfquery>  
+        <cfdump var="#qryCheckContact#" abort>
     </cffunction>
     
 

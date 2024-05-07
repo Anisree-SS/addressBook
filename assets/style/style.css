@@ -8,6 +8,10 @@ body{
     background-color: #D8E5F1;
 }
 
+.bgColor{
+    background-color: #D8E5F1; 
+}
+
 a{
     text-decoration: none;
 }
@@ -41,9 +45,11 @@ a{
     height:150px;
 }
 
-input{
+input,select{
     border: none;
     outline:none;
+    width:100px;
+    border-bottom: 1px solid #6C757D;
 }
 
 .fontSize14{
@@ -56,4 +62,29 @@ input{
 
 .errorMsgHeight{
     height:20px;
+}
+
+.buttonStyle{
+    padding: 5px 30% ;
+    border-radius: 35px ;
+}
+
+.modalBtn{
+    border-radius: 35px;
+}
+
+.uploadfile{
+    border: none;
+    outline:none;
+    width:70%;
+    border-bottom: 1px solid #6C757D;
+}
+
+.downloadIcon{
+    width: 40px;
+    height: 40px;
+}
+.profileImg{
+    width:100px;
+    height:100px;
 }
