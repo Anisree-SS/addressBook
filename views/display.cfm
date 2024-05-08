@@ -14,7 +14,7 @@
                 #UCase(session.fullName)#
             </div>  
             <div  class="d-flex justify-content-center mb-2">                
-                <button type="button" class="btn-primary btn modalBtn" data-bs-toggle="modal" data-bs-target="##myModal">
+                <button type="button" class="btn-primary btn modalBtn" >
                     CREATE CONTACT
                 </button>
                 <div class="modal" id="myModal">
@@ -25,7 +25,7 @@
                             </div>
                             <center><p  class="errorMsgHeight mb-0" id="saveContactValidationMsg"></p></center>
                             <div class="modal-body mt-0">
-                                <form action="?action=display" method="post" enctype="multipart/form-data">
+                                <form action="?action=display" method="post" id="createForm" enctype="multipart/form-data">
                                     <p class="mb-0 text-primary fw-bold">Personal Contact</p>
                                     <hr class="mt-0">
                                     <div class="d-flex justify-content-between mb-4">
@@ -64,7 +64,7 @@
                                         </div>
                                     </div>
                                     <div class="d-flex-column justify-content-start mt-4">
-                                        <label class="text-primary" for="filePhoto">Upload Photo</label><br>
+                                        <label class="text-primary" for="filePhoto">Upload Photo *</label><br>
                                         <input type="file" name="filePhoto" id="filePhoto" class="uploadfile" accept=".jpg, .jpeg, .png">
                                     </div>
                                     <p class="mb-0 text-primary fw-bold mt-2">Contact Details</p>
@@ -79,6 +79,12 @@
                                             <input type="text" name="strStreet" id="strStreet" placeholder="Your Street"  class="uploadfile">
                                         </div>
                                     </div>
+                                    <div class="d-flex justify-content-between mt-2 ">
+                                        <div>
+                                            <label class="text-primary" for="intPincode">PinCode * </label><br>
+                                            <input type="text" name="intPincode" id="intPincode" placeholder="Pincode"  class="uploadfile">
+                                        </div>
+                                    </div>
                                     <div class="d-flex justify-content-between mt-2">
                                         <div>
                                             <label class="text-primary" for="strEmailId">Email Id * </label><br>
@@ -91,7 +97,7 @@
                                     </div>
                                     <div class="d-flex justify-content-evenly mt-4">
                                         <button type="button" class="btn btn-outline-dark" data-bs-dismiss="modal">Cancel</button>
-                                        <input type="submit" value="Save Data" id="saveContact" class="btn btn-outline-primary">
+                                        <input type="submit" value="Save Data" id="saveContact" class="btn btn-outline-primary" name="submit">
                                     </div>
                                 </form>
                             </div>
@@ -105,6 +111,34 @@
                 </div>
             </div>  
         </div>  
+        <div class="bg-light ms-5 w-75">
+            <table class="w-100">
+				<thead>
+					<tr class="text-primary">
+                        <th class="text-light">Photo</th>
+						<th>Name</th>
+						<th>Email</th>
+						<th>Phone number</th>
+                        <th></th>
+                        <th></th>
+					</tr>
+				</thead>
+				<tbody>
+					<cfset persons = EntityLoad("ormFunction")>
+					<cfloop array="#persons#" index="person">
+						<tr>
+                            <td><img src="#person.getPhoto()#"></td>
+							<td>#person.getFirstName()# #person.getLastName()#</td>
+							<td>#person.getEmail()#</td>
+							<td>#person.getPhone()#</td>
+                            <th><button type="button" class="btn btn-outline-primary buttonListStyle m-0" >EDIT</button></th>
+                            <th><button type="button" class="btn btn-outline-primary buttonListStyle m-0" >DELETE</button></th>
+                            <th><button type="button" class="btn btn-outline-primary buttonListStyle m-0" >VIEW</button></th>
+						</tr>
+					</cfloop>
+				</tbody>
+			</table>
+        </div>
     </div>
 </cfif>
 </cfoutput>

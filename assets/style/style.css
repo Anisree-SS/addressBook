@@ -88,3 +88,8 @@ input,select{
     width:100px;
     height:100px;
 }
+
+.buttonListStyle{
+    padding:5px 20%;
+    border-radius: 35px !important;
+}
