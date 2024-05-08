@@ -55,8 +55,28 @@ $(document).ready(function() {
         return false;
     });
 
-    $('#saveContact').click(function() {
+    $('#createForm').on("submit",function() {
         $("#saveContactValidationMsg").text("");
+        var strEmailId=$('#strEmailId').val().trim();
+        if(contactValidation()){
+            $.ajax({
+                url: './controllers/contact.cfc?method=checkContact',
+                type: 'post',
+                data:  { strEmailId:strEmailId },
+                dataType:"json",
+                success: function(response) {
+                    if (response.success){
+                        uploadContact();                        
+                    } else {
+                        $("#saveContactValidationMsg").html(response.msg).css("color", "red");
+                    }
+                },
+            });
+        }
+        return false;
+    });
+
+    function uploadContact(){
         var intContactId = $('#intContactId').val().trim();
         var strTitle = $('#strTitle').val().trim();
         var strFirstName = $('#strFirstName').val().trim();
@@ -68,27 +88,39 @@ $(document).ready(function() {
         var strStreet=$('#strStreet').val().trim();
         var intPhone=$('#intPhone').val().trim();
         var strEmailId=$('#strEmailId').val().trim();
-        if(contactValidation()){
-            $.ajax({
-                url: './controllers/contact.cfc?method=checkContact',
-                type: 'post',
-                data:  {intContactId:intContactId,strTitle:strTitle,strFirstName:strFirstName,strLastName: strLastName,strGender:strGender,dateDOB:dateDOB,filePhoto:filePhoto,strAddress:strAddress,strStreet:strStreet,intPhone:intPhone,strEmailId:strEmailId},
-                dataType:"json",
-                success: function(response) {
-                    if (response.success){
-                        $("#saveContactValidationMsg").html(response.msg).css("color", "green");
-                        setTimeout(function() {
-                            window.location.href="?action=display";
-                        },1000);
-
-                    } else {
-                        $("#saveContactValidationMsg").html(response.msg).css("color", "red");
-                    }
-                },
-            });
-        }
-        return false;
-    });
+        var intPincode=$('#intPincode').val().trim();
+        $.ajax({
+            url: './models/contact.cfc?method=uploadContact',
+            type: 'post',
+            data:  {
+                intContactId:intContactId,
+                strTitle:strTitle,
+                strFirstName:strFirstName,
+                strLastName: strLastName,
+                strGender:strGender,
+                dateDOB:dateDOB,
+                filePhoto:filePhoto,
+                strAddress:strAddress,
+                strStreet:strStreet,
+                intPhone:intPhone,  
+                strEmailId:strEmailId,
+                intPincode:intPincode
+            },
+            dataType:"json",
+            success: function(response) {
+                if (response.success){
+                    $("#saveContactValidationMsg").html("contact uploades successfull").css("color", "green");
+                    setTimeout(function() {
+                        window.location.href="?action=display";
+                    },1000);
+                
+                } else {
+                    $("#saveContactValidationMsg").html("enable to upload contact").css("color", "red");
+                    return false;
+                }
+            },
+        });   
+    }
 
     function validation(){
         var strFullName = $('#strFullName').val().trim(); 
@@ -152,10 +184,12 @@ $(document).ready(function() {
         var strLastName = $('#strLastName').val().trim();
         var strGender = $('#strGender').val().trim();
         var dateDOB=$('#dateDOB').val().trim();
+        var filePhoto=$('#filePhoto').val().trim();
         var strAddress=$('#strAddress').val().trim();
         var strStreet=$('#strStreet').val().trim();
         var intPhone=$('#intPhone').val().trim();
         var strEmailId=$('#strEmailId').val().trim();
+        var intPincode=$('#intPincode').val().trim();
         var specialChar = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/;
         var emailformate=/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
         var number = /[0-9]/g;
@@ -164,21 +198,25 @@ $(document).ready(function() {
         var specialCharLastName = specialChar.test(strLastName);
         var numberLastName = number.test(strLastName);
         var errorMsg='';
-        if((strTitle=='')||(strFirstName=='')||(strLastName=='')||(strGender=='')||(dateDOB=='')||(strAddress=='')||(strStreet=='')||(intPhone=='')||(strEmailId=='')){
+        if((strTitle=='')||(strFirstName=='')||(strLastName=='')||(strGender=='')||(dateDOB=='')||(strAddress=='')||(strStreet=='')||(intPhone=='')||(strEmailId=='')||(intPincode=='')||(filePhoto=='')){
             errorMsg+="All fields required";
         }
         else{
             if(((specialCharName) || (numberName))){
-                errorMsg+="First name should be in string"; 
+                errorMsg+="First name should be in string "; 
             }
             if(((specialCharLastName) || (numberLastName))){
-                errorMsg+="Last name should be in string"; 
+                errorMsg+="Last name should be in string "; 
             }
             if (!strEmailId.match(emailformate)){
-                errorMsg+="Enter valid email address!!";
+                errorMsg+="Enter valid email address!! ";
             }
             if(isNaN(intPhone)||(intPhone.length!=10))
-                errorMsg+="Enter valid phone number!!";            
+                errorMsg+="Enter valid phone number!!  ";     
+            if(isNaN(intPincode)) 
+                errorMsg+="Enter valid pincode!! ";  
+            if(!isNaN(strAddress)) 
+                errorMsg+="Address must contains letters ";    
         }
         if(errorMsg !==''){
             $("#saveContactValidationMsg").html(errorMsg).css("color", "red");

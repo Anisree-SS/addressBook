@@ -11,6 +11,8 @@ component
 	this.mappings[ "/views" ] = (this.baseDirectory & "views/");
 	this.mappings[ "/controllers" ] = (this.baseDirectory & "controllers/");
 	this.mappings[ "/layouts" ] = (this.baseDirectory & "layouts/");
+	this.ormEnabled = true;
+	this.datasource = "demo";
 
 	function onApplicationStart(){
 		return( true );

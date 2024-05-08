@@ -49,22 +49,21 @@ component {
 
     remote any function checkContact() returnFormat='json'{
         local.error='';
-        if((strTitle EQ'')||(strFirstName EQ'')||(strLastName EQ'')||(strGender EQ'')||(dateDOB EQ'')||(strAddress EQ'')||(strStreet EQ'')||(intPhone EQ'')||(strEmailId EQ'')){
+        if((strEmailId EQ'')){
             error="All fields required";
         }
         if(len(local.error) EQ 0){
-            local.qryResult=variables.modelObject.checkContact(strEmailId=strEmailId);
-            if (local.qryResult.recordCount) {
-                session.isLogin = true;
-                session.fullName= local.qryResult.fullName;
-                return { "success": true };
+            local.booleanResult=variables.modelObject.checkContact(strEmailId=strEmailId);
+            if (local.booleanResult) {
+                return{"success":true};
             } 
-            else 
-                return { "success": false };
+            else {
+                return {"success": false,"msg":"Email id already present"};
+            }
         }
         else{
             return {"success":false,"msg":"#local.error#"};
         }
+           
     }
-
 }

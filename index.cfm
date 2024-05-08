@@ -12,9 +12,13 @@
             include "/views/register.cfm";           
         break;
         case "display":
+            include "/controllers/displayAction.cfm";  
             include "/views/header.cfm";
             include "/views/navbar.cfm";
-            include "/views/display.cfm";           
+            include "/views/display.cfm";
+        break;
+        case 'Upload':
+            include "/views/display.cfm";
         break;
     }
 </cfscript>
