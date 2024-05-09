@@ -12,7 +12,7 @@
                 <center  class="errorMsgHeight"><span id="signUpValidationMsg"></span></center>
             </div>
             <div class="d-flex-column justify-content-center align-item-center pt-5 ">
-                <form action="?action=display" method="post">
+                <form action="?action=login" method="post">
                     <div class="mb-4 border-bottom">
                         <input type="text"  id="strFullName" name="strFullName" placeholder="Full Name">
                     </div>

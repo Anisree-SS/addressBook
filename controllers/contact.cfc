@@ -48,12 +48,8 @@ component {
     }
 
     remote any function checkContact() returnFormat='json'{
-        local.error='';
-        if((strEmailId EQ'')){
-            error="All fields required";
-        }
         if(len(local.error) EQ 0){
-            local.booleanResult=variables.modelObject.checkContact(strEmailId=strEmailId);
+            local.booleanResult=variables.modelObject.checkContact(intContactId=intContactId,strEmailId=strEmailId);
             if (local.booleanResult) {
                 return{"success":true};
             } 

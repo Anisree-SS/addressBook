@@ -17,8 +17,10 @@
             include "/views/navbar.cfm";
             include "/views/display.cfm";
         break;
-        case 'Upload':
-            include "/views/display.cfm";
+        case "view":
+            include "/controllers/viewAction.cfm";  
+            include "/views/header.cfm";
+            include "/views/navbar.cfm";
         break;
     }
 </cfscript>
