@@ -29,6 +29,7 @@ component
 			this.onApplicationStart();
 			this.onSessionStart();
 		}
+		ORMReload();
 		request.event = [];
 		if (
 			!isNull( url.event ) &&

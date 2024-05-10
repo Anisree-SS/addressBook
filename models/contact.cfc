@@ -10,7 +10,6 @@
         </cfquery>
         <cfreturn qryDoLogin>
     </cffunction>
-
     <cffunction name="checkUser" access="remote" returnFormat="json">
         <cfargument name="strEmail"  required="true" type="string">
         <cfargument name="strUserName"  required="true" type="string">
@@ -62,12 +61,14 @@
     </cffunction>
 
     <cffunction name="checkContact" access="remote" returnType="boolean">
+        <cfargument name="intContactId" required="true" type="numeric">
         <cfargument name="strEmailId" required="true" type="string">
         <cfquery name='qryCheckContact'>
             select 1 
             from contactTable
             where email=<cfqueryparam value="#arguments.strEmailId#" cfsqltype="cf_sql_varchar">
-            AND userId=<cfqueryparam value="#session.userId#" cfsqltype="cf_sql_varchar">
+            AND userId=<cfqueryparam value="#session.userId#" cfsqltype="cf_sql_integer">
+            AND ContactId!=<cfqueryparam value="#arguments.intContactId#" cfsqltype="cf_sql_integer">
         </cfquery>  
         <cfif qryCheckContact.recordCount>
             <cfreturn false>
@@ -77,6 +78,7 @@
     </cffunction>
 
     <cffunction name="uploadContact" access="remote" returnFormat="json">
+        <cfargument name="intContactId" required='true' type="numeric">
         <cfargument name="strTitle" required="true" type="string">
         <cfargument name="strFirstName" required="true" type="string">
         <cfargument name="strLastName" required="true" type="string">
@@ -89,37 +91,79 @@
         <cfargument name="intPhone" required="true" type="numeric">
         <cfargument name="intPincode" required="true" type="numeric">
         <cfset local.success = ''>
-
         <cfset local.path = ExpandPath("assets/uploads")>
-        <!---cffile action ="uploadAll" destination ="#local.path#" nameConflict ="MakeUnique" filefield="#arguments.filePhoto#">
-        <cfset local.image = cffile.serverFile--->
-        <cfquery name="qrySaveContact" result="qryAddContact">
-            insert into contactTable(Title,FirstName,LastName,Gender,DOB,Photo,Address,Street,Email,userId,Pincode,Phone)
-            values(
-                <cfqueryparam value="#arguments.strTitle#" cfsqltype="cf_sql_varchar">,
-                <cfqueryparam value="#arguments.strFirstName#" cfsqltype="cf_sql_varchar">,
-                <cfqueryparam value="#arguments.strLastName#" cfsqltype="cf_sql_varchar">,
-                <cfqueryparam value="#arguments.strGender#" cfsqltype="cf_sql_varchar">,
-                <cfqueryparam value="#arguments.dateDOB#" cfsqltype="cf_sql_date">,
-                <cfqueryparam value="#arguments.filePhoto#" cfsqltype="cf_sql_varchar">,
-                <cfqueryparam value="#arguments.strAddress#" cfsqltype="cf_sql_varchar">,
-                <cfqueryparam value="#arguments.strStreet#" cfsqltype="cf_sql_varchar">,
-                <cfqueryparam value="#arguments.strEmailId#" cfsqltype="cf_sql_varchar">,
-                <cfqueryparam value="#session.userId#" cfsqltype="cf_sql_integer">,
-                <cfqueryparam value="#arguments.intPincode#" cfsqltype="cf_sql_integer">,
-                <cfqueryparam value="#arguments.intPhone#" cfsqltype="cf_sql_varchar">
-            )
-        </cfquery>
-        <cftry>
-            <cfif qryAddContact.recordCount>
-                <cfset local.success = true>
-            </cfif>
-            <cfcatch type="any"> 
-                <cfset local.success = false>
-            </cfcatch>
-        </cftry>
-        <cfreturn {"success":local.success}>
+        <cffile action ="uploadAll" destination ="#local.path#" nameConflict ="MakeUnique" filefield="#arguments.filePhoto#">
+        <cfset local.image = cffile.serverFile>
+        <cfdump var="#local.image#" abort>
+
+        <cfif arguments.intContactId GT 0>
+            <cfquery name="updatePage">
+                update contactTable 
+                set Title=<cfqueryparam value="#arguments.strTitle#" cfsqltype="cf_sql_varchar">,
+                FirstName=<cfqueryparam value="#arguments.strFirstName#" cfsqltype="cf_sql_varchar">,
+                LastName=<cfqueryparam value="#arguments.strLastName#" cfsqltype="cf_sql_varchar">,
+                Gender=<cfqueryparam value="#arguments.strGender#" cfsqltype="cf_sql_varchar">,
+                DOB=<cfqueryparam value="#arguments.dateDOB#" cfsqltype="cf_sql_date">,
+                Photo=<cfqueryparam value="#arguments.filePhoto#" cfsqltype="cf_sql_varchar">,
+                Address=<cfqueryparam value="#arguments.strAddress#" cfsqltype="cf_sql_varchar">,
+                Street=<cfqueryparam value="#arguments.strStreet#" cfsqltype="cf_sql_varchar">,
+                Email=<cfqueryparam value="#arguments.strEmailId#" cfsqltype="cf_sql_varchar">,
+                userId=<cfqueryparam value="#session.userId#" cfsqltype="cf_sql_integer">,
+                Pincode=<cfqueryparam value="#arguments.intPincode#" cfsqltype="cf_sql_integer">,
+                Phone=<cfqueryparam value="#arguments.intPhone#" cfsqltype="cf_sql_varchar">
+                where contactId=<cfqueryparam value="#arguments.intContactId#" cfsqltype="cf_sql_integer">
+            </cfquery>
+            <cfreturn {"success":true, "msg":"contact updated successfully"}>
+            <cfelse>
+                <cfquery name="qrySaveContact" result="qryAddContact">
+                    insert into contactTable(Title,FirstName,LastName,Gender,DOB,Photo,Address,Street,Email,userId,Pincode,Phone)
+                    values(
+                        <cfqueryparam value="#arguments.strTitle#" cfsqltype="cf_sql_varchar">,
+                        <cfqueryparam value="#arguments.strFirstName#" cfsqltype="cf_sql_varchar">,
+                        <cfqueryparam value="#arguments.strLastName#" cfsqltype="cf_sql_varchar">,
+                        <cfqueryparam value="#arguments.strGender#" cfsqltype="cf_sql_varchar">,
+                        <cfqueryparam value="#arguments.dateDOB#" cfsqltype="cf_sql_date">,
+                        <cfqueryparam value="#arguments.filePhoto#" cfsqltype="cf_sql_varchar">,
+                        <cfqueryparam value="#arguments.strAddress#" cfsqltype="cf_sql_varchar">,
+                        <cfqueryparam value="#arguments.strStreet#" cfsqltype="cf_sql_varchar">,
+                        <cfqueryparam value="#arguments.strEmailId#" cfsqltype="cf_sql_varchar">,
+                        <cfqueryparam value="#session.userId#" cfsqltype="cf_sql_integer">,
+                        <cfqueryparam value="#arguments.intPincode#" cfsqltype="cf_sql_integer">,
+                        <cfqueryparam value="#arguments.intPhone#" cfsqltype="cf_sql_varchar">
+                    )
+                </cfquery>
+                <cftry>
+                    <cfif qryAddContact.recordCount>
+                        <cfset local.success = true>
+                    </cfif>
+                    <cfcatch type="any"> 
+                        <cfset local.success = false>
+                    </cfcatch>
+                </cftry>
+                    <cfreturn {"success":local.success,"msg":''}>
+        </cfif>
     </cffunction>
-    
+
+    <cffunction name="getContact" access="remote" returnFormat="json">
+        <cfargument name="intContactId" type="numeric"  required='true'>
+        <cfquery name="forDisplay">
+            select Title,FirstName,LastName,Gender,DOB,Photo,Address,Street,Email,Pincode,Phone
+            from contactTable
+            <cfif structKeyExists(arguments,"intContactId")>
+                where contactId =<cfqueryparam value="#arguments.intContactId#" cfsqltype="cf_sql_integer">
+                and userId =<cfqueryparam value="#session.userId#" cfsqltype="cf_sql_integer">
+            </cfif>
+        </cfquery>
+        <cfreturn {"success":true,"Title":forDisplay.Title,"FirstName":forDisplay.FirstName,"LastName":forDisplay.LastName,"Gender":forDisplay.Gender,"DOB":forDisplay.DOB,"Address":forDisplay.Address,"Pincode":forDisplay.Pincode,"Email":forDisplay.Email,"Phone":forDisplay.Phone,"Photo":forDisplay.Photo,'Street':forDisplay.Street}>
+    </cffunction>
+
+    <cffunction name="deleteContact" access='remote' returnFormat="json">
+        <cfargument name="intContactId" type="numeric" required='true'>
+        <cfquery name="deleteContact">
+            delete from contactTable
+            where contactId=<cfqueryparam value="#arguments.intContactId#" cfsqltype="cf_sql_integer">
+        </cfquery>
+        <cfreturn {"success":true}>
+    </cffunction>
 
 </cfcomponent>

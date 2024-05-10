@@ -48,7 +48,6 @@ a{
 input,select{
     border: none;
     outline:none;
-    width:100px;
     border-bottom: 1px solid #6C757D;
 }
 
@@ -92,4 +91,10 @@ input,select{
 .buttonListStyle{
     padding:5px 20%;
     border-radius: 35px !important;
+}
+
+.contactImg{
+    display: flex;
+    justify-content: center;
+    margin-top: 20%;
 }

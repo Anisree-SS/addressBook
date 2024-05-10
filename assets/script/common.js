@@ -15,9 +15,7 @@ $(document).ready(function() {
             success: function(response) {
                 if (response.success){
                     $("#loginValidationMsg").text('Login successfull !!!!').css("color", "green");
-                    setTimeout(function() {
-                        window.location.href="?action=display";
-                    },1000);
+                    delayRedirect();
 
                 } else {
                     $("#loginValidationMsg").text('Invalid user name or password !!!!').css("color", "red");
@@ -58,11 +56,12 @@ $(document).ready(function() {
     $('#createForm').on("submit",function() {
         $("#saveContactValidationMsg").text("");
         var strEmailId=$('#strEmailId').val().trim();
+        var intContactId=$('#intContactId').val().trim();
         if(contactValidation()){
             $.ajax({
                 url: './controllers/contact.cfc?method=checkContact',
                 type: 'post',
-                data:  { strEmailId:strEmailId },
+                data:  {intContactId :intContactId, strEmailId:strEmailId },
                 dataType:"json",
                 success: function(response) {
                     if (response.success){
@@ -74,6 +73,95 @@ $(document).ready(function() {
             });
         }
         return false;
+    });
+
+    $('.deleteBtn').click(function() {
+        var intContactId =$(this).attr("data-id"); 
+        if(confirm("Are you sure you want delete the contact ?")){
+            $.ajax({
+                url: './models/contact.cfc?method=deleteContact',
+                type: 'post',
+                data:  {intContactId: intContactId},
+                dataType:"json",
+                success: function(response) {
+                    if(response.success){
+                        window.location.href="?action=display";
+                    } 
+                }, 
+            });
+        }
+        else{
+            return false;
+        }
+    });
+
+    $('.viewBtn').click(function() {
+        var intContactId =$(this).attr("data-id"); 
+        $.ajax({
+            url: './models/contact.cfc?method=getContact',
+            type: 'post',
+            data:  {intContactId: intContactId},
+            dataType:"json",
+            success:function(response){
+                if(response.success){
+                    $("#Name").html(response.Title+' '+response.FirstName+' '+response.LastName);
+                    $('#Gender').html(response.Gender);
+                    $('#DOB').html(response.DOB);
+                    $('#Address').html(response.Address+' '+response.Street);
+                    $('#Pincode').html(response.Pincode);
+                    $('#EmailId').html(response.Email);
+                    $('#Phone').html(response.Phone);
+                }
+            }
+        });
+        return false;
+    });
+    
+    $("#createBtn").click(function() { 
+        $("#createForm")[0].reset();
+        $('#heading').html("CREATE CONTACT");
+    }); 
+
+    $(".editBtn").click(function(){
+        var intContactId =$(this).attr("data-id"); 
+        if(intContactId > 0){
+            $('#heading').html("EDIT CONTACT");
+            $.ajax({
+                url: './models/contact.cfc?method=getContact',
+                type: 'post',
+                data:  {intContactId: intContactId},
+                dataType:"json",
+                success:function(response){
+                    if(response.success){
+                        $('#strTitle').prop("value", response.Title);
+                        $("#strFirstName").prop("value",response.FirstName);
+                        $("#strLastName").prop("value",response.LastName);
+                        $('#strGender').prop("value",response.Gender);
+                        $('#dateDOB').prop("value",response.DOB);
+                        $('#strAddress').prop("value",response.Address);
+                        $('#strStreet').prop("value",response.Street);
+                        $('#intPincode').prop("value",response.Pincode);
+                        $('#strEmailId').prop("value",response.Email);
+                        $('#intPhone').prop("value",response.Phone);
+                    }
+                }
+            });
+            return false;
+        }
+    });
+
+    $('#printBtn').click(function(){
+        var css = '@page { size: landscape; }',
+        printArea = document.table || document.getElementsByTagName('table')[0],
+        style = document.createElement('style');
+            style.media = 'print';
+            if (style.styleSheet){
+                style.styleSheet.cssText = css;
+            } else {
+                style.appendChild(document.createTextNode(css));
+         }
+        printArea.appendChild(style);
+        window.print();
     });
 
     function uploadContact(){
@@ -89,6 +177,7 @@ $(document).ready(function() {
         var intPhone=$('#intPhone').val().trim();
         var strEmailId=$('#strEmailId').val().trim();
         var intPincode=$('#intPincode').val().trim();
+        $("#saveContactValidationMsg").html('');
         $.ajax({
             url: './models/contact.cfc?method=uploadContact',
             type: 'post',
@@ -109,12 +198,16 @@ $(document).ready(function() {
             dataType:"json",
             success: function(response) {
                 if (response.success){
-                    $("#saveContactValidationMsg").html("contact uploades successfull").css("color", "green");
-                    setTimeout(function() {
-                        window.location.href="?action=display";
-                    },1000);
-                
-                } else {
+                    if(response.msg==''){
+                        $("#saveContactValidationMsg").html("contact created successfully").css("color", "green");
+                        delayRedirect();
+                    }
+                    else{
+                        $("#saveContactValidationMsg").html(response.msg).css("color","green");
+                        delayRedirect();
+                    }
+                } 
+                else {
                     $("#saveContactValidationMsg").html("enable to upload contact").css("color", "red");
                     return false;
                 }
@@ -122,6 +215,13 @@ $(document).ready(function() {
         });   
     }
 
+    function delayRedirect(){
+        setTimeout(function() {
+            window.location.href="?action=display";
+        },1000);
+    }
+
+    
     function validation(){
         var strFullName = $('#strFullName').val().trim(); 
         var strEmail = $('#strEmail').val().trim();
@@ -184,7 +284,8 @@ $(document).ready(function() {
         var strLastName = $('#strLastName').val().trim();
         var strGender = $('#strGender').val().trim();
         var dateDOB=$('#dateDOB').val().trim();
-        var filePhoto=$('#filePhoto').val().trim();
+        var filePhoto=$("#filePhoto")[0].files[0].name;
+        //var filePhoto=$('#filePhoto').files[0].name;
         var strAddress=$('#strAddress').val().trim();
         var strStreet=$('#strStreet').val().trim();
         var intPhone=$('#intPhone').val().trim();

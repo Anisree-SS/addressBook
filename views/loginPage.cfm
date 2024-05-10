@@ -20,7 +20,7 @@
                         <input type="password" class="" id="strPassword" name="strPassword" placeholder="Password">
                     </div>
                     <center>
-                        <input type="submit" class="btn btn-outline-primary buttonStyle" value="Login" id="login"> </center>
+                        <input type="submit" class="btn btn-outline-primary buttonStyle" value="Login" id="login"> 
                     </center>
                 </form> 
             </div>
