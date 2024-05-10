@@ -2,7 +2,7 @@ component {
     variables.modelObject=createObject("component","models.contact");
     remote any function doLogin(strUserName,strPassword) returnFormat="JSON" {
         local.error='';
-        if(trim(len(strUserName)) EQ 0 OR trim(len(strPassword)) EQ 0)
+        if(len(trim(strUserName)) EQ 0 OR len(trim(strPassword)) EQ 0)
             local.error='Required user name and password';
         if(len(local.error) EQ 0){
             local.strPassword=Hash(arguments.strPassword,"MD5");
@@ -17,7 +17,7 @@ component {
                 return { "success": false };
         }
         else{
-            return {"success":false,"msg":"#local.error#"};
+            return {"success":false,"msg":local.error};
         }
     }   
 
@@ -48,6 +48,10 @@ component {
     }
 
     remote any function checkContact() returnFormat='json'{
+        local.error='';
+        if((strEmailId=='')){
+            error+="All fields required";
+        }
         if(len(local.error) EQ 0){
             local.booleanResult=variables.modelObject.checkContact(intContactId=intContactId,strEmailId=strEmailId);
             if (local.booleanResult) {
@@ -58,7 +62,7 @@ component {
             }
         }
         else{
-            return {"success":false,"msg":"#local.error#"};
+            return {"success":false,"msg":local.error};
         }
            
     }

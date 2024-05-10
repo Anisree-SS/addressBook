@@ -95,16 +95,74 @@ $(document).ready(function() {
         }
     });
 
-    $('#printBtn').click(function(){
-        var prtContent = $('#areaToPrint');
-        var WinPrint = window.open('', '', 'left=0,top=0,width=800,height=900,toolbar=0,scrollbars=0,status=0');
-        WinPrint.document.write(prtContent.innerHTML);
-        WinPrint.document.close();
-        WinPrint.focus();
-        WinPrint.print();
-        WinPrint.close();
+    $('.viewBtn').click(function() {
+        var intContactId =$(this).attr("data-id"); 
+        $.ajax({
+            url: './models/contact.cfc?method=getContact',
+            type: 'post',
+            data:  {intContactId: intContactId},
+            dataType:"json",
+            success:function(response){
+                if(response.success){
+                    $("#Name").html(response.Title+' '+response.FirstName+' '+response.LastName);
+                    $('#Gender').html(response.Gender);
+                    $('#DOB').html(response.DOB);
+                    $('#Address').html(response.Address+' '+response.Street);
+                    $('#Pincode').html(response.Pincode);
+                    $('#EmailId').html(response.Email);
+                    $('#Phone').html(response.Phone);
+                }
+            }
+        });
+        return false;
+    });
+    
+    $("#createBtn").click(function() { 
+        $("#createForm")[0].reset();
+        $('#heading').html("CREATE CONTACT");
+    }); 
+
+    $(".editBtn").click(function(){
+        var intContactId =$(this).attr("data-id"); 
+        if(intContactId > 0){
+            $('#heading').html("EDIT CONTACT");
+            $.ajax({
+                url: './models/contact.cfc?method=getContact',
+                type: 'post',
+                data:  {intContactId: intContactId},
+                dataType:"json",
+                success:function(response){
+                    if(response.success){
+                        $('#strTitle').prop("value", response.Title);
+                        $("#strFirstName").prop("value",response.FirstName);
+                        $("#strLastName").prop("value",response.LastName);
+                        $('#strGender').prop("value",response.Gender);
+                        $('#dateDOB').prop("value",response.DOB);
+                        $('#strAddress').prop("value",response.Address);
+                        $('#strStreet').prop("value",response.Street);
+                        $('#intPincode').prop("value",response.Pincode);
+                        $('#strEmailId').prop("value",response.Email);
+                        $('#intPhone').prop("value",response.Phone);
+                    }
+                }
+            });
+            return false;
+        }
     });
 
+    $('#printBtn').click(function(){
+        var css = '@page { size: landscape; }',
+        printArea = document.table || document.getElementsByTagName('table')[0],
+        style = document.createElement('style');
+            style.media = 'print';
+            if (style.styleSheet){
+                style.styleSheet.cssText = css;
+            } else {
+                style.appendChild(document.createTextNode(css));
+         }
+        printArea.appendChild(style);
+        window.print();
+    });
 
     function uploadContact(){
         var intContactId = $('#intContactId').val().trim();
@@ -119,7 +177,7 @@ $(document).ready(function() {
         var intPhone=$('#intPhone').val().trim();
         var strEmailId=$('#strEmailId').val().trim();
         var intPincode=$('#intPincode').val().trim();
-        console.log(intContactId);
+        $("#saveContactValidationMsg").html('');
         $.ajax({
             url: './models/contact.cfc?method=uploadContact',
             type: 'post',
@@ -226,7 +284,8 @@ $(document).ready(function() {
         var strLastName = $('#strLastName').val().trim();
         var strGender = $('#strGender').val().trim();
         var dateDOB=$('#dateDOB').val().trim();
-        var filePhoto=$('#filePhoto').val().trim();
+        var filePhoto=$("#filePhoto")[0].files[0].name;
+        //var filePhoto=$('#filePhoto').files[0].name;
         var strAddress=$('#strAddress').val().trim();
         var strStreet=$('#strStreet').val().trim();
         var intPhone=$('#intPhone').val().trim();

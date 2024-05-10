@@ -10,7 +10,6 @@
         </cfquery>
         <cfreturn qryDoLogin>
     </cffunction>
-
     <cffunction name="checkUser" access="remote" returnFormat="json">
         <cfargument name="strEmail"  required="true" type="string">
         <cfargument name="strUserName"  required="true" type="string">
@@ -69,7 +68,7 @@
             from contactTable
             where email=<cfqueryparam value="#arguments.strEmailId#" cfsqltype="cf_sql_varchar">
             AND userId=<cfqueryparam value="#session.userId#" cfsqltype="cf_sql_integer">
-            AND contactId!=<cfqueryparam value="#arguments.intContactId#" cfsqltype="cf_sql_integer">
+            AND ContactId!=<cfqueryparam value="#arguments.intContactId#" cfsqltype="cf_sql_integer">
         </cfquery>  
         <cfif qryCheckContact.recordCount>
             <cfreturn false>
@@ -93,8 +92,9 @@
         <cfargument name="intPincode" required="true" type="numeric">
         <cfset local.success = ''>
         <cfset local.path = ExpandPath("assets/uploads")>
-        <!---cffile action ="uploadAll" destination ="#local.path#" nameConflict ="MakeUnique" filefield="#arguments.filePhoto#">
-        <cfset local.image = cffile.serverFile--->
+        <cffile action ="uploadAll" destination ="#local.path#" nameConflict ="MakeUnique" filefield="#arguments.filePhoto#">
+        <cfset local.image = cffile.serverFile>
+        <cfdump var="#local.image#" abort>
 
         <cfif arguments.intContactId GT 0>
             <cfquery name="updatePage">
@@ -144,16 +144,17 @@
         </cfif>
     </cffunction>
 
-    <cffunction name="getContact" access="remote" returnType="query">
+    <cffunction name="getContact" access="remote" returnFormat="json">
         <cfargument name="intContactId" type="numeric"  required='true'>
         <cfquery name="forDisplay">
             select Title,FirstName,LastName,Gender,DOB,Photo,Address,Street,Email,Pincode,Phone
             from contactTable
             <cfif structKeyExists(arguments,"intContactId")>
-                where ContactId =<cfqueryparam value="#arguments.intContactId#" cfsqltype="cf_sql_integer">
+                where contactId =<cfqueryparam value="#arguments.intContactId#" cfsqltype="cf_sql_integer">
+                and userId =<cfqueryparam value="#session.userId#" cfsqltype="cf_sql_integer">
             </cfif>
         </cfquery>
-        <cfreturn forDisplay>
+        <cfreturn {"success":true,"Title":forDisplay.Title,"FirstName":forDisplay.FirstName,"LastName":forDisplay.LastName,"Gender":forDisplay.Gender,"DOB":forDisplay.DOB,"Address":forDisplay.Address,"Pincode":forDisplay.Pincode,"Email":forDisplay.Email,"Phone":forDisplay.Phone,"Photo":forDisplay.Photo,'Street':forDisplay.Street}>
     </cffunction>
 
     <cffunction name="deleteContact" access='remote' returnFormat="json">
