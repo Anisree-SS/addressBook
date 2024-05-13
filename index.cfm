@@ -16,12 +16,15 @@
             include "/views/navbar.cfm";
             include "/views/display.cfm";
         break;
-        case "download":
+        case "pdfDownload":
             include "/views/header.cfm";
+            include "/views/pdfDownload.cfm";
+        break;
+        case 'excelDownload':
+            include '/views/header.cfm';
             include "/views/navbar.cfm";
+            include '/views/excelDownload.cfm';
             include "/views/display.cfm";
-            include "/views/downloadConatct.cfm";
-
         break;
     }
 </cfscript>

@@ -51,6 +51,11 @@ input,select{
     border-bottom: 1px solid #6C757D;
 }
 
+.inputStyle{
+    border: none;
+    outline:none; 
+}
+
 .fontSize14{
     font-size: 14px;
 }

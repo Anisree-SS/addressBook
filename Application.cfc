@@ -6,7 +6,7 @@ component
 	this.applicationTimeout = createTimeSpan( 0, 1, 0, 0 );
 	this.sessionManagement = true;
 	this.datasource = "demo"
-	this.sessionTimeout = createTimeSpan( 0, 1, 0, 0 );
+	this.sessionTimeout = createTimeSpan( 0, 2, 0, 0 );
 	this.mappings[ "/models" ] = (this.baseDirectory & "models/");
 	this.mappings[ "/views" ] = (this.baseDirectory & "views/");
 	this.mappings[ "/controllers" ] = (this.baseDirectory & "controllers/");
@@ -22,6 +22,7 @@ component
 		session.islogin=false;
 		session.userId=0;
 		session.fullName='';
+		session.profile='';
 	}
 
 	function onRequestStart( String scriptName ){

@@ -1,21 +1,20 @@
 <cfoutput>
 <cfif session.isLogin>
-    <div class="d-flex justify-content-end bg-light m-5 mb-4 gap-2 p-2">
-        <a href='?action=download'>
-            <img src="./assets/images/pdf.png" alt="pdf format" class="downloadIcon">
+    <div class="d-flex justify-content-end align-item-center bg-light m-5 mb-4 gap-2 p-2">
+        <a href='?action=pdfDownload'>
+            <img src="./assets/images/pdf.png" alt="pdf format" class="downloadIcon" title='PDF Download'>
         </a>
-        <button id='pdf' class="btn btn-outline-none">
-            <img src="./assets/images/excel.png" alt="excel format" class="downloadIcon">
+        <a href='?action=excelDownload'>
+            <img src="./assets/images/excel.png" alt="excel format" class="downloadIcon" title='Excel Download'>
+        </a>
+        <button id='printBtn' class="btn btn-outline-none p-0">
+            <img src="./assets/images/print.jpg" alt="print" class="downloadIcon">
         </button>
-        <button id='printBtn' class="btn btn-outline-none">
-            <img src="./assets/images/print.jpg" alt="print" class="downloadIcon" title='print'>
-        </button>
-        
     </div>
-    <div class="d-flex m-5 mt-0 ">
+    <div class="d-flex m-5 mt-0">
         <div class="d-flex-column justify-content-center align-item-center bg-light p-2 px-4 gap-4">
             <div class="d-flex justify-content-center mb-2">
-                <img src="./assets/images/profile.png" alt="profile" class="profileImg">
+                <img src="./assets/uploads/#session.profile#" alt="user profile" class="profileImg">
             </div>
             <div class="d-flex justify-content-center mb-2 text-primary">
                 #UCase(session.fullName)#
@@ -41,7 +40,7 @@
                                     <hr class="mt-0">
                                     <div class="d-flex justify-content-between mb-4">
                                         <div>
-                                            <input type="hidden" name="intContactId" id="intContactId" value="">
+                                            <input type="hidden" name="intContactId" id="intContactId" value="0">
                                             <label class="text-primary" for="strTitle">Title *</label><br>
                                             <select id="strTitle" name="strTitle" value="">
                                                 <option value=""></option>
@@ -76,7 +75,7 @@
                                     </div>
                                     <div class="d-flex-column justify-content-start mt-4">
                                         <label class="text-primary" for="filePhoto">Upload Photo *</label><br>
-                                        <input type="file" name="filePhoto" id="filePhoto" class="uploadfile">
+                                        <input type="file" name="filePhoto" id="filePhoto" class="uploadfile" accept="image/png, image/gif, image/jpeg"> 
                                     </div>
                                     <p class="mb-0 text-primary fw-bold mt-2">Contact Details</p>
                                     <hr  class="mt-0">
@@ -107,23 +106,23 @@
                                         </div>
                                     </div>
                                     <div class="d-flex justify-content-evenly mt-4">
-                                        <input type="button" class="btn btn-outline-dark" data-bs-dismiss="modal" value="Cancel">
-                                        <input type="submit" value="Save Data" id="saveContact" class="btn btn-outline-primary" name="submit">
+                                        <input type="button" class="btn btn-outline-dark" data-bs-dismiss="modal" value="CLOSE">
+                                        <input type="submit" value="SUBMIT" id="saveContact" class="btn btn-outline-primary" name="submit">
                                     </div>
                                 </form>
                             </div>
                         </div>
                         <div>
                             <div class="p-5 contactImg">
-                                <img src="./assets/images/profile.png" class="profileImg">
+                                <img src="./assets/images/profile.png" class="profileImg picture">
                             </div>
                         </div>
                     </div>
                 </div>
             </div>  
         </div>  
-        <div class="bg-light ms-5 w-75" >
-            <table class="w-100" id="areaToPrint">
+        <div class="bg-light ms-5 w-75" id='areaToPrint'>
+            <table class="w-100" >
 				<thead class='p-2'>
 					<tr class="text-primary p-2">
                         <th class="text-light">Photo</th>
@@ -139,7 +138,7 @@
 					<cfloop array="#contacts#" index="contact">
                         <cfif session.userId Eq contact.getuserId()>
                             <tr class='m-2'>
-                                <td><img src="#contact.getPhoto()#" alt="Profile"></td>
+                                <td><img src="./assets/uploads/#contact.getPhoto()#" alt="Profile" class='downloadIcon'></td>
                                 <td>#contact.getFirstName()# #contact.getLastName()#</td>
                                 <td>#contact.getEmail()#</td>
                                 <td>#contact.getPhone()#</td>
@@ -195,13 +194,13 @@
                         </div>
                     </div>
                     <div class="d-flex justify-content-evenly mt-4">
-                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">CLOSE</button>
                     </div>
                 </div> 
             </div>
             <div>
                 <div class="p-5 contactImg">
-                    <img src="" class="profileImg" alt='profile'>
+                    <img src="./assets/images/profile.png" class="profileImg picture" alt='profile'>
                 </div>
             </div>
         </div>

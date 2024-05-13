@@ -12,24 +12,27 @@
                 <center  class="errorMsgHeight"><span id="signUpValidationMsg"></span></center>
             </div>
             <div class="d-flex-column justify-content-center align-item-center pt-5 ">
-                <form action="?action=login" method="post">
+                <form action="?action=login" method="post" id='signUpForm' enctype="multipart/form-data">
                     <div class="mb-4 border-bottom">
-                        <input type="text"  id="strFullName" name="strFullName" placeholder="Full Name">
+                        <input type="text"  id="strFullName" name="strFullName" placeholder="Full Name" class='inputStyle'>
                     </div>
                     <div class="mb-4 border-bottom">
-                        <input type="email" id="strEmail" name="strEmail" placeholder="Email Id">
+                        <input type="email" id="strEmail" name="strEmail" placeholder="Email Id" class='inputStyle'>
                     </div>
                     <div class="mb-4 border-bottom">
-                        <input type="text"  id="strUserName" name="strUserName" placeholder="User Name">
+                        <input type="text"  id="strUserName" name="strUserName" placeholder="User Name" class='inputStyle'>
                     </div>
                     <div class="mb-4 border-bottom">
-                        <input type="password"  id="strPassword" name="strPassword" placeholder="Password">
+                        <input type="password"  id="strPassword" name="strPassword" placeholder="Password" class='inputStyle'>
                     </div>
                     <div class="mb-4 border-bottom">
-                        <input type="password"  id="strConfirmPass" name="strConfirmPass" placeholder="Confirm Password">
+                        <input type="password"  id="strConfirmPass" name="strConfirmPass" placeholder="Confirm Password" class='inputStyle'>
+                    </div>
+                    <div class="mb-4 border-bottom">
+                        <input type="file"  id="fileUserPhoto" name="fileUserPhoto" class='inputStyle' accept="image/png, image/gif, image/jpeg">
                     </div>
                     <center>
-                        <input type="submit" class="btn btn-outline-primary buttonStyle" value="Register" id="signUp"> 
+                        <input type="submit" class="btn btn-outline-primary buttonStyle" value="Register" id="signUp" > 
                     </center>
                 </form> 
             </div>
