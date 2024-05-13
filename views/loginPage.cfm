@@ -14,10 +14,10 @@
             <div class="d-flex-column justify-content-center align-item-center pt-5">
                 <form action="?action=display" method="post">
                     <div class="mb-4 border-secondary border-bottom">
-                        <input type="text"  id="strUserName" name="strUserName" placeholder="Username">
+                        <input type="text"  id="strUserName" name="strUserName" placeholder="Username" class='inputStyle'>
                     </div>
                     <div class="mb-4 border-secondary border-bottom">
-                        <input type="password" class="" id="strPassword" name="strPassword" placeholder="Password">
+                        <input type="password" class="inputStyle" id="strPassword" name="strPassword" placeholder="Password">
                     </div>
                     <center>
                         <input type="submit" class="btn btn-outline-primary buttonStyle" value="Login" id="login"> 

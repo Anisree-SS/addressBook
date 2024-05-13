@@ -11,6 +11,7 @@ component {
                 session.userId= local.qryResult.userId;
                 session.isLogin = true;
                 session.fullName= local.qryResult.fullName;
+                session.profile=local.qryResult.Profile;
                 return { "success": true };
             } 
             else 
@@ -21,18 +22,12 @@ component {
         }
     }   
 
-    remote any function checkUser(strFullName,strEmail,strUserName,strPassword) returnFormat="JSON" {
+    remote any function checkUser(strEmail,strUserName) returnFormat="JSON" {
         local.strcheckUserResult=variables.modelObject.checkUser(strEmail=strEmail,strUserName=strUserName);
         if(local.strcheckUserResult.success){
-            local.strPassword=Hash(arguments.strPassword,"MD5");
-            local.strInputResult=variables.modelObject.saveUser(strFullName=strFullName,strEmail=strEmail,strUserName=strUserName,strPassword=strPassword);
-            if(local.strInputResult)
-                return {"success":true,"msg":"Registration completed successfully!!!"};
-            else
-                return {"success":false,"msg":"Something went wrong!!!"};
-        }
-        else{
-            return local.strcheckUserResult;
+           return { "success": true };
+        }else{
+            return {"success":false,'msg':local.strcheckUserResult.msg}; 
         }
     }
 
@@ -55,7 +50,7 @@ component {
         if(len(local.error) EQ 0){
             local.booleanResult=variables.modelObject.checkContact(intContactId=intContactId,strEmailId=strEmailId);
             if (local.booleanResult) {
-                return{"success":true};
+                return {"success":true};
             } 
             else {
                 return {"success": false,"msg":"Email id already present"};
