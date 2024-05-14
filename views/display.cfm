@@ -19,10 +19,43 @@
             <div class="d-flex justify-content-center mb-2 text-primary">
                 #UCase(session.fullName)#
             </div>  
-            <div  class="d-flex justify-content-center mb-2">                
+            <div class="d-flex justify-content-center mb-2">                
                 <button type="button" class="btn-primary btn modalBtn" data-bs-toggle="modal" data-bs-target="##myModal" id="createBtn">
                     CREATE CONTACT
                 </button>
+            </div>
+            <div class="d-flex justify-content-center mb-2">
+                <button type="button" class="btn-primary btn modalBtn" data-bs-toggle="modal" data-bs-target="##uploadModel" id="uploadExcel">
+                    UPLOAD EXCEL
+                </button>
+                <div class="modal bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" id="uploadModel">
+                    <div class="modal-dialog bgColor p-2 d-flex">
+                        <div class="modal-content border-0">
+                            <div class="m-5 mb-2 bgColor">
+                                <center>
+                                    <h6 class="modal-title text-primary fw-bold p-1">UPLOAD CONTACTS</h6>
+                                </center>
+                            </div>
+                            <center>
+                                <p class="errorMsgHeight mb-0" id="uploadError"></p>
+                            </center>
+                            <div class="modal-body mt-0">
+                                <form action='?action=display' method='post' enctype='multipart/form-data' id='uploadContact'>
+                                <div class="d-flex justify-content-center mb-4">
+                                    <div>
+                                        <label class="text-primary" for="fileExcel">Upload Excel File *</label><br>
+                                        <input type="file" name="fileExcel" id="fileExcel" class="uploadfile" value=""> 
+                                    </div>
+                                </div>
+                                <div class="d-flex justify-content-evenly mt-4">
+                                    <input type="button" class="btn btn-outline-dark" data-bs-dismiss="modal" value="CLOSE">
+                                    <input type="submit" value="SUBMIT" class="btn btn-outline-primary" name="submit">
+                                </div>
+                               </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div class="modal bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" id="myModal">
                     <div class="modal-dialog modal-lg bgColor p-2 d-flex w-75">
                         <div class="modal-content border-0">
@@ -75,7 +108,7 @@
                                     </div>
                                     <div class="d-flex-column justify-content-start mt-4">
                                         <label class="text-primary" for="filePhoto">Upload Photo *</label><br>
-                                        <input type="file" name="filePhoto" id="filePhoto" class="uploadfile" accept="image/png, image/gif, image/jpeg"> 
+                                        <input type="file" name="filePhoto" id="filePhoto" class="uploadfile" accept="image/png, image/gif, image/jpeg" value=""> 
                                     </div>
                                     <p class="mb-0 text-primary fw-bold mt-2">Contact Details</p>
                                     <hr  class="mt-0">
@@ -136,7 +169,7 @@
 				<tbody>
 					<cfset contacts = EntityLoad("displayORM")>
 					<cfloop array="#contacts#" index="contact">
-                        <cfif session.userId Eq contact.getuserId()>
+                        <cfif session.userId EQ contact.getuserId()>
                             <tr class='m-2'>
                                 <td><img src="./assets/uploads/#contact.getPhoto()#" alt="Profile" class='downloadIcon'></td>
                                 <td>#contact.getFirstName()# #contact.getLastName()#</td>
@@ -152,8 +185,6 @@
                                     <button type="button" class="btn btn-outline-primary modalBtn viewBtn" data-bs-toggle="modal" data-bs-target="##viewModal" data-id="#contact.getContactID()#">VIEW</button>
                                 </th>
                             </tr>
-                            <cfelse>
-                                <cfcontinue>
                         </cfif>
 					</cfloop>
 				</tbody>

@@ -1,7 +1,7 @@
 $(document).ready(function() {
     $('#login').click(function() {
         $("#validationMsg").text("");
-        var strUserName = $('#strUserName').val().trim(); 
+        var strEmail = $('#strUserName').val().trim(); 
         var strPassword = $('#strPassword').val().trim();
         if (strUserName == ''|| strPassword =='' ){  
             $('#loginValidationMsg').html('Required user name and password').css("color", "red");
@@ -10,7 +10,7 @@ $(document).ready(function() {
         $.ajax({
             url: './controllers/contact.cfc?method=doLogin',
             type: 'post',
-            data:  {strUserName: strUserName , strPassword:strPassword},
+            data:  {strEmail: strEmail , strPassword:strPassword},
             dataType:"json",
             success: function(response) {
                 if (response.success){
@@ -80,7 +80,7 @@ $(document).ready(function() {
                 dataType:"json",
                 success: function(response) {
                     if(response.success){
-                        window.location.href="?action=display";
+                        delayRedirect();
                     } 
                 }, 
             });
@@ -100,7 +100,7 @@ $(document).ready(function() {
             success:function(response){
                 if(response.success){
                     var date =new Date(response.DOB);
-                    var strDate = date.getFullYear() + "/" + (date.getMonth()+1) + "/" + date.getDate();
+                    var strDate = date.getFullYear() + '-' + ('0' + (date.getMonth() + 1)).slice(-2) + '-' + ('0' + date.getDate()).slice(-2);
                     $("#Name").html(response.Title+' '+response.FirstName+' '+response.LastName);
                     $('#Gender').html(response.Gender);
                     $('#DOB').html(strDate);
@@ -140,6 +140,8 @@ $(document).ready(function() {
                     $('#strGender').prop("value",response.Gender);
                     $('#dateDOB').prop("value",strDate);
                     $('#strAddress').prop("value",response.Address);
+                    //$('#filePhoto').attr('C:/ColdFusion2023/cfusion/wwwroot/addressBook/assets/uploads/'+response.Photo);
+                    //$('#filePhoto').attr('value','C:/ColdFusion2023/cfusion/wwwroot/addressBook/assets/uploads/'+response.Photo);
                     $('#strStreet').prop("value",response.Street);
                     $('#intPincode').prop("value",response.Pincode);
                     $('#strEmailId').prop("value",response.Email);
@@ -155,7 +157,7 @@ $(document).ready(function() {
         var printArea = $('#areaToPrint').html();
         $('body').html(printArea);
         window.print();
-        window.location.href="?action=display";
+        delayRedirect();
     });
 
     function uploadUser(){
@@ -181,9 +183,7 @@ $(document).ready(function() {
             success: function(response) {
                 if(response){
                     $("#signUpValidationMsg").html('Registration completed').css("color", "green");
-                    setTimeout(function() {
-                        window.location.href="?action=login";
-                    },1000);
+                    window.location.href="?action=login";
                 }
                 else
                     $("#signUpValidationMsg").html('Unable to complete Registration').css("color", "red");
@@ -246,9 +246,7 @@ $(document).ready(function() {
     }
 
     function delayRedirect(){
-        setTimeout(function() {
-            window.location.href="?action=display";
-        },1000);
+        window.location.href="?action=display";
     }
 
     

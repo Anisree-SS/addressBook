@@ -1,11 +1,11 @@
 <cfcomponent>
     <cffunction name="doLogin" access="remote" returnType="query">
-        <cfargument name="strUserName" required="true" type="string">
+        <cfargument name="strEmail" required="true" type="string">
         <cfargument name="strPassword" required="true" type="string">
         <cfquery name="qryDoLogin">
             select userId,fullName,Profile
             from addressBookLogin
-            where userName=<cfqueryparam value="#arguments.strUserName#" cfsqltype="cf_sql_varchar">
+            where emailId=<cfqueryparam value="#arguments.strEmail#" cfsqltype="cf_sql_varchar">
             and password=<cfqueryparam value="#arguments.strPassword#" cfsqltype="cf_sql_varchar">
         </cfquery>
         <cfreturn qryDoLogin>
@@ -22,16 +22,7 @@
         <cfif qryCheckEmail.recordCount>
             <cfreturn {"success":false,"msg":"Email Id already present"}>
             <cfelse>
-                <cfquery name="qryCheckUser">
-                    select 1 
-                    from addressBookLogin
-                    where userName=<cfqueryparam value="#arguments.strUserName#" cfsqltype="cf_sql_varchar">
-                </cfquery>
-                <cfif qryCheckUser.recordCount>
-                    <cfreturn {"success":false,"msg":"User name already present"}>
-                    <cfelse>
-                        <cfreturn {"success":true}>
-                </cfif>
+                <cfreturn {"success":true}>
         </cfif>
     </cffunction>
 
@@ -69,7 +60,7 @@
         <cfreturn local.result>
     </cffunction>
 
-    <cffunction name="checkContact" access="remote" returnType="boolean">
+    <cffunction name="checkContact" access="remote" returnFormat="json">
         <cfargument name="intContactId" required="true" type="numeric">
         <cfargument name="strEmailId" required="true" type="string">
         <cfquery name='qryCheckContact'>
@@ -80,9 +71,19 @@
             AND contactId!=<cfqueryparam value="#arguments.intContactId#" cfsqltype="cf_sql_integer">
         </cfquery>  
         <cfif qryCheckContact.recordCount>
-            <cfreturn false>
+            <cfreturn {'success':false,'msg':'Email Id already present'}>
             <cfelse>
-                <cfreturn true>
+                <cfquery name='qryCheckUserMail'>
+                    select 1 
+                    from addressBookLogin 
+                    where emailId=<cfqueryparam value="#arguments.strEmailId#" cfsqltype="cf_sql_varchar">
+                    AND userID=<cfqueryparam value="#session.userId#" cfsqltype="cf_sql_integer">
+                </cfquery>
+                <cfif qryCheckUserMail.recordCount>
+                    <cfreturn {'success':false,'msg':'you cant create your own contact'}>
+                    <cfelse>
+                        <cfreturn {'success':true,'msg':''}>
+                </cfif>
         </cfif>
     </cffunction>
 

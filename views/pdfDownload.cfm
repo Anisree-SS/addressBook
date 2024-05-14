@@ -1,22 +1,28 @@
 <cfoutput>
 <cfhtmltopdf>
-    <div class="bg-light ms-5 w-75" >
-        <table class="w-100">
-            <thead class='p-2'>
-                <tr class="text-primary p-2">
+    <div class="w-100" >
+        <table>
+            <thead>
+                <tr>
                     <th>Photo</th>
                     <th>Name</th>
-                    <th>Email</th>
-                    <th>Phone number</th>
+                    <th>Gender</th>
+                    <th>DOB</th>
+                    <th>Address</th>
+                    <th>Email Id</th>
+                    <th>Phone</th> 
                 </tr>
             </thead>
             <tbody>
                 <cfset contacts = EntityLoad("displayORM")>
                 <cfloop array="#contacts#" index="contact">
                     <cfif session.userId Eq contact.getuserId()>
-                        <tr class='m-2'>
+                        <tr>
                             <td><img src="./assets/uploads/#contact.getPhoto()#" alt="Profile" width='40' height='40'></td>
                             <td>#contact.getFirstName()# #contact.getLastName()#</td>
+                            <td>#contact.getGender()#</td>
+                            <td>#contact.getDOB()#</td>
+                            <td>#contact.getAddress()# #contact.getstreet()# #contact.getPincode()#</td>
                             <td>#contact.getEmail()#</td>
                             <td>#contact.getPhone()#</td>
                         </tr>
