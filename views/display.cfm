@@ -41,16 +41,16 @@
                             </center>
                             <div class="modal-body mt-0">
                                 <form action='?action=display' method='post' enctype='multipart/form-data' id='uploadContact'>
-                                <div class="d-flex justify-content-center mb-4">
-                                    <div>
-                                        <label class="text-primary" for="fileExcel">Upload Excel File *</label><br>
-                                        <input type="file" name="fileExcel" id="fileExcel" class="uploadfile" value=""> 
+                                    <div class="d-flex justify-content-center mb-4">
+                                        <div>
+                                            <label class="text-primary" for="fileExcel">Upload Excel File *</label><br>
+                                            <input type="file" name="fileExcel" id="fileExcel" class="uploadfile" value=""> 
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="d-flex justify-content-evenly mt-4">
-                                    <input type="button" class="btn btn-outline-dark" data-bs-dismiss="modal" value="CLOSE">
-                                    <input type="submit" value="SUBMIT" class="btn btn-outline-primary" name="submit">
-                                </div>
+                                    <div class="d-flex justify-content-evenly mt-4">
+                                        <input type="button" class="btn btn-outline-dark" data-bs-dismiss="modal" value="CLOSE">
+                                        <input type="submit" value="SUBMIT" class="btn btn-outline-primary" name="submit">
+                                    </div>
                                </form>
                             </div>
                         </div>
@@ -108,7 +108,7 @@
                                     </div>
                                     <div class="d-flex-column justify-content-start mt-4">
                                         <label class="text-primary" for="filePhoto">Upload Photo *</label><br>
-                                        <input type="file" name="filePhoto" id="filePhoto" class="uploadfile" accept="image/png, image/gif, image/jpeg" value=""> 
+                                        <input type="file" name="filePhoto" id="filePhoto" class="uploadfile" accept="image/png, image/gif, image/jpeg" value=''> 
                                     </div>
                                     <p class="mb-0 text-primary fw-bold mt-2">Contact Details</p>
                                     <hr  class="mt-0">

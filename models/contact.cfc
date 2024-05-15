@@ -80,7 +80,7 @@
                     AND userID=<cfqueryparam value="#session.userId#" cfsqltype="cf_sql_integer">
                 </cfquery>
                 <cfif qryCheckUserMail.recordCount>
-                    <cfreturn {'success':false,'msg':'you cant create your own contact'}>
+                    <cfreturn {'success':false,'msg':'You cant create your own contact'}>
                     <cfelse>
                         <cfreturn {'success':true,'msg':''}>
                 </cfif>
@@ -121,7 +121,7 @@
                 Phone=<cfqueryparam value="#arguments.intPhone#" cfsqltype="cf_sql_varchar">
                 where contactId=<cfqueryparam value="#arguments.intContactId#" cfsqltype="cf_sql_integer">
             </cfquery>
-            <cfreturn {"success":true, "msg":"contact updated successfully"}>
+            <cfreturn {"success":true, "msg":"Contact updated successfully"}>
             <cfelse>
                 <cfquery name="qrySaveContact" result="qryAddContact">
                     insert into contactTable(Title,FirstName,LastName,Gender,DOB,Photo,Address,street,Email,userId,pincode,Phone)
@@ -173,5 +173,85 @@
         </cfquery>
         <cfreturn {"success":true}>
     </cffunction>
-    
+
+    <cffunction name='excelColumn' access='remote'  returnType="array">
+        <cfquery name="qryColumnNames">
+            select column_name
+            from information_schema.columns
+            where table_name = 'contactTable'
+        </cfquery>
+        <cfset dbColumnNames = []>
+        <cfloop query="qryColumnNames">
+            <cfif(!((qryColumnNames.column_name EQ 'contactId') OR (qryColumnNames.column_name EQ 'userID')))>
+                <cfset arrayAppend(dbColumnNames, qryColumnNames.column_name)>
+            </cfif>
+        </cfloop>
+        <cfreturn dbColumnNames>
+    </cffunction>
+
+    <cffunction name='uploadFile' access='remote' returnFormat='json'>
+        <cfargument name="fileExcel" required='true' type='any'>
+        <cfset variables.FileUploadpath=Expandpath("../assets/uploads/")>
+        <cffile action="upload" destination="#variables.FileUploadpath#" nameConflict="MakeUnique">
+        <cfset variables.fileName=cffile.serverFile>
+        <cfset variables.FilePath=variables.FileUploadpath&variables.fileName>
+        <cfspreadsheet action="read" src="#variables.FilePath#" query="spreadsheetData" headerrow="1"> 
+        <cfset local.excelHead = getMetaData(spreadsheetData)>
+        <cfset local.excelColumnNames = []>
+        <cfloop index="i" from="1" to="#arrayLen(local.excelHead)#">
+            <cfset columnhead = local.excelHead[i].name>
+            <cfset arrayAppend(local.excelColumnNames, columnhead)>
+        </cfloop>
+         <cfquery name="qryColumnNames">
+            select column_name
+            from information_schema.columns
+            where table_name = 'contactTable'
+        </cfquery>
+        <cfset local.dbColumnNames = []>
+        <cfloop query="qryColumnNames">
+            <cfif(!((qryColumnNames.column_name EQ 'contactId') OR (qryColumnNames.column_name EQ 'userID')))>
+                <cfset arrayAppend(local.dbColumnNames, qryColumnNames.column_name)>
+            </cfif>
+        </cfloop>
+        <cfset local.excelColumnNames=ArrayToList(local.excelColumnNames)>
+        <cfset local.dbColumnNames=ArrayToList(local.dbColumnNames)>
+        <cfset local.allHeader = Listappend(trim(local.excelColumnNames),trim(local.dbColumnNames))>
+        <cfset local.ListRemoveDuplicate=(ListRemoveDuplicates(local.allHeader,",",true))>
+        <cfif (ListLen(local.dbColumnNames) EQ ListLen(local.ListRemoveDuplicate)) AND (ListLen(local.dbColumnNames) EQ ListLen(trim(local.excelColumnNames)))>
+            <cfspreadsheet action="read" src="#variables.FilePath#" query="spreadsheetData" headerrow='1' rows='2-100'> 
+            <cfloop query="#spreadsheetData#">
+                <cfquery name='qryCheckContact'>
+                    select 1 
+                    from contactTable
+                    where Email=<cfqueryparam value="#spreadsheetData.Email#" cfsqltype="cf_sql_varchar">
+                    AND userId=<cfqueryparam value="#session.userId#" cfsqltype="cf_sql_integer">
+                </cfquery>
+                <cfif qryCheckContact.recordCount>
+                    <cfcontinue>
+                    <cfelse>
+                    <cfquery name="insertExcel" datasource="demo">
+                        INSERT INTO contactTable(Title,FirstName,LastName,Gender,DOB,Photo,Address,street,Email,userId,pincode,Phone)
+                                values(
+                                    <cfqueryparam value="#spreadsheetData.Title#" cfsqltype="cf_sql_varchar">,
+                                    <cfqueryparam value="#spreadsheetData.FirstName#" cfsqltype="cf_sql_varchar">,
+                                    <cfqueryparam value="#spreadsheetData.LastName#" cfsqltype="cf_sql_varchar">,
+                                    <cfqueryparam value="#spreadsheetData.Gender#" cfsqltype="cf_sql_varchar">,
+                                    <cfqueryparam value="#spreadsheetData.DOB#" cfsqltype="cf_sql_date">,
+                                    <cfqueryparam value="#spreadsheetData.Photo#" cfsqltype="cf_sql_varchar">,
+                                    <cfqueryparam value="#spreadsheetData.Address#" cfsqltype="cf_sql_varchar">,
+                                    <cfqueryparam value="#spreadsheetData.street#" cfsqltype="cf_sql_varchar">,
+                                    <cfqueryparam value="#spreadsheetData.Email#" cfsqltype="cf_sql_varchar">,
+                                    <cfqueryparam value="#session.userId#" cfsqltype="cf_sql_integer">,
+                                    <cfqueryparam value="#spreadsheetData.Pincode#" cfsqltype="cf_sql_integer">,
+                                    <cfqueryparam value="#spreadsheetData.Phone#" cfsqltype="cf_sql_varchar">
+                                )
+                    </cfquery>
+                </cfif>
+            </cfloop>
+                <cfreturn {'success':true,'msg':'Contacts updated successfully'}>
+            <cfelse>
+                <cfreturn {'success':false,'msg':'Uploaded Excel is not Have the all the data of filds'}>      
+        </cfif>
+    </cffunction>
+        
 </cfcomponent>

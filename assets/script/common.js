@@ -15,7 +15,7 @@ $(document).ready(function() {
             success: function(response) {
                 if (response.success){
                     $("#loginValidationMsg").text('Login successfull !!!!').css("color", "green");
-                    delayRedirect();
+                    Redirect();
 
                 } else {
                     $("#loginValidationMsg").text('Invalid user name or password !!!!').css("color", "red");
@@ -80,7 +80,7 @@ $(document).ready(function() {
                 dataType:"json",
                 success: function(response) {
                     if(response.success){
-                        delayRedirect();
+                        Redirect();
                     } 
                 }, 
             });
@@ -140,8 +140,7 @@ $(document).ready(function() {
                     $('#strGender').prop("value",response.Gender);
                     $('#dateDOB').prop("value",strDate);
                     $('#strAddress').prop("value",response.Address);
-                    //$('#filePhoto').attr('C:/ColdFusion2023/cfusion/wwwroot/addressBook/assets/uploads/'+response.Photo);
-                    //$('#filePhoto').attr('value','C:/ColdFusion2023/cfusion/wwwroot/addressBook/assets/uploads/'+response.Photo);
+                   // $("#fileUserPhoto").html('C:/ColdFusion2023/cfusion/wwwroot/addressBook/assets/uploads/'+response.Photo);
                     $('#strStreet').prop("value",response.Street);
                     $('#intPincode').prop("value",response.Pincode);
                     $('#strEmailId').prop("value",response.Email);
@@ -157,7 +156,43 @@ $(document).ready(function() {
         var printArea = $('#areaToPrint').html();
         $('body').html(printArea);
         window.print();
-        delayRedirect();
+        Redirect();
+    });
+
+    $('#uploadContact').on('submit',function(){
+        var errorMsg='';
+        try {
+            var fileExcel = $("#fileExcel")[0].files[0].name;
+        } catch (error) {
+            errorMsg+=error;
+        }
+        if(errorMsg!=''){
+            $('#uploadError').html("Required Excel File").css("color", "red");
+        }
+        else{
+            var fileExcel = $("#fileExcel")[0].files[0];
+            var formData = new FormData();
+            formData.append('fileExcel', fileExcel);
+            $.ajax({
+                url: './models/contact.cfc?method=uploadFile',
+                type: 'post',
+                data: formData,
+                contentType: false, 
+                processData: false, 
+                dataType: 'json',
+                success: function(response) {
+                    if(response.success){
+                        $('#uploadError').html(response.msg).css("color", "green");
+                        Redirect();
+                    }
+                    else{
+                        $('#uploadError').html(response.msg).css("color", "red");
+                    }
+                }
+            });
+
+        } 
+        return false;
     });
 
     function uploadUser(){
@@ -230,11 +265,11 @@ $(document).ready(function() {
                 if (response.success){
                     if(response.msg==''){
                         $("#saveContactValidationMsg").html("contact created successfully").css("color", "green");
-                        delayRedirect();
+                        Redirect();
                     }
                     else{
                         $("#saveContactValidationMsg").html(response.msg).css("color","green");
-                        delayRedirect();
+                        Redirect();
                     }
                 } 
                 else {
@@ -245,7 +280,7 @@ $(document).ready(function() {
         });   
     }
 
-    function delayRedirect(){
+    function Redirect(){
         window.location.href="?action=display";
     }
 
