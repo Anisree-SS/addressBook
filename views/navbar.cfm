@@ -4,8 +4,6 @@
 <cfset variables.strSignUpImg=session.isLogin?"":"person">
 <cfset variables.strLoginLink= session.isLogin?"Logout":"Login">
 <cfset variables.strSignUpLink= session.isLogin?"":"Sign Up">
-
-
 <cfoutput>
 <div class="navBar d-flex align-items-center justify-content-center col-12 ">
     <nav class="navbar-expand-lg flex-nowrap navbar-dark  px-3 px-sm-5 col-12 navBgColor">

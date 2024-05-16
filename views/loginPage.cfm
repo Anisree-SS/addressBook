@@ -29,8 +29,8 @@
                     <spam class="text-secondary fontSize14">Or Sign In Using</span> 
                 </div>     
                 <div>
-                    <a href='' title="facebook Login"><img src="./assets/images/fb.png" alt="faceBook login"></a>
-                    <a href='' title="google Login"><img src="./assets/images/google.png" alt="google login"></a>
+                    <img src="./assets/images/fb.png" alt="faceBook login">
+                    <img src="./assets/images/google.png" alt="google login" id='googleLogin'>
                 </div>
                 <div>
                     <span class="fontSize14">Don't have an account?</span>

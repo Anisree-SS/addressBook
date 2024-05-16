@@ -2,11 +2,11 @@ component {
     variables.modelObject=createObject("component","models.contact");
     remote any function doLogin(strUserName,strPassword) returnFormat="JSON" {
         local.error='';
-        if(len(trim(strUserName)) EQ 0 OR len(trim(strPassword)) EQ 0)
-            local.error='Required user name and password';
+        if(len(trim(strEmail)) EQ 0 OR len(trim(strPassword)) EQ 0)
+            local.error='Required Email id and password';
         if(len(local.error) EQ 0){
             local.strPassword=Hash(arguments.strPassword,"MD5");
-            local.qryResult=variables.modelObject.doLogin(strUserName=strUserName,strPassword=strPassword);
+            local.qryResult=variables.modelObject.doLogin(strEmail=strEmail,strPassword=strPassword);
             if (local.qryResult.recordCount) {
                 session.userId= local.qryResult.userId;
                 session.isLogin = true;
@@ -49,11 +49,11 @@ component {
         }
         if(len(local.error) EQ 0){
             local.booleanResult=variables.modelObject.checkContact(intContactId=intContactId,strEmailId=strEmailId);
-            if (local.booleanResult) {
-                return {"success":true};
+            if (local.booleanResult.success) {
+                return {"success":true,'msg':''};
             } 
             else {
-                return {"success": false,"msg":"Email id already present"};
+                return {"success": false,"msg":local.booleanResult.msg};
             }
         }
         else{
@@ -61,4 +61,14 @@ component {
         }
            
     }
+
+    remote any function googleLogin() returnFormat='json'{
+        if(bolGoogleEmailValid){
+            local.strcheckUserResult=variables.modelObject.checkUser(strEmail=strGoogleMail,strUserName=strGoogleName);
+            if(local.strcheckUserResult.success){
+               
+            }
+        }
+    }
 }
+

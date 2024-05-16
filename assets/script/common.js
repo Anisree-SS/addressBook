@@ -1,7 +1,7 @@
 $(document).ready(function() {
     $('#login').click(function() {
         $("#validationMsg").text("");
-        var strUserName = $('#strUserName').val().trim(); 
+        var strEmail = $('#strUserName').val().trim(); 
         var strPassword = $('#strPassword').val().trim();
         if (strUserName == ''|| strPassword =='' ){  
             $('#loginValidationMsg').html('Required user name and password').css("color", "red");
@@ -10,12 +10,12 @@ $(document).ready(function() {
         $.ajax({
             url: './controllers/contact.cfc?method=doLogin',
             type: 'post',
-            data:  {strUserName: strUserName , strPassword:strPassword},
+            data:  {strEmail: strEmail , strPassword:strPassword},
             dataType:"json",
             success: function(response) {
                 if (response.success){
                     $("#loginValidationMsg").text('Login successfull !!!!').css("color", "green");
-                    delayRedirect();
+                    Redirect();
 
                 } else {
                     $("#loginValidationMsg").text('Invalid user name or password !!!!').css("color", "red");
@@ -80,7 +80,7 @@ $(document).ready(function() {
                 dataType:"json",
                 success: function(response) {
                     if(response.success){
-                        window.location.href="?action=display";
+                        Redirect();
                     } 
                 }, 
             });
@@ -100,7 +100,7 @@ $(document).ready(function() {
             success:function(response){
                 if(response.success){
                     var date =new Date(response.DOB);
-                    var strDate = date.getFullYear() + "/" + (date.getMonth()+1) + "/" + date.getDate();
+                    var strDate = date.getFullYear() + '-' + ('0' + (date.getMonth() + 1)).slice(-2) + '-' + ('0' + date.getDate()).slice(-2);
                     $("#Name").html(response.Title+' '+response.FirstName+' '+response.LastName);
                     $('#Gender').html(response.Gender);
                     $('#DOB').html(strDate);
@@ -140,6 +140,7 @@ $(document).ready(function() {
                     $('#strGender').prop("value",response.Gender);
                     $('#dateDOB').prop("value",strDate);
                     $('#strAddress').prop("value",response.Address);
+                   // $("#fileUserPhoto").html('C:/ColdFusion2023/cfusion/wwwroot/addressBook/assets/uploads/'+response.Photo);
                     $('#strStreet').prop("value",response.Street);
                     $('#intPincode').prop("value",response.Pincode);
                     $('#strEmailId').prop("value",response.Email);
@@ -155,9 +156,73 @@ $(document).ready(function() {
         var printArea = $('#areaToPrint').html();
         $('body').html(printArea);
         window.print();
-        window.location.href="?action=display";
+        Redirect();
     });
 
+    $('#uploadContact').on('submit',function(){
+        var errorMsg='';
+        try {
+            var fileExcel = $("#fileExcel")[0].files[0].name;
+        } catch (error) {
+            errorMsg+=error;
+        }
+        if(errorMsg!=''){
+            $('#uploadError').html("Required Excel File").css("color", "red");
+        }
+        else{
+            var fileExcel = $("#fileExcel")[0].files[0];
+            var formData = new FormData();
+            formData.append('fileExcel', fileExcel);
+            $.ajax({
+                url: './models/contact.cfc?method=uploadFile',
+                type: 'post',
+                data: formData,
+                contentType: false, 
+                processData: false, 
+                dataType: 'json',
+                success: function(response) {
+                    if(response.success){
+                        $('#uploadError').html(response.msg).css("color", "green");
+                        Redirect();
+                    }
+                    else{
+                        $('#uploadError').html(response.msg).css("color", "red");
+                    }
+                }
+            });
+
+        } 
+        return false;
+    });
+
+    $('#googleLogin').on('click', function() {
+        signIn();
+    });
+
+    function signIn() {
+        let oauth2Endpoint = "https://accounts.google.com/o/oauth2/v2/auth";
+        let $form = $('<form>')
+            .attr('method', 'POsT')
+            .attr('action', oauth2Endpoint);
+        let params = {
+            "client_id": "19029201266-hj7d0uj1vus2q60pcmd9jacs1flmb72f.apps.googleusercontent.com",
+            "redirect_uri": "http://127.0.0.1:8500/addressBook/?action=display",
+            "response_type": "token",
+            "scope": "https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email",
+            "include_granted_scopes": "true",
+            "state": 'pass-through-value'
+        };
+        $.each(params, function(name, value) {
+            $('<input>')
+                .attr('type', 'hidden')
+                .attr('name', name)
+                .attr('value', value)
+                .appendTo($form);
+        });
+        $form.appendTo('body').submit();
+    }
+
+    
     function uploadUser(){
         var strFullName = $('#strFullName').val().trim(); 
         var strEmail = $('#strEmail').val().trim();
@@ -181,9 +246,7 @@ $(document).ready(function() {
             success: function(response) {
                 if(response){
                     $("#signUpValidationMsg").html('Registration completed').css("color", "green");
-                    setTimeout(function() {
-                        window.location.href="?action=login";
-                    },1000);
+                    window.location.href="?action=login";
                 }
                 else
                     $("#signUpValidationMsg").html('Unable to complete Registration').css("color", "red");
@@ -230,11 +293,11 @@ $(document).ready(function() {
                 if (response.success){
                     if(response.msg==''){
                         $("#saveContactValidationMsg").html("contact created successfully").css("color", "green");
-                        delayRedirect();
+                        Redirect();
                     }
                     else{
                         $("#saveContactValidationMsg").html(response.msg).css("color","green");
-                        delayRedirect();
+                        Redirect();
                     }
                 } 
                 else {
@@ -245,10 +308,8 @@ $(document).ready(function() {
         });   
     }
 
-    function delayRedirect(){
-        setTimeout(function() {
-            window.location.href="?action=display";
-        },1000);
+    function Redirect(){
+        window.location.href="?action=display";
     }
 
     
@@ -365,4 +426,50 @@ $(document).ready(function() {
         }
     }
 
+});
+
+
+$(document).ready(function() {
+    if (location.search.includes("action=display")) {
+        let params = {};
+        let regex = /([^&=]+)=([^&]*)/g, m;
+        while ((m = regex.exec(location.href)) !== null) {
+            params[decodeURIComponent(m[1])] = decodeURIComponent(m[2]);
+        }
+        if (Object.keys(params).length > 0) {
+            localStorage.setItem('authInfo', JSON.stringify(params));
+            window.history.pushState({}, document.title, "/addressBook/?action=display");
+        }
+        let info = JSON.parse(localStorage.getItem('authInfo'));
+        if (info) {
+            console.log(info['access_token']);
+            console.log(info['expires_in']);
+            $.ajax({
+                url: "https://www.googleapis.com/oauth2/v3/userinfo",
+                headers: {
+                    "Authorization": `Bearer ${info['access_token']}`
+                },
+                success: function(data) {
+                    console.log(data);
+                    var formData = new FormData();
+                    formData.append('strGoogleMail', data.email);
+                    formData.append('strGoogleName', data.name);
+                    formData.append('intGoogleSubID', data.sub);
+                    formData.append('bolGoogleEmailValid', data.email_verified);
+                    $.ajax({
+                        url: './controllers/contact.cfc?method=googleLogin',
+                        type: 'post',
+                        data: formData,
+                        contentType: false, 
+                        processData: false, 
+                        dataType: 'json',
+                        success:function(response){
+                            console.log(response);
+                        }
+                    });
+
+                }
+            });
+        }
+    }
 });
