@@ -12,7 +12,7 @@
         </button>
     </div>
     <div class="d-flex m-5 mt-0">
-        <div class="d-flex-column justify-content-center align-item-center bg-light p-2 px-4 gap-4">
+        <div class="d-flex-column justify-content-center align-item-center bg-light p-2 px-4 gap-4 divheight">
             <div class="d-flex justify-content-center mb-2">
                 <img src="./assets/uploads/#session.profile#" alt="user profile" class="profileImg">
             </div>
@@ -154,8 +154,8 @@
                 </div>
             </div>  
         </div>  
-        <div class="bg-light ms-5 w-75" id='areaToPrint'>
-            <table class="w-100" >
+        <div class="bg-light ms-5 w-75 tableDiv" id='areaToPrint'>
+            <table class="w-100">
 				<thead class='p-2'>
 					<tr class="text-primary p-2">
                         <th class="text-light">Photo</th>

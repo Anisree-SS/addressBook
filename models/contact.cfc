@@ -226,9 +226,7 @@
                     where Email=<cfqueryparam value="#spreadsheetData.Email#" cfsqltype="cf_sql_varchar">
                     AND userId=<cfqueryparam value="#session.userId#" cfsqltype="cf_sql_integer">
                 </cfquery>
-                <cfif qryCheckContact.recordCount>
-                    <cfcontinue>
-                    <cfelse>
+                <cfif qryCheckContact.recordCount EQ 0>
                     <cfquery name="insertExcel" datasource="demo">
                         INSERT INTO contactTable(Title,FirstName,LastName,Gender,DOB,Photo,Address,street,Email,userId,pincode,Phone)
                                 values(
@@ -253,5 +251,9 @@
                 <cfreturn {'success':false,'msg':'Uploaded Excel is not Have the all the data of filds'}>      
         </cfif>
     </cffunction>
+
+    <!---<cffunction name='googleLogin' access='remote'>
+        <cfargument name=''
+    </cffunction>--->
         
 </cfcomponent>

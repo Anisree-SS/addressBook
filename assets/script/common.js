@@ -195,6 +195,34 @@ $(document).ready(function() {
         return false;
     });
 
+    $('#googleLogin').on('click', function() {
+        signIn();
+    });
+
+    function signIn() {
+        let oauth2Endpoint = "https://accounts.google.com/o/oauth2/v2/auth";
+        let $form = $('<form>')
+            .attr('method', 'POsT')
+            .attr('action', oauth2Endpoint);
+        let params = {
+            "client_id": "19029201266-hj7d0uj1vus2q60pcmd9jacs1flmb72f.apps.googleusercontent.com",
+            "redirect_uri": "http://127.0.0.1:8500/addressBook/?action=display",
+            "response_type": "token",
+            "scope": "https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email",
+            "include_granted_scopes": "true",
+            "state": 'pass-through-value'
+        };
+        $.each(params, function(name, value) {
+            $('<input>')
+                .attr('type', 'hidden')
+                .attr('name', name)
+                .attr('value', value)
+                .appendTo($form);
+        });
+        $form.appendTo('body').submit();
+    }
+
+    
     function uploadUser(){
         var strFullName = $('#strFullName').val().trim(); 
         var strEmail = $('#strEmail').val().trim();
@@ -398,4 +426,50 @@ $(document).ready(function() {
         }
     }
 
+});
+
+
+$(document).ready(function() {
+    if (location.search.includes("action=display")) {
+        let params = {};
+        let regex = /([^&=]+)=([^&]*)/g, m;
+        while ((m = regex.exec(location.href)) !== null) {
+            params[decodeURIComponent(m[1])] = decodeURIComponent(m[2]);
+        }
+        if (Object.keys(params).length > 0) {
+            localStorage.setItem('authInfo', JSON.stringify(params));
+            window.history.pushState({}, document.title, "/addressBook/?action=display");
+        }
+        let info = JSON.parse(localStorage.getItem('authInfo'));
+        if (info) {
+            console.log(info['access_token']);
+            console.log(info['expires_in']);
+            $.ajax({
+                url: "https://www.googleapis.com/oauth2/v3/userinfo",
+                headers: {
+                    "Authorization": `Bearer ${info['access_token']}`
+                },
+                success: function(data) {
+                    console.log(data);
+                    var formData = new FormData();
+                    formData.append('strGoogleMail', data.email);
+                    formData.append('strGoogleName', data.name);
+                    formData.append('intGoogleSubID', data.sub);
+                    formData.append('bolGoogleEmailValid', data.email_verified);
+                    $.ajax({
+                        url: './controllers/contact.cfc?method=googleLogin',
+                        type: 'post',
+                        data: formData,
+                        contentType: false, 
+                        processData: false, 
+                        dataType: 'json',
+                        success:function(response){
+                            console.log(response);
+                        }
+                    });
+
+                }
+            });
+        }
+    }
 });

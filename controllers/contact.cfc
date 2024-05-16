@@ -61,4 +61,14 @@ component {
         }
            
     }
+
+    remote any function googleLogin() returnFormat='json'{
+        if(bolGoogleEmailValid){
+            local.strcheckUserResult=variables.modelObject.checkUser(strEmail=strGoogleMail,strUserName=strGoogleName);
+            if(local.strcheckUserResult.success){
+               
+            }
+        }
+    }
 }
+
