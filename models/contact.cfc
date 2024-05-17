@@ -32,32 +32,37 @@
         <cfargument name="strUserName" required="true" type="string">
         <cfargument name="strPassword" required="true" type="string">
         <cfargument name='fileUserPhoto' required='true' type='any'>
+        <cfargument name='intSubID' required='false' type='numeric' default='0'>
         <cfset local.strPassword=Hash(arguments.strPassword,"MD5")>
-        <cfset local.result = {}>
         <cfset local.path = ExpandPath("../assets/uploads/")>
-        <cffile action="upload" destination="#local.path#" nameConflict="MakeUnique" filefield="fileUserPhoto">
-        <cfset local.profile = cffile.serverFile>
-        <cfquery name="qrySaveUser" result="qryAddUser">
-            insert into addressBookLogin(fullName,emailId,userName,password,Profile)
-            values(
-                <cfqueryparam value="#arguments.strFullName#" cfsqltype="cf_sql_varchar">,
-                <cfqueryparam value="#arguments.strEmail#" cfsqltype="cf_sql_varchar">,
-                <cfqueryparam value="#arguments.strUserName#" cfsqltype="cf_sql_varchar">,
-                <cfqueryparam value="#local.strPassword#" cfsqltype="cf_sql_varchar">,
-                <cfqueryparam value="#local.profile#" cfsqltype="cf_sql_varchar">
-            )
-        </cfquery>
-        <cftry>
-            <cfif qryAddUser.recordCount>
-                <cfset local.result.success = true>
-                <cfset local.result.msg="Registration completed">
-            </cfif>
-            <cfcatch type="any"> 
-                <cfset local.success = false>
-                <cfset local.result.msg="Unable to complete Registration">
-            </cfcatch>
-        </cftry>
-        <cfreturn local.result>
+        <cfset local.result = {}>
+        <cfif arguments.intSubID EQ 0>
+            <cffile action="upload" destination="#local.path#" nameConflict="MakeUnique" filefield="fileUserPhoto">
+            <cfset local.profile = cffile.serverFile>
+            <cfelse>
+                <cfset local.profile=arguments.fileUserPhoto>
+        </cfif>
+            <cfquery name="qrySaveUser" result="qryAddUser">
+                insert into addressBookLogin(fullName,emailId,userName,password,Profile)
+                values(
+                    <cfqueryparam value="#arguments.strFullName#" cfsqltype="cf_sql_varchar">,
+                    <cfqueryparam value="#arguments.strEmail#" cfsqltype="cf_sql_varchar">,
+                    <cfqueryparam value="#arguments.strUserName#" cfsqltype="cf_sql_varchar">,
+                    <cfqueryparam value="#local.strPassword#" cfsqltype="cf_sql_varchar">,
+                    <cfqueryparam value="#local.profile#" cfsqltype="cf_sql_varchar">
+                )
+            </cfquery>
+            <cftry>
+                <cfif qryAddUser.recordCount>
+                    <cfset local.result.success = true>
+                    <cfset local.result.msg="Registration completed">
+                </cfif>
+                <cfcatch type="any"> 
+                    <cfset local.success = false>
+                    <cfset local.result.msg="Unable to complete Registration">
+                </cfcatch>
+            </cftry>
+            <cfreturn {'success':local.result}>
     </cffunction>
 
     <cffunction name="checkContact" access="remote" returnFormat="json">
@@ -252,8 +257,4 @@
         </cfif>
     </cffunction>
 
-    <!---<cffunction name='googleLogin' access='remote'>
-        <cfargument name=''
-    </cffunction>--->
-        
 </cfcomponent>

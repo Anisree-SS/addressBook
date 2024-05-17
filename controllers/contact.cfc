@@ -12,6 +12,10 @@ component {
                 session.isLogin = true;
                 session.fullName= local.qryResult.fullName;
                 session.profile=local.qryResult.Profile;
+                if(intSubID EQ 0)
+                    session.profileURL=false;
+                else
+                    session.profileURL=true;
                 return { "success": true };
             } 
             else 
@@ -58,17 +62,31 @@ component {
         }
         else{
             return {"success":false,"msg":local.error};
-        }
-           
+        }   
     }
 
     remote any function googleLogin() returnFormat='json'{
-        if(bolGoogleEmailValid){
-            local.strcheckUserResult=variables.modelObject.checkUser(strEmail=strGoogleMail,strUserName=strGoogleName);
+        if(bolEmailValid){
+            local.strcheckUserResult=variables.modelObject.checkUser(strEmail=strEmail,strUserName=strUserName);
             if(local.strcheckUserResult.success){
-               
+                return { "success": true,'msg':'not exists'};        
+            }
+            else{
+                local.strPassword=Hash('NULL',"MD5");
+                local.qryResult=variables.modelObject.doLogin(strEmail=strEmail,strPassword=local.strPassword);
+                if (local.qryResult.recordCount) {
+                session.userId= local.qryResult.userId;
+                session.isLogin = true;
+                session.fullName= local.qryResult.fullName;
+                session.profile=local.qryResult.Profile;
+                session.profileURL=true;
+                return { "success": true,'msg':''};
+            } 
+            else 
+                return { "success": false };
             }
         }
+        return {"success":false,'msg':'Something went wrong!!!'}
     }
 }
 

@@ -3,6 +3,7 @@ $(document).ready(function() {
         $("#validationMsg").text("");
         var strEmail = $('#strUserName').val().trim(); 
         var strPassword = $('#strPassword').val().trim();
+        var intSubID=0;
         if (strUserName == ''|| strPassword =='' ){  
             $('#loginValidationMsg').html('Required user name and password').css("color", "red");
             return false;
@@ -10,12 +11,12 @@ $(document).ready(function() {
         $.ajax({
             url: './controllers/contact.cfc?method=doLogin',
             type: 'post',
-            data:  {strEmail: strEmail , strPassword:strPassword},
+            data:  {strEmail: strEmail , strPassword:strPassword,intSubID:intSubID},
             dataType:"json",
             success: function(response) {
                 if (response.success){
                     $("#loginValidationMsg").text('Login successfull !!!!').css("color", "green");
-                    Redirect();
+                    window.location.href="?action=display";
 
                 } else {
                     $("#loginValidationMsg").text('Invalid user name or password !!!!').css("color", "red");
@@ -80,7 +81,7 @@ $(document).ready(function() {
                 dataType:"json",
                 success: function(response) {
                     if(response.success){
-                        Redirect();
+                        window.location.href="?action=display";
                     } 
                 }, 
             });
@@ -156,7 +157,7 @@ $(document).ready(function() {
         var printArea = $('#areaToPrint').html();
         $('body').html(printArea);
         window.print();
-        Redirect();
+        window.location.href="?action=display";
     });
 
     $('#uploadContact').on('submit',function(){
@@ -183,7 +184,7 @@ $(document).ready(function() {
                 success: function(response) {
                     if(response.success){
                         $('#uploadError').html(response.msg).css("color", "green");
-                        Redirect();
+                        window.location.href="?action=display";
                     }
                     else{
                         $('#uploadError').html(response.msg).css("color", "red");
@@ -202,7 +203,7 @@ $(document).ready(function() {
     function signIn() {
         let oauth2Endpoint = "https://accounts.google.com/o/oauth2/v2/auth";
         let $form = $('<form>')
-            .attr('method', 'POsT')
+            .attr('method', 'POST')
             .attr('action', oauth2Endpoint);
         let params = {
             "client_id": "19029201266-hj7d0uj1vus2q60pcmd9jacs1flmb72f.apps.googleusercontent.com",
@@ -293,11 +294,11 @@ $(document).ready(function() {
                 if (response.success){
                     if(response.msg==''){
                         $("#saveContactValidationMsg").html("contact created successfully").css("color", "green");
-                        Redirect();
+                        window.location.href="?action=display";
                     }
                     else{
                         $("#saveContactValidationMsg").html(response.msg).css("color","green");
-                        Redirect();
+                        window.location.href="?action=display";
                     }
                 } 
                 else {
@@ -308,11 +309,7 @@ $(document).ready(function() {
         });   
     }
 
-    function Redirect(){
-        window.location.href="?action=display";
-    }
 
-    
     function validation(){
         var strFullName = $('#strFullName').val().trim(); 
         var strEmail = $('#strEmail').val().trim();
@@ -411,7 +408,7 @@ $(document).ready(function() {
                 errorMsg+="Enter valid email address!! ";
             }
             if(isNaN(intPhone)||(intPhone.length!=10))
-                errorMsg+="Enter valid phone number!!  ";     
+                errorMsg+="Enter valid phone number!! ";     
             if(isNaN(intPincode)) 
                 errorMsg+="Enter valid pincode!! ";  
             if(!isNaN(strAddress)) 
@@ -450,12 +447,14 @@ $(document).ready(function() {
                     "Authorization": `Bearer ${info['access_token']}`
                 },
                 success: function(data) {
-                    console.log(data);
                     var formData = new FormData();
-                    formData.append('strGoogleMail', data.email);
-                    formData.append('strGoogleName', data.name);
-                    formData.append('intGoogleSubID', data.sub);
-                    formData.append('bolGoogleEmailValid', data.email_verified);
+                    formData.append('strEmail', data.email);
+                    formData.append('strFullName', data.name);
+                    formData.append('strUserName', data.name);
+                    formData.append('strPassword','NULL');
+                    formData.append('intSubID', data.sub);
+                    formData.append('fileUserPhoto',data.picture);
+                    formData.append('bolEmailValid', data.email_verified);
                     $.ajax({
                         url: './controllers/contact.cfc?method=googleLogin',
                         type: 'post',
@@ -464,12 +463,50 @@ $(document).ready(function() {
                         processData: false, 
                         dataType: 'json',
                         success:function(response){
-                            console.log(response);
+                            if(response.success && response.msg!=''){
+                                googleLoginCheck(formData)
+                            }
+                            else if(response.success && response.msg=='')
+                                window.location.href="?action=display";
+                            else
+                                alert('some issue');
                         }
                     });
-
                 }
             });
         }
+    }
+    function googleLogin(formData){
+        $.ajax({
+            url: './controllers/contact.cfc?method=dologin',
+            type: 'post',
+            data: formData,
+            contentType: false, 
+            processData: false, 
+            dataType: 'json',
+            success:function(response){
+                if(response.success){
+                    window.location.href="?action=display"; 
+                }
+                else
+                    alert('something went wrong');
+            }
+        });
+    }
+
+    function googleLoginCheck(formData){
+        $.ajax({
+            url: './models/contact.cfc?method=saveUser',
+            type: 'post',
+            data: formData,
+            contentType: false, 
+            processData: false, 
+            dataType: 'json',
+            success: function(response) {
+                if(response.success ){
+                    googleLogin(formData);
+                }
+            }
+        });
     }
 });

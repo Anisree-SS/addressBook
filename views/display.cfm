@@ -1,3 +1,4 @@
+<cfset variables.profileURL= session.profileURL?session.profile:"./assets/uploads/"&session.profile>
 <cfoutput>
 <cfif session.isLogin>
     <div class="d-flex justify-content-end align-item-center bg-light m-5 mb-4 gap-2 p-2">
@@ -14,7 +15,7 @@
     <div class="d-flex m-5 mt-0">
         <div class="d-flex-column justify-content-center align-item-center bg-light p-2 px-4 gap-4 divheight">
             <div class="d-flex justify-content-center mb-2">
-                <img src="./assets/uploads/#session.profile#" alt="user profile" class="profileImg">
+                <img src="#variables.profileURL#" alt="user profile" class="profileImg">
             </div>
             <div class="d-flex justify-content-center mb-2 text-primary">
                 #UCase(session.fullName)#
