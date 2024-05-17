@@ -23,6 +23,7 @@ component
 		session.userId=0;
 		session.fullName='';
 		session.profile='';
+		session.profileURL=false;
 	}
 
 	function onRequestStart( String scriptName ){

@@ -3,9 +3,6 @@
     <cfset excelQry = queryNew("Photo,Name,Gender,Email,Phone,Address,Pincode","varchar,varchar,varchar,varchar,varchar,varchar,integer")> 
     <cfloop array="#contacts#" index="contact">
         <cfif session.userId EQ contact.getuserId()>
-            <cfimage name = "profilePhoto" source ="" action = "read"> 
-            <cfset photo=profilePhoto>
-            <cfdump var="#photo#" abort>
             <cfset name = contact.getFirstName()&" "&contact.getLastName()>
             <cfset email = contact.getEmail()>
             <cfset phone = contact.getPhone()>

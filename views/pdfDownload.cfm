@@ -1,7 +1,7 @@
 <cfoutput>
 <cfhtmltopdf>
     <div class="w-100" >
-        <table>
+        <table class='border border-dark'>
             <thead>
                 <tr>
                     <th>Photo</th>
