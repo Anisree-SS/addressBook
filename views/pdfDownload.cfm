@@ -26,8 +26,6 @@
                             <td>#contact.getEmail()#</td>
                             <td>#contact.getPhone()#</td>
                         </tr>
-                        <cfelse>
-                            <cfcontinue>
                     </cfif>
                 </cfloop>
             </tbody>

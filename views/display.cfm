@@ -12,8 +12,8 @@
             <img src="./assets/images/print.jpg" alt="print" class="downloadIcon">
         </button>
     </div>
-    <div class="d-flex m-5 mt-0">
-        <div class="d-flex-column justify-content-center align-item-center bg-light p-2 px-4 gap-4 divheight">
+    <div class="d-flex m-5 mt-0 col-12">
+        <div class="d-flex-column justify-content-center align-item-center bg-light p-2 px-4 divheight">
             <div class="d-flex justify-content-center mb-2">
                 <img src="#variables.profileURL#" alt="user profile" class="profileImg">
             </div>
@@ -153,43 +153,43 @@
                         </div>
                     </div>
                 </div>
-            </div>  
-        </div>  
-        <div class="bg-light ms-5 w-75 tableDiv" id='areaToPrint'>
+            </div>
+        </div>
+        <div class="bg-light ms-4 w-75 tableDiv" id='areaToPrint'>
             <table class="w-100">
-				<thead class='p-2'>
-					<tr class="text-primary p-2">
+                <thead class='p-2'>
+                    <tr class="text-primary p-2">
                         <th class="text-light">Photo</th>
-						<th>Name</th>
-						<th>Email</th>
-						<th>Phone number</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Phone number</th>
                         <th></th>
                         <th></th>
-					</tr>
-				</thead>
-				<tbody>
-					<cfset contacts = EntityLoad("displayORM")>
-					<cfloop array="#contacts#" index="contact">
+                    </tr>
+                </thead>
+                <tbody>
+                    <cfset contacts = EntityLoad("displayORM")>
+                    <cfloop array="#contacts#" index="contact">
                         <cfif session.userId EQ contact.getuserId()>
                             <tr class='m-2'>
                                 <td><img src="./assets/uploads/#contact.getPhoto()#" alt="Profile" class='downloadIcon'></td>
                                 <td>#contact.getFirstName()# #contact.getLastName()#</td>
                                 <td>#contact.getEmail()#</td>
                                 <td>#contact.getPhone()#</td>
-                                <th>
+                                <td>
                                     <button type="button" class="btn btn-outline-primary modalBtn editBtn" data-bs-toggle="modal" data-bs-target="##myModal" data-id="#contact.getContactID()#">EDIT</button>
-                                </th>
-                                <th>
+                                </td>
+                                <td>
                                     <button type="button" class="btn btn-outline-primary modalBtn deleteBtn" data-bs-toggle="modal" data-id="#contact.getContactID()#">DELETE</button>
-                                </th>
-                                <th>
+                                </td>
+                                <td>
                                     <button type="button" class="btn btn-outline-primary modalBtn viewBtn" data-bs-toggle="modal" data-bs-target="##viewModal" data-id="#contact.getContactID()#">VIEW</button>
-                                </th>
+                                </td>
                             </tr>
                         </cfif>
-					</cfloop>
-				</tbody>
-			</table>
+                    </cfloop>
+                </tbody>
+            </table>
         </div>
     </div>
     <div class="modal bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" id="viewModal">
