@@ -1,6 +1,6 @@
 <cfoutput>
     <cfset contacts = EntityLoad("displayORM")>
-    <cfset excelQry = queryNew("Photo,Name,Gender,Email,Phone,Address,Pincode","varchar,varchar,varchar,varchar,varchar,varchar,integer")> 
+    <cfset excelQry = queryNew("Name,Gender,Email,Phone,Address,Pincode","varchar,varchar,varchar,varchar,varchar,integer")> 
     <cfloop array="#contacts#" index="contact">
         <cfif session.userId EQ contact.getuserId()>
             <cfset name = contact.getFirstName()&" "&contact.getLastName()>

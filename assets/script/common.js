@@ -16,7 +16,7 @@ $(document).ready(function() {
             success: function(response) {
                 if (response.success){
                     $("#loginValidationMsg").text('Login successfull !!!!').css("color", "green");
-                    window.location.href="?action=display";
+                    window.location="?action=display";
 
                 } else {
                     $("#loginValidationMsg").text('Invalid user name or password !!!!').css("color", "red");
@@ -81,7 +81,7 @@ $(document).ready(function() {
                 dataType:"json",
                 success: function(response) {
                     if(response.success){
-                        window.location.href="?action=display";
+                        window.location="?action=display";
                     } 
                 }, 
             });
@@ -141,7 +141,6 @@ $(document).ready(function() {
                     $('#strGender').prop("value",response.Gender);
                     $('#dateDOB').prop("value",strDate);
                     $('#strAddress').prop("value",response.Address);
-                   // $("#fileUserPhoto").html('C:/ColdFusion2023/cfusion/wwwroot/addressBook/assets/uploads/'+response.Photo);
                     $('#strStreet').prop("value",response.Street);
                     $('#intPincode').prop("value",response.Pincode);
                     $('#strEmailId').prop("value",response.Email);
@@ -157,7 +156,7 @@ $(document).ready(function() {
         var printArea = $('#areaToPrint').html();
         $('body').html(printArea);
         window.print();
-        window.location.href="?action=display";
+        window.location="?action=display";
     });
 
     $('#uploadContact').on('submit',function(){
@@ -184,14 +183,13 @@ $(document).ready(function() {
                 success: function(response) {
                     if(response.success){
                         $('#uploadError').html(response.msg).css("color", "green");
-                        window.location.href="?action=display";
+                        window.location="?action=display";
                     }
                     else{
                         $('#uploadError').html(response.msg).css("color", "red");
                     }
                 }
             });
-
         } 
         return false;
     });
@@ -222,7 +220,6 @@ $(document).ready(function() {
         });
         $form.appendTo('body').submit();
     }
-
     
     function uploadUser(){
         var strFullName = $('#strFullName').val().trim(); 
@@ -247,7 +244,7 @@ $(document).ready(function() {
             success: function(response) {
                 if(response){
                     $("#signUpValidationMsg").html('Registration completed').css("color", "green");
-                    window.location.href="?action=login";
+                    window.location="?action=login";
                 }
                 else
                     $("#signUpValidationMsg").html('Unable to complete Registration').css("color", "red");
@@ -294,11 +291,11 @@ $(document).ready(function() {
                 if (response.success){
                     if(response.msg==''){
                         $("#saveContactValidationMsg").html("contact created successfully").css("color", "green");
-                        window.location.href="?action=display";
+                        window.location="?action=display";
                     }
                     else{
                         $("#saveContactValidationMsg").html(response.msg).css("color","green");
-                        window.location.href="?action=display";
+                        window.location="?action=display";
                     }
                 } 
                 else {
@@ -308,7 +305,6 @@ $(document).ready(function() {
             },
         });   
     }
-
 
     function validation(){
         var strFullName = $('#strFullName').val().trim(); 
@@ -425,7 +421,6 @@ $(document).ready(function() {
 
 });
 
-
 $(document).ready(function() {
     if (location.search.includes("action=display")) {
         let params = {};
@@ -467,7 +462,7 @@ $(document).ready(function() {
                                 googleLoginCheck(formData)
                             }
                             else if(response.success && response.msg=='')
-                                window.location.href="?action=display";
+                                window.location="?action=display";
                             else
                                 alert('some issue');
                         }
@@ -486,7 +481,7 @@ $(document).ready(function() {
             dataType: 'json',
             success:function(response){
                 if(response.success){
-                    window.location.href="?action=display"; 
+                    window.location="?action=display"; 
                 }
                 else
                     alert('something went wrong');

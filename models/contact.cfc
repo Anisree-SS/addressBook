@@ -42,27 +42,27 @@
             <cfelse>
                 <cfset local.profile=arguments.fileUserPhoto>
         </cfif>
-            <cfquery name="qrySaveUser" result="qryAddUser">
-                insert into addressBookLogin(fullName,emailId,userName,password,Profile)
-                values(
-                    <cfqueryparam value="#arguments.strFullName#" cfsqltype="cf_sql_varchar">,
-                    <cfqueryparam value="#arguments.strEmail#" cfsqltype="cf_sql_varchar">,
-                    <cfqueryparam value="#arguments.strUserName#" cfsqltype="cf_sql_varchar">,
-                    <cfqueryparam value="#local.strPassword#" cfsqltype="cf_sql_varchar">,
-                    <cfqueryparam value="#local.profile#" cfsqltype="cf_sql_varchar">
-                )
-            </cfquery>
-            <cftry>
-                <cfif qryAddUser.recordCount>
-                    <cfset local.result.success = true>
-                    <cfset local.result.msg="Registration completed">
-                </cfif>
-                <cfcatch type="any"> 
-                    <cfset local.success = false>
-                    <cfset local.result.msg="Unable to complete Registration">
-                </cfcatch>
-            </cftry>
-            <cfreturn {'success':local.result}>
+        <cfquery name="qrySaveUser" result="qryAddUser">
+            insert into addressBookLogin(fullName,emailId,userName,password,Profile)
+            values(
+                <cfqueryparam value="#arguments.strFullName#" cfsqltype="cf_sql_varchar">,
+                <cfqueryparam value="#arguments.strEmail#" cfsqltype="cf_sql_varchar">,
+                <cfqueryparam value="#arguments.strUserName#" cfsqltype="cf_sql_varchar">,
+                <cfqueryparam value="#local.strPassword#" cfsqltype="cf_sql_varchar">,
+                <cfqueryparam value="#local.profile#" cfsqltype="cf_sql_varchar">
+            )
+        </cfquery>
+        <cftry>
+            <cfif qryAddUser.recordCount>
+                <cfset local.result.success = true>
+                <cfset local.result.msg="Registration completed">
+            </cfif>
+            <cfcatch type="any"> 
+                <cfset local.success = false>
+                <cfset local.result.msg="Unable to complete Registration">
+            </cfcatch>
+        </cftry>
+        <cfreturn {'success':local.result}>
     </cffunction>
 
     <cffunction name="checkContact" access="remote" returnFormat="json">
@@ -162,10 +162,8 @@
         <cfquery name="forDisplay">
             select Title,FirstName,LastName,Gender,DOB,Photo,Address,street,Email,pincode,Phone
             from contactTable
-            <cfif structKeyExists(arguments,"intContactId")>
-                where contactId =<cfqueryparam value="#arguments.intContactId#" cfsqltype="cf_sql_integer">
-                and userId =<cfqueryparam value="#session.userId#" cfsqltype="cf_sql_integer">
-            </cfif>
+            where contactId =<cfqueryparam value="#arguments.intContactId#" cfsqltype="cf_sql_integer">
+            and userId =<cfqueryparam value="#session.userId#" cfsqltype="cf_sql_integer">
         </cfquery>
         <cfreturn {"success":true,"Title":forDisplay.Title,"FirstName":forDisplay.FirstName,"LastName":forDisplay.LastName,"Gender":forDisplay.Gender,"DOB":forDisplay.DOB,"Address":forDisplay.Address,"Pincode":forDisplay.Pincode,"Email":forDisplay.Email,"Phone":forDisplay.Phone,"Photo":forDisplay.Photo,'Street':forDisplay.Street}>
     </cffunction>
@@ -177,21 +175,6 @@
             where contactId=<cfqueryparam value="#arguments.intContactId#" cfsqltype="cf_sql_integer">
         </cfquery>
         <cfreturn {"success":true}>
-    </cffunction>
-
-    <cffunction name='excelColumn' access='remote'  returnType="array">
-        <cfquery name="qryColumnNames">
-            select column_name
-            from information_schema.columns
-            where table_name = 'contactTable'
-        </cfquery>
-        <cfset dbColumnNames = []>
-        <cfloop query="qryColumnNames">
-            <cfif(!((qryColumnNames.column_name EQ 'contactId') OR (qryColumnNames.column_name EQ 'userID')))>
-                <cfset arrayAppend(dbColumnNames, qryColumnNames.column_name)>
-            </cfif>
-        </cfloop>
-        <cfreturn dbColumnNames>
     </cffunction>
 
     <cffunction name='uploadFile' access='remote' returnFormat='json'>
@@ -207,7 +190,7 @@
             <cfset columnhead = local.excelHead[i].name>
             <cfset arrayAppend(local.excelColumnNames, columnhead)>
         </cfloop>
-         <cfquery name="qryColumnNames">
+        <cfquery name="qryColumnNames">
             select column_name
             from information_schema.columns
             where table_name = 'contactTable'
@@ -232,29 +215,36 @@
                     AND userId=<cfqueryparam value="#session.userId#" cfsqltype="cf_sql_integer">
                 </cfquery>
                 <cfif qryCheckContact.recordCount EQ 0>
-                    <cfquery name="insertExcel" datasource="demo">
-                        INSERT INTO contactTable(Title,FirstName,LastName,Gender,DOB,Photo,Address,street,Email,userId,pincode,Phone)
-                                values(
-                                    <cfqueryparam value="#spreadsheetData.Title#" cfsqltype="cf_sql_varchar">,
-                                    <cfqueryparam value="#spreadsheetData.FirstName#" cfsqltype="cf_sql_varchar">,
-                                    <cfqueryparam value="#spreadsheetData.LastName#" cfsqltype="cf_sql_varchar">,
-                                    <cfqueryparam value="#spreadsheetData.Gender#" cfsqltype="cf_sql_varchar">,
-                                    <cfqueryparam value="#spreadsheetData.DOB#" cfsqltype="cf_sql_date">,
-                                    <cfqueryparam value="#spreadsheetData.Photo#" cfsqltype="cf_sql_varchar">,
-                                    <cfqueryparam value="#spreadsheetData.Address#" cfsqltype="cf_sql_varchar">,
-                                    <cfqueryparam value="#spreadsheetData.street#" cfsqltype="cf_sql_varchar">,
-                                    <cfqueryparam value="#spreadsheetData.Email#" cfsqltype="cf_sql_varchar">,
-                                    <cfqueryparam value="#session.userId#" cfsqltype="cf_sql_integer">,
-                                    <cfqueryparam value="#spreadsheetData.Pincode#" cfsqltype="cf_sql_integer">,
-                                    <cfqueryparam value="#spreadsheetData.Phone#" cfsqltype="cf_sql_varchar">
-                                )
+                    <cfquery name='qryCheckUserMail'>
+                        select 1 
+                        from addressBookLogin 
+                        where emailId=<cfqueryparam value="#spreadsheetData.Email#" cfsqltype="cf_sql_varchar">
+                        AND userID=<cfqueryparam value="#session.userId#" cfsqltype="cf_sql_integer">
                     </cfquery>
+                    <cfif qryCheckUserMail.recordCount EQ 0>
+                        <cfquery name="insertExcel" datasource="demo">
+                            INSERT INTO contactTable(Title,FirstName,LastName,Gender,DOB,Photo,Address,street,Email,userId,pincode,Phone)
+                            values(
+                                <cfqueryparam value="#spreadsheetData.Title#" cfsqltype="cf_sql_varchar">,
+                                <cfqueryparam value="#spreadsheetData.FirstName#" cfsqltype="cf_sql_varchar">,
+                                <cfqueryparam value="#spreadsheetData.LastName#" cfsqltype="cf_sql_varchar">,
+                                <cfqueryparam value="#spreadsheetData.Gender#" cfsqltype="cf_sql_varchar">,
+                                <cfqueryparam value="#spreadsheetData.DOB#" cfsqltype="cf_sql_date">,
+                                <cfqueryparam value="#spreadsheetData.Photo#" cfsqltype="cf_sql_varchar">,
+                                <cfqueryparam value="#spreadsheetData.Address#" cfsqltype="cf_sql_varchar">,
+                                <cfqueryparam value="#spreadsheetData.street#" cfsqltype="cf_sql_varchar">,
+                                <cfqueryparam value="#spreadsheetData.Email#" cfsqltype="cf_sql_varchar">,
+                                <cfqueryparam value="#session.userId#" cfsqltype="cf_sql_integer">,
+                                <cfqueryparam value="#spreadsheetData.Pincode#" cfsqltype="cf_sql_integer">,
+                                <cfqueryparam value="#spreadsheetData.Phone#" cfsqltype="cf_sql_varchar">
+                            )
+                        </cfquery>
+                    </cfif>
                 </cfif>
             </cfloop>
-                <cfreturn {'success':true,'msg':'Contacts updated successfully'}>
+            <cfreturn {'success':true,'msg':'Contacts updated successfully'}>
             <cfelse>
-                <cfreturn {'success':false,'msg':'Uploaded Excel is not Have the all the data of filds'}>      
+                <cfreturn {'success':false,'msg':'Uploaded Excel is not the sheet we need'}>      
         </cfif>
     </cffunction>
-
 </cfcomponent>
