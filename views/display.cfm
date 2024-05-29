@@ -200,11 +200,6 @@
                 </div>
                 <center><p  class="errorMsgHeight mb-0" id="saveContactValidationMsg"></p></center>
                 <div class="modal-body mt-0">
-                    <table id="tableContainer">
-                        <tr>
-                            <td> </td>
-                        <tr>
-                    </table>
                     <div class="d-flex justify-content-evenly">
                         <div class="d-flex-column">
                             <p class="text-primary">Name</p>
