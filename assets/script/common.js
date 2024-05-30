@@ -243,7 +243,7 @@ $(document).ready(function() {
             dataType: 'json',
             success: function(response) {
                 if(response){
-                    $("#signUpValidationMsg").html('Registration completed').css("color", "green");
+                    alert('Registration completed');
                     window.location="?action=login";
                 }
                 else
@@ -260,8 +260,8 @@ $(document).ready(function() {
         var strLastName = $('#strLastName').val().trim();
         var strGender = $('#strGender').val().trim();
         var dateDOB=$('#dateDOB').val().trim();
-        var strAddress=$('#strAddress').val().trim();
-        var strStreet=$('#strStreet').val().trim();
+        var strAddress = DOMPurify.sanitize($('#strAddress').val().trim());
+        var strStreet = DOMPurify.sanitize($('#strStreet').val().trim());
         var intPhone=$('#intPhone').val().trim();
         var strEmailId=$('#strEmailId').val().trim();
         var intPincode=$('#intPincode').val().trim();
@@ -315,7 +315,7 @@ $(document).ready(function() {
         var specialChar = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/;
         var alphabets = /[A-z]/g;
         var number = /[0-9]/g;
-        var emailformate=/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+        var emailformate=/^\w+([\.+-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
         var specialCharName = specialChar.test(strFullName);
         var numberName = number.test(strFullName);
         var specialCharUserName = specialChar.test(strUserName);
@@ -336,7 +336,7 @@ $(document).ready(function() {
             }
             if (!strEmail.match(emailformate)){
                 errorMsg+="Enter valid email address!!";
-            }
+            }          
             if (((specialCharUserName) || (numberUserName))){
                 errorMsg+="User name should be in string"; 
             }
@@ -371,19 +371,21 @@ $(document).ready(function() {
         var strLastName = $('#strLastName').val().trim();
         var strGender = $('#strGender').val().trim();
         var dateDOB=$('#dateDOB').val().trim();
-        var strAddress=$('#strAddress').val().trim();
-        var strStreet=$('#strStreet').val().trim();
+        var strAddress = DOMPurify.sanitize($('#strAddress').val().trim());
+        var strStreet = DOMPurify.sanitize($('#strStreet').val().trim());
         var intPhone=$('#intPhone').val().trim();
         var strEmailId=$('#strEmailId').val().trim();
         var intPincode=$('#intPincode').val().trim();
         var specialChar = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/;
-        var emailformate=/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+        var emailformate= /^\w+([\.+-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
         var number = /[0-9]/g;
         var specialCharName = specialChar.test(strFirstName);
         var numberName = number.test(strFirstName);
         var specialCharLastName = specialChar.test(strLastName);
         var numberLastName = number.test(strLastName);
         var errorMsg='';
+        var regexWithCountryCode = /^\+91\d{10}$/;
+        var regexWithoutCountryCode = /^00\d{10}$/;
         try {
             var filePhoto = $("#filePhoto")[0].files[0].name;
         } catch (error) {
@@ -394,21 +396,22 @@ $(document).ready(function() {
             errorMsg="All fields required";
         }
         else{
-            if(((specialCharName) || (numberName))){
+            if(((specialCharName) || (numberName)))
                 errorMsg+="First name should be in string "; 
-            }
-            if(((specialCharLastName) || (numberLastName))){
-                errorMsg+="Last name should be in string "; 
-            }
-            if (!strEmailId.match(emailformate)){
+            if(((specialCharLastName) || (numberLastName)))
+                errorMsg+="Last name should be in string ";
+            if(strFirstName.length>15)
+                errorMsg+="First name is too long";
+            if(strLastName.length>15)
+                errorMsg+='Second name is too long';
+            if(!strEmailId.match(emailformate))
                 errorMsg+="Enter valid email address!! ";
-            }
-            if(isNaN(intPhone)||(intPhone.length!=10))
-                errorMsg+="Enter valid phone number!! ";     
-            if(isNaN(intPincode)) 
+            if (!regexWithCountryCode.test(intPhone) && !regexWithoutCountryCode.test(intPhone)) 
+                errorMsg += 'Enter valid phone number ';
+            if(isNaN(intPincode)||(intPincode.length!=6)) 
                 errorMsg+="Enter valid pincode!! ";  
             if(!isNaN(strAddress)) 
-                errorMsg+="Address must contains letters ";    
+                errorMsg+="Address must contains letters ";  
         }
         if(errorMsg != ''){
             $("#saveContactValidationMsg").html(errorMsg).css("color", "red");
@@ -418,7 +421,6 @@ $(document).ready(function() {
             return true;
         }
     }
-
 });
 
 $(document).ready(function() {
