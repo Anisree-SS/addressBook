@@ -120,3 +120,16 @@ tr{
 th{
     margin: 10px 0px;
 }
+td{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 200px;
+}
+
+.ponter{
+    cursor: pointer;
+}
+
+.forPadding{
+    padding-left: 5%;
+}

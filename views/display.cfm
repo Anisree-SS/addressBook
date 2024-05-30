@@ -126,7 +126,7 @@
                                     <div class="d-flex justify-content-between mt-2 ">
                                         <div>
                                             <label class="text-primary" for="intPincode">PinCode * </label><br>
-                                            <input type="text" name="intPincode" id="intPincode" placeholder="Pincode"  class="uploadfile" value="">
+                                            <input type="text" name="intPincode" id="intPincode" placeholder="Pincode"  class="uploadfile" value="" maxlength='6'>
                                         </div>
                                     </div>
                                     <div class="d-flex justify-content-between mt-2">
@@ -196,28 +196,42 @@
         <div class="modal-dialog modal-lg bgColor p-2 d-flex w-75">
             <div class="modal-content border-0">
                 <div class="m-5 mb-2 bgColor">
-                    <center><h6 class="modal-title text-primary fw-bold p-1">CONTACT DETAILS</h6></center>
+                    <center>
+                        <h6 class="modal-title text-primary fw-bold p-1">CONTACT DETAILS</h6>
+                    </center>
                 </div>
-                <center><p  class="errorMsgHeight mb-0" id="saveContactValidationMsg"></p></center>
+                <center>
+                    <p  class="errorMsgHeight mb-0" id="saveContactValidationMsg"></p>
+                </center>
                 <div class="modal-body mt-0">
-                    <div class="d-flex justify-content-evenly">
-                        <div class="d-flex-column">
-                            <p class="text-primary">Name</p>
-                            <p class="text-primary">Gender</p>
-                            <p class="text-primary">Date of Birth</p>
-                            <p class="text-primary">Address</p>
-                            <p class="text-primary">Pincode</p>
-                            <p class="text-primary">Email Id</p>
-                            <p class="text-primary">Phone</p>
+                    <div class="d-flex-column">
+                        <div class="d-flex justify-content-strat mb-2">
+                            <div class="text-primary forPadding col-3">Name</div>
+                            <div class="text-dark forPadding" id="Name"></div>
                         </div>
-                        <div class="d-flex-column">
-                            <p class="text-dark" id="Name"></p>
-                            <p class="text-dark" id="Gender"></p>
-                            <p class="text-dark" id="DOB"></p>
-                            <p class="text-dark" id="Address"></p>
-                            <p class="text-dark" id="Pincode"></p>
-                            <p class="text-primary" id="EmailId"></p>
-                            <p class="text-dark" id="Phone"></p>
+                        <div class="d-flex justify-content-start mb-2">
+                            <div class="text-primary forPadding col-3">Gender</div>
+                            <div class="text-dark forPadding" id="Gender"></div>
+                        </div>
+                        <div class="d-flex justify-content-start mb-2">
+                            <div class="text-primary forPadding col-3">Date of Birth</div>
+                            <div class="text-dark forPadding" id="DOB"></div>
+                        </div>
+                        <div class="d-flex justify-content-start mb-2">
+                            <div class="text-primary forPadding col-3">Address</div>
+                            <div class="text-dark forPadding" id="Address"></div>
+                        </div>
+                        <div class="d-flex justify-content-start mb-2">
+                            <div class="text-primary forPadding col-3">Pincode</div>
+                            <div class="text-dark forPadding" id="Pincode"></div>
+                        </div>
+                        <div class="d-flex justify-content-start mb-2">
+                            <div class="text-primary forPadding col-3">Email Id</div>
+                            <div class="text-primary forPadding" id="EmailId"></div>
+                        </div>
+                        <div class="d-flex justify-content-start mb-2">
+                            <div class="text-primary forPadding col-3">Phone</div>
+                            <div class="text-dark forPadding" id="Phone"></div>
                         </div>
                     </div>
                     <div class="d-flex justify-content-evenly mt-4">
@@ -234,3 +248,4 @@
     </div>
 </cfif>
 </cfoutput>
+</html>
