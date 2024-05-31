@@ -33,6 +33,7 @@
     <cfheader name="Content-Disposition" value="attachment; filename=contactList.xlsx">
     <cfcontent type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" file="#excelFilePath#" deleteFile="true">
 </cfoutput>
+</body>
 </html>
 
 

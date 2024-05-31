@@ -104,7 +104,7 @@
                                         </div>
                                         <div>
                                             <label class="text-primary" for="dateDOB">Date Of Birth *</label><br>
-                                            <input type="date" name="dateDOB" id="dateDOB" value=''>
+                                            <input type="text" name="dateDOB" id="dateDOB" value=''>
                                         </div>
                                     </div>
                                     <div class="d-flex-column justify-content-start mt-4">
@@ -248,4 +248,5 @@
     </div>
 </cfif>
 </cfoutput>
+</body>
 </html>
