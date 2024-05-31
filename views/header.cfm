@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="./assets/style/style.css">
     <script src="./assets/script/jquery.js"></script>
     <script src="./assets/script/modalJS.js"></script>
+    <script src="./assets/script/purify.js"></script>
     <script src="./assets/script/common.js"></script>
     <title>ADDRESS BOOK</title>
 </cfoutput>

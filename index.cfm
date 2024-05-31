@@ -13,7 +13,7 @@
         break;
         case "display":
             include "/views/header.cfm";
-            include "/views/navbar.cfm";
+            include "/views/navbar.cfm";         
             include "/views/display.cfm";
         break;
         case "pdfDownload":
@@ -25,6 +25,11 @@
             include "/views/navbar.cfm";
             include '/views/excelDownload.cfm';
             include "/views/display.cfm";
+        break;
+        default :
+            include "/views/header.cfm";
+            include "/views/navbar.cfm";
+            include "/views/logInPage.cfm"; 
         break;
     }
 </cfscript>
