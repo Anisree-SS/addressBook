@@ -104,7 +104,7 @@
                                         </div>
                                         <div>
                                             <label class="text-primary" for="dateDOB">Date Of Birth *</label><br>
-                                            <input type="date" name="dateDOB" id="dateDOB" value=''>
+                                            <input type="text" name="dateDOB" id="dateDOB" value=''>
                                         </div>
                                     </div>
                                     <div class="d-flex-column justify-content-start mt-4">
@@ -156,7 +156,7 @@
             </div>
         </div>
         <div class="bg-light ms-4 w-75 tableDiv" id='areaToPrint'>
-            <table class="w-100">
+            <table class="w-100 mx-1">
                 <thead class='p-2'>
                     <tr class="text-primary p-2">
                         <th class="text-light">Photo</th>
@@ -248,4 +248,5 @@
     </div>
 </cfif>
 </cfoutput>
+</body>
 </html>
