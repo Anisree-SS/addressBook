@@ -156,7 +156,7 @@
             </div>
         </div>
         <div class="bg-light ms-4 w-75 tableDiv" id='areaToPrint'>
-            <table class="w-100">
+            <table class="w-100 mx-1">
                 <thead class='p-2'>
                     <tr class="text-primary p-2">
                         <th class="text-light">Photo</th>
