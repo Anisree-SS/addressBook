@@ -391,7 +391,6 @@ $(document).ready(function() {
         var regexWithCountryCode = /^\+91\d{10}$/;
         var regexWithoutCountryCode = /^00\d{10}$/;
         var regexStratWithZero = /^0\d{10}$/;
-        var regexForTenDigit=/([1-9]{10})|(\([0-9]{3}\)\s+[0-9]{3}\-[0-9]{4})/;
         try {
             var filePhoto = $("#filePhoto")[0].files[0].name;
         } catch (error) {
@@ -416,8 +415,6 @@ $(document).ready(function() {
                 if (!regexWithCountryCode.test(intPhone) && !regexWithoutCountryCode.test(intPhone)&&!regexStratWithZero.test(intPhone)) 
                     errorMsg += 'Enter valid phone number ';
             }
-            else if(!regexForTenDigit.test(intPhone))
-                errorMsg+='Ente valid phone number ';
             if(isNaN(intPincode)||(intPincode.length!=6)) 
                 errorMsg+="Enter valid pincode!! ";  
             if(!isNaN(strAddress)) 
@@ -442,7 +439,7 @@ $(document).ready(function() {
         }
         if (Object.keys(params).length > 0) {
             localStorage.setItem('authInfo', JSON.stringify(params));
-            window.history.pushState({}, document.title, "/addressBook/");
+            window.history.pushState({}, document.title, "");
         }
         let info = JSON.parse(localStorage.getItem('authInfo'));
         if (info) {

@@ -246,6 +246,8 @@
             </div>
         </div>
     </div>
+    <cfelse>
+        <cfinclude template="loginPage.cfm">
 </cfif>
 </cfoutput>
 </body>
