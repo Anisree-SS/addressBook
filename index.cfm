@@ -16,6 +16,10 @@
             include "/views/navbar.cfm";         
             include "/views/display.cfm";
         break;
+        case "error":
+            include "/views/header.cfm";
+            include "/views/errorPage.cfm";
+        break;
         case "pdfDownload":
             include "/views/header.cfm";
             include "/views/pdfDownload.cfm";
