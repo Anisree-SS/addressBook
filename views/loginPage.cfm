@@ -1,4 +1,6 @@
 <cfset result=createObject("component","controllers.contact").checkLogin()>
+<!--- <cfinclude template="header.cfm">
+<cfinclude template="navbar.cfm"> --->
 <cfoutput>
     <div class="d-flex justify-content-center align-item-center postion-fixed-center mt-5 pt-5 border">
         <div class="navBgColor d-flex justify-content-center align-item-center p-5 border rounded-start">
@@ -34,7 +36,7 @@
                 </div>
                 <div>
                     <span class="fontSize14">Don't have an account?</span>
-                    <a href="?action=register" class="fontSize14">Register here</a>
+                    <a href="" class="fontSize14">Register here</a>
                 </div>
             </center>
         </div>
