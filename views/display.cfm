@@ -1,15 +1,17 @@
-<cfset variables.profileURL= session.profileURL?session.profile:"./assets/uploads/"&session.profile>
+<cfset variables.profileURL= session.profileURL?session.profile:"../assets/uploads/"&session.profile>
+<cfinclude template="./header.cfm">
+<cfinclude template="./navbar.cfm">
 <cfoutput>
 <cfif session.isLogin>
     <div class="d-flex justify-content-end align-item-center bg-light m-5 mb-4 gap-2 p-2">
-        <a href='?action=pdfDownload'>
-            <img src="./assets/images/pdf.png" alt="pdf format" class="downloadIcon" title='PDF Download'>
+        <a href='pdfDownload.cfm'>
+            <img src="../assets/images/pdf.png" alt="pdf format" class="downloadIcon" title='PDF Download'>
         </a>
-        <a href='?action=excelDownload'>
-            <img src="./assets/images/excel.png" alt="excel format" class="downloadIcon" title='Excel Download'>
+        <a href="excelDownload.cfm">
+            <img src="../assets/images/excel.png" alt="excel format" class="downloadIcon" title='Excel Download'>
         </a>
         <button id='printBtn' class="btn btn-outline-none p-0">
-            <img src="./assets/images/print.jpg" alt="print" class="downloadIcon">
+            <img src="../assets/images/print.jpg" alt="print" class="downloadIcon">
         </button>
     </div>
     <div class="d-flex m-5 mt-0 col-12">
@@ -41,7 +43,7 @@
                                 <p class="errorMsgHeight mb-0" id="uploadError"></p>
                             </center>
                             <div class="modal-body mt-0">
-                                <form action='?action=display' method='post' enctype='multipart/form-data' id='uploadContact'>
+                                <form action='display.cfm' method='post' enctype='multipart/form-data' id='uploadContact'>
                                     <div class="d-flex justify-content-center mb-4">
                                         <div>
                                             <label class="text-primary" for="fileExcel">Upload Excel File *</label><br>
@@ -69,7 +71,7 @@
                                 <p class="errorMsgHeight mb-0" id="saveContactValidationMsg"></p>
                             </center>
                             <div class="modal-body mt-0">
-                                <form action="?action=display" method="post" id="createForm" enctype="multipart/form-data">
+                                <form action="display.cfm" method="post" id="createForm" enctype="multipart/form-data">
                                     <p class="mb-0 text-primary fw-bold">Personal Contact</p>
                                     <hr class="mt-0">
                                     <div class="d-flex justify-content-between mb-4">
@@ -148,7 +150,7 @@
                         </div>
                         <div>
                             <div class="p-5 contactImg">
-                                <img src="./assets/images/profile.png" class="profileImg picture">
+                                <img src="../assets/images/profile.png" class="profileImg picture">
                             </div>
                         </div>
                     </div>
@@ -172,7 +174,7 @@
                     <cfloop array="#contacts#" index="contact">
                         <cfif session.userId EQ contact.getuserId()>
                             <tr class='m-2'>
-                                <td><img src="./assets/uploads/#contact.getPhoto()#" alt="Profile" class='downloadIcon'></td>
+                                <td><img src="../assets/uploads/#contact.getPhoto()#" alt="Profile" class='downloadIcon'></td>
                                 <td>#contact.getFirstName()# #contact.getLastName()#</td>
                                 <td>#contact.getEmail()#</td>
                                 <td>#contact.getPhone()#</td>
@@ -241,13 +243,13 @@
             </div>
             <div>
                 <div class="p-5 contactImg">
-                    <img src="./assets/images/profile.png" class="profileImg picture" alt='profile'>
+                    <img src="../assets/images/profile.png" class="profileImg picture" alt='profile'>
                 </div>
             </div>
         </div>
     </div>
     <cfelse>
-        <cfinclude template="loginPage.cfm">
+        <cfinclude template="index.cfm">
 </cfif>
 </cfoutput>
 </body>

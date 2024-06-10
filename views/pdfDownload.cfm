@@ -18,7 +18,7 @@
             <cfloop array="#contacts#" index="contact">
                 <cfif session.userId Eq contact.getuserId()>
                     <tr>
-                        <td><img src="./assets/uploads/#contact.getPhoto()#" alt="Profile" width='40' height='40'></td>
+                        <td><img src="../assets/uploads/#contact.getPhoto()#" alt="Profile" width='40' height='40'></td>
                         <td>#contact.getFirstName()# #contact.getLastName()#</td>
                         <td>#contact.getGender()#</td>
                         <td>#contact.getDOB()#</td>
