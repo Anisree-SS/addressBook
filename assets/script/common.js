@@ -9,14 +9,14 @@ $(document).ready(function() {
             return false;
         }
         $.ajax({
-            url: './controllers/contact.cfc?method=doLogin',
+            url: '../controllers/contact.cfc?method=doLogin',
             type: 'post',
             data:  {strEmail: strEmail , strPassword:strPassword,intSubID:intSubID},
             dataType:"json",
             success: function(response) {
                 if (response.success){
                     $("#loginValidationMsg").text('Login successfull !!!!').css("color", "green");
-                    window.location="?action=display";
+                    window.location="../views/display.cfm";
 
                 } else {
                     $("#loginValidationMsg").text('Invalid user name or password !!!!').css("color", "red");
@@ -33,7 +33,7 @@ $(document).ready(function() {
         $("#signUpValidationMsg").html('');
         if(validation()){
             $.ajax({
-                url: './controllers/contact.cfc?method=checkUser',
+                url: '../controllers/contact.cfc?method=checkUser',
                 type: 'post',
                 data: {strEmail:strEmail,strUserName:strUserName} ,
                 dataType: 'json',
@@ -55,7 +55,7 @@ $(document).ready(function() {
         var intContactId=$('#intContactId').val().trim();
         if(contactValidation()){
             $.ajax({
-                url: './controllers/contact.cfc?method=checkContact',
+                url: '../controllers/contact.cfc?method=checkContact',
                 type: 'post',
                 data:  {intContactId :intContactId, strEmailId:strEmailId },
                 dataType:"json",
@@ -75,13 +75,13 @@ $(document).ready(function() {
         var intContactId =$(this).attr("data-id"); 
         if(confirm("Are you sure you want delete the contact ?")){
             $.ajax({
-                url: './models/contact.cfc?method=deleteContact',
+                url: '../models/contact.cfc?method=deleteContact',
                 type: 'post',
                 data:  {intContactId: intContactId},
                 dataType:"json",
                 success: function(response) {
                     if(response.success){
-                        window.location="?action=display";
+                        window.location="../views/display.cfm";
                     } 
                 }, 
             });
@@ -94,7 +94,7 @@ $(document).ready(function() {
     $('.viewBtn').click(function() {
         var intContactId =$(this).attr("data-id"); 
         $.ajax({
-            url: './models/contact.cfc?method=getContact',
+            url: '../models/contact.cfc?method=getContact',
             type: 'post',
             data:  {intContactId: intContactId},
             dataType:"json",
@@ -109,7 +109,7 @@ $(document).ready(function() {
                     $('#Pincode').html(response.Pincode);
                     $('#EmailId').html(response.Email);
                     $('#Phone').html(response.Phone);
-                    $('.picture').attr('src','./assets/uploads/'+response.Photo);
+                    $('.picture').attr('src','../assets/uploads/'+response.Photo);
                 }
             }
         });
@@ -119,14 +119,14 @@ $(document).ready(function() {
     $("#createBtn").click(function() { 
         $("#createForm")[0].reset();
         $('#heading').html("CREATE CONTACT");
-        $('.picture').attr('src','./assets/images/profile.png');
+        $('.picture').attr('src','../assets/images/profile.png');
     }); 
 
     $(".editBtn").click(function(){
         var intContactId =$(this).attr("data-id"); 
         $('#heading').html("EDIT CONTACT");
         $.ajax({
-            url: './models/contact.cfc?method=getContact',
+            url: '../models/contact.cfc?method=getContact',
             type: 'post',
             data:  {intContactId: intContactId},
             dataType:"json",
@@ -145,7 +145,7 @@ $(document).ready(function() {
                     $('#intPincode').prop("value",response.Pincode);
                     $('#strEmailId').prop("value",response.Email);
                     $('#intPhone').prop("value",response.Phone);
-                    $('.picture').attr('src','./assets/uploads/'+response.Photo);
+                    $('.picture').attr('src','../assets/uploads/'+response.Photo);
                 }
             }
         });
@@ -156,7 +156,7 @@ $(document).ready(function() {
         var printArea = $('#areaToPrint').html();
         $('body').html(printArea);
         window.print();
-        window.location="?action=display";
+        window.location="../views/display.cfm";
     });
 
     $('#uploadContact').on('submit',function(){
@@ -174,7 +174,7 @@ $(document).ready(function() {
             var formData = new FormData();
             formData.append('fileExcel', fileExcel);
             $.ajax({
-                url: './models/contact.cfc?method=uploadFile',
+                url: '../models/contact.cfc?method=uploadFile',
                 type: 'post',
                 data: formData,
                 contentType: false, 
@@ -183,7 +183,7 @@ $(document).ready(function() {
                 success: function(response) {
                     if(response.success){
                         $('#uploadError').html(response.msg).css("color", "green");
-                        window.location="?action=display";
+                        window.location="../views/display.cfm";
                     }
                     else{
                         $('#uploadError').html(response.msg).css("color", "red");
@@ -205,7 +205,7 @@ $(document).ready(function() {
             .attr('action', oauth2Endpoint);
         let params = {
             "client_id": "19029201266-hj7d0uj1vus2q60pcmd9jacs1flmb72f.apps.googleusercontent.com",
-            "redirect_uri": "https://redirectmeto.com/http://addressbook.local/?action=display",
+            "redirect_uri": "https://redirectmeto.com/http://contactbook.local/views/display.cfm",
             "response_type": "token",
             "scope": "https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email",
             "include_granted_scopes": "true",
@@ -235,7 +235,7 @@ $(document).ready(function() {
         formData.append('fileUserPhoto', fileUserPhoto);
         $("#signUpValidationMsg").html('');
         $.ajax({
-            url: './models/contact.cfc?method=saveUser',
+            url: '../models/contact.cfc?method=saveUser',
             type: 'post',
             data: formData,
             contentType: false, 
@@ -244,7 +244,7 @@ $(document).ready(function() {
             success: function(response) {
                 if(response){
                     alert('Registration completed');
-                    window.location="?action=login";
+                    window.location="../index.cfm";
                 }
                 else
                     $("#signUpValidationMsg").html('Unable to complete Registration').css("color", "red");
@@ -281,7 +281,7 @@ $(document).ready(function() {
         formData.append('intPincode', intPincode);
         $("#saveContactValidationMsg").html('');
         $.ajax({
-            url: './models/contact.cfc?method=uploadContact',
+            url: '../models/contact.cfc?method=uploadContact',
             type: 'post',
             data: formData,
             contentType: false, 
@@ -291,11 +291,11 @@ $(document).ready(function() {
                 if (response.success){
                     if(response.msg==''){
                         $("#saveContactValidationMsg").html("contact created successfully").css("color", "green");
-                        window.location="?action=display";
+                        window.location="../views/display.cfm";
                     }
                     else{
                         $("#saveContactValidationMsg").html(response.msg).css("color","green");
-                        window.location="?action=display";
+                        window.location="../views/display.cfm";
                     }
                 } 
                 else {
@@ -431,7 +431,7 @@ $(document).ready(function() {
 });
 
 $(document).ready(function() {
-    if (location.search.includes("action=display")) {
+    if (location.search.includes("display")) {
         let params = {};
         let regex = /([^&=]+)=([^&]*)/g, m;
         while ((m = regex.exec(location.href)) !== null) {
@@ -471,7 +471,7 @@ $(document).ready(function() {
                                 googleLoginCheck(formData)
                             }
                             else if(response.success && response.msg=='')
-                                window.location="?action=display";
+                                window.location="../views/display.cfm";
                             else
                                 alert('some issue');
                         }
@@ -490,7 +490,7 @@ $(document).ready(function() {
             dataType: 'json',
             success:function(response){
                 if(response.success){
-                    window.location="?action=display"; 
+                    window.location="../views/display.cfm"; 
                 }
                 else
                     alert('something went wrong');
@@ -500,7 +500,7 @@ $(document).ready(function() {
 
     function googleLoginCheck(formData){
         $.ajax({
-            url: './models/contact.cfc?method=saveUser',
+            url: '../models/contact.cfc?method=saveUser',
             type: 'post',
             data: formData,
             contentType: false, 
