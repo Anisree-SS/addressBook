@@ -205,7 +205,7 @@ $(document).ready(function() {
             .attr('action', oauth2Endpoint);
         let params = {
             "client_id": "19029201266-hj7d0uj1vus2q60pcmd9jacs1flmb72f.apps.googleusercontent.com",
-            "redirect_uri": "http://contactbook.local/views/display.cfm",
+            "redirect_uri": "https://redirectmeto.com/http://contactbook.local/views/display.cfm",
             "response_type": "token",
             "scope": "https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email",
             "include_granted_scopes": "true",

@@ -1,3 +1,4 @@
+
 <cfset result=createObject("component","controllers.contact").checkLogin()>
 <cfinclude template="views/header.cfm">
 <cfinclude template="views/navbar.cfm">
