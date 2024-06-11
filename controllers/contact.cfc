@@ -37,13 +37,13 @@ component {
 
     public void function checkLogin(){
         if(session.isLogin){
-           cflocation(url="?action=display");
+           cflocation(url="views/display.cfm");
         }
     }
 
     remote any function doLogOut(){
         session.isLogin=false;
-        cflocation(url="../?action=login");
+        cflocation(url="../index.cfm");
     }
 
     remote any function checkContact() returnFormat='json'{

@@ -1,9 +1,11 @@
 <cfset result=createObject("component","controllers.contact").checkLogin()>
+<cfinclude template="./header.cfm">
+<cfinclude template="./navbar.cfm">
 <cfoutput>
     <div class="d-flex justify-content-center align-item-center postion-fixed-center mt-5 border">
         <div class="navBgColor d-flex justify-content-center align-item-center p-5 border rounded-start">
             <div class="d-flex justify-content-center align-item-center mt-5">
-                <img src="./assets/images/contactBook.png" alt="Address book logo" class="login mt-3">
+                <img src="../assets/images/contactBook.png" alt="Address book logo" class="login mt-3">
             </div>
         </div>
         <div class="d-flex-column justify-content-center align-item-center bg-light p-5 border-none rounded-end formWidth">
@@ -12,7 +14,7 @@
                 <center  class="errorMsgHeight"><span id="signUpValidationMsg"></span></center>
             </div>
             <div class="d-flex-column justify-content-center align-item-center pt-5 ">
-                <form action="?action=login" method="post" id='signUpForm' enctype="multipart/form-data">
+                <form action="index.cfm" method="post" id='signUpForm' enctype="multipart/form-data">
                     <div class="mb-4 border-bottom">
                         <input type="text"  id="strFullName" name="strFullName" placeholder="Full Name" class='inputStyle'>
                     </div>
