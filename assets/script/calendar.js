@@ -1,0 +1,9 @@
+$(document).ready(function(){
+    $("#dateDOB").datepicker({
+        changeMonth:true,
+        changeYear:true,
+        yearRange:'1920:2024',
+        maxDate:'0y',
+        minDate:'-100y'
+    });
+});
