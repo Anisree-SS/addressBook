@@ -16,22 +16,22 @@
             <div class="d-flex-column justify-content-center align-item-center pt-5 ">
                 <form action="index.cfm" method="post" id='signUpForm' enctype="multipart/form-data">
                     <div class="mb-4 border-bottom">
-                        <input type="text"  id="strFullName" name="strFullName" placeholder="Full Name" class='inputStyle'>
+                        <input type="text"  id="strFullName" name="strFullName" placeholder="Full Name" class='inputStyle w-100'>
                     </div>
                     <div class="mb-4 border-bottom">
-                        <input type="email" id="strEmail" name="strEmail" placeholder="Email Id" class='inputStyle'>
+                        <input type="email" id="strEmail" name="strEmail" placeholder="Email Id" class='inputStyle w-100'>
                     </div>
                     <div class="mb-4 border-bottom">
-                        <input type="text"  id="strUserName" name="strUserName" placeholder="User Name" class='inputStyle'>
+                        <input type="text"  id="strUserName" name="strUserName" placeholder="User Name" class='inputStyle w-100'>
                     </div>
                     <div class="mb-4 border-bottom">
-                        <input type="password"  id="strPassword" name="strPassword" placeholder="Password" class='inputStyle'>
+                        <input type="password"  id="strPassword" name="strPassword" placeholder="Password" class='inputStyle w-100'>
                     </div>
                     <div class="mb-4 border-bottom">
-                        <input type="password"  id="strConfirmPass" name="strConfirmPass" placeholder="Confirm Password" class='inputStyle'>
+                        <input type="password"  id="strConfirmPass" name="strConfirmPass" placeholder="Confirm Password" class='inputStyle w-100'>
                     </div>
                     <div class="mb-4 border-bottom">
-                        <input type="file"  id="fileUserPhoto" name="fileUserPhoto" class='inputStyle' accept="image/png, image/gif, image/jpeg">
+                        <input type="file"  id="fileUserPhoto" name="fileUserPhoto" class='inputStyle w-100' accept="image/png, image/gif, image/jpeg">
                     </div>
                     <center>
                         <input type="submit" class="btn btn-outline-primary buttonStyle" value="Register" id="signUp" > 
