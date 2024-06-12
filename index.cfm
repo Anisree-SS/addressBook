@@ -17,10 +17,10 @@
             <div class="d-flex-column justify-content-center align-item-center pt-5">
                 <form action="views/display.cfm" method="post">
                     <div class="mb-4 border-secondary border-bottom">
-                        <input type="text"  id="strUserName" name="strUserName" placeholder="Username" class='inputStyle'>
+                        <input type="text"  id="strUserName" name="strUserName" placeholder="Username" class='inputStyle w-100'>
                     </div>
                     <div class="mb-4 border-secondary border-bottom">
-                        <input type="password" class="inputStyle" id="strPassword" name="strPassword" placeholder="Password">
+                        <input type="password" class="inputStyle w-100" id="strPassword" name="strPassword" placeholder="Password">
                     </div>
                     <center>
                         <input type="submit" class="btn btn-outline-primary buttonStyle" value="Login" id="login"> 

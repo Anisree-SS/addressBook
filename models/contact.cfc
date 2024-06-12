@@ -85,7 +85,7 @@
                     AND userID=<cfqueryparam value="#session.userId#" cfsqltype="cf_sql_integer">
                 </cfquery>
                 <cfif qryCheckUserMail.recordCount>
-                    <cfreturn {'success':false,'msg':'You cant create your own contact'}>
+                    <cfreturn {'success':false,'msg':'Its your email id'}>
                     <cfelse>
                         <cfreturn {'success':true,'msg':''}>
                 </cfif>

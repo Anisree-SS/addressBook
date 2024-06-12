@@ -1,8 +1,8 @@
 <cfset variables.profileURL= session.profileURL?session.profile:"../assets/uploads/"&session.profile>
-<cfinclude template="./header.cfm">
-<cfinclude template="./navbar.cfm">
 <cfoutput>
 <cfif session.isLogin>
+    <cfinclude template="./header.cfm">
+    <cfinclude template="./navbar.cfm">
     <div class="d-flex justify-content-end align-item-center bg-light m-5 mb-4 gap-2 p-2">
         <a href='pdfDownload.cfm'>
             <img src="../assets/images/pdf.png" alt="pdf format" class="downloadIcon" title='PDF Download'>
@@ -14,7 +14,7 @@
             <img src="../assets/images/print.jpg" alt="print" class="downloadIcon">
         </button>
     </div>
-    <div class="d-flex m-5 mt-0 col-12">
+    <div class="d-flex ms-5 mt-0">
         <div class="d-flex-column justify-content-center align-item-center bg-light p-2 px-4 divheight">
             <div class="d-flex justify-content-center mb-2">
                 <img src="#variables.profileURL#" alt="user profile" class="profileImg">
@@ -157,7 +157,7 @@
                 </div>
             </div>
         </div>
-        <div class="bg-light ms-4 w-75 tableDiv" id='areaToPrint'>
+        <div class="bg-light ms-4 tableDiv" id='areaToPrint'>
             <table class="w-100 mx-1">
                 <thead class='p-2'>
                     <tr class="text-primary p-2">
@@ -249,7 +249,7 @@
         </div>
     </div>
     <cfelse>
-        <cfinclude template="index.cfm">
+        <cfinclude template="../index.cfm">
 </cfif>
 </cfoutput>
 </body>

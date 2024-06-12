@@ -431,8 +431,9 @@ $(document).ready(function() {
 });
 
 $(document).ready(function() {
-    if (location.search.includes("display")) {
+    if (window.location.href.indexOf("views/display") > -1 ){
         let params = {};
+        params={"http://contactbook.local/views":"display"};
         let regex = /([^&=]+)=([^&]*)/g, m;
         while ((m = regex.exec(location.href)) !== null) {
             params[decodeURIComponent(m[1])] = decodeURIComponent(m[2]);
@@ -443,8 +444,6 @@ $(document).ready(function() {
         }
         let info = JSON.parse(localStorage.getItem('authInfo'));
         if (info) {
-            console.log(info['access_token']);
-            console.log(info['expires_in']);
             $.ajax({
                 url: "https://www.googleapis.com/oauth2/v3/userinfo",
                 headers: {
@@ -460,7 +459,7 @@ $(document).ready(function() {
                     formData.append('fileUserPhoto',data.picture);
                     formData.append('bolEmailValid', data.email_verified);
                     $.ajax({
-                        url: './controllers/contact.cfc?method=googleLogin',
+                        url: '../controllers/contact.cfc?method=googleLogin',
                         type: 'post',
                         data: formData,
                         contentType: false, 
@@ -482,7 +481,7 @@ $(document).ready(function() {
     }
     function googleLogin(formData){
         $.ajax({
-            url: './controllers/contact.cfc?method=dologin',
+            url: '../controllers/contact.cfc?method=dologin',
             type: 'post',
             data: formData,
             contentType: false, 
@@ -513,14 +512,4 @@ $(document).ready(function() {
             }
         });
     }
-});
-
-$(document).ready(function(){
-    $("#dateDOB").datepicker({
-        changeMonth:true,
-        changeYear:true,
-        yearRange:'1920:2024',
-        maxDate:'0y',
-        minDate:'-100y'
-    });
 });

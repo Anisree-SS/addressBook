@@ -13,6 +13,7 @@
     <script src="../assets/script/purify.js"></script>
     <script src="../assets/script/jquery-ui.js"></script>
     <script src="../assets/script/common.js"></script>
+    <script src="../assets/script/calendar.js"></script>
     <title>ADDRESS BOOK</title>
 </cfoutput>
 </head>
