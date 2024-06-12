@@ -431,9 +431,9 @@ $(document).ready(function() {
 });
 
 $(document).ready(function() {
-    if (window.location.href.indexOf("views/display") > -1 ){
+    if (window.location.href.indexOf("home") > -1 ){
         let params = {};
-        params={"http://contactbook.local/views":"display"};
+        params={"http://contactbook.local":"home"};
         let regex = /([^&=]+)=([^&]*)/g, m;
         while ((m = regex.exec(location.href)) !== null) {
             params[decodeURIComponent(m[1])] = decodeURIComponent(m[2]);
