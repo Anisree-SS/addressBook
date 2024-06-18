@@ -1,6 +1,6 @@
 <cfoutput>
     <cfset contacts = EntityLoad("displayORM")>
-    <cfset excelQry = queryNew("Title,FirstName,LastName,Gender,DOB,Photo,Address,street,Email,pincode,Phone","varchar,varchar,varchar,varchar,varchar,varchar,varchar,varchar,varchar,varchar,varchar")> 
+    <cfset excelQry = queryNew("Title,FirstName,LastName,Gender,DOB,Photo,Address,street,Email,pincode,Phone,Hobbies","varchar,varchar,varchar,varchar,varchar,varchar,varchar,varchar,varchar,varchar,varchar,varchar")> 
     <cfloop array="#contacts#" index="contact">
         <cfif session.userId EQ contact.getuserId()>
             <cfset Title=contact.getTitle()>
@@ -14,6 +14,7 @@
             <cfset address=contact.getAddress()>
             <cfset street =contact.getstreet()>
             <cfset pincode=contact.getPincode()>
+            <cfset Hobbies=contact.getHobbies()>
             <cfset queryAddRow(excelQry, 1)>
             <cfset querySetCell(excelQry, "Title", Title)>
             <cfset querySetCell(excelQry, "FirstName", FirstName)>
@@ -26,6 +27,7 @@
             <cfset querySetCell(excelQry, "Email", email)>
             <cfset querySetCell(excelQry,'PinCode',pincode)>
             <cfset querySetCell(excelQry,'Phone',Phone)>
+            <cfset querySetCell(excelQry,'Hobbies',Hobbies)>
         </cfif>
     </cfloop>
     <cfset excelFilePath = ExpandPath("./contactList.xlsx")>

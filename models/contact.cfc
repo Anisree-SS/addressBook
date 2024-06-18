@@ -105,6 +105,7 @@
         <cfargument name="strEmailId" required="true" type="string">
         <cfargument name="intPhone" required="true" type="numeric">
         <cfargument name="intPincode" required="true" type="numeric">
+        <cfargument name="aryHobbies" required="true" type="string" default="No">
         <cfset local.success = ''>
         <cfset local.path = ExpandPath("../assets/uploads/")>
         <cffile action="upload" destination="#local.path#" nameConflict="MakeUnique" filefield="filePhoto">
@@ -123,13 +124,14 @@
                 Email=<cfqueryparam value="#arguments.strEmailId#" cfsqltype="cf_sql_varchar">,
                 userId=<cfqueryparam value="#session.userId#" cfsqltype="cf_sql_integer">,
                 Pincode=<cfqueryparam value="#arguments.intPincode#" cfsqltype="cf_sql_integer">,
-                Phone=<cfqueryparam value="#arguments.intPhone#" cfsqltype="cf_sql_varchar">
+                Phone=<cfqueryparam value="#arguments.intPhone#" cfsqltype="cf_sql_varchar">,
+                Hobbies=<cfqueryparam value="#arguments.aryHobbies#" cfsqltype="cf_sql_varchar">
                 where contactId=<cfqueryparam value="#arguments.intContactId#" cfsqltype="cf_sql_integer">
             </cfquery>
             <cfreturn {"success":true, "msg":"Contact updated successfully"}>
             <cfelse>
                 <cfquery name="qrySaveContact" result="qryAddContact">
-                    insert into contactTable(Title,FirstName,LastName,Gender,DOB,Photo,Address,street,Email,userId,pincode,Phone)
+                    insert into contactTable(Title,FirstName,LastName,Gender,DOB,Photo,Address,street,Email,userId,pincode,Phone,Hobbies)
                     values(
                         <cfqueryparam value="#arguments.strTitle#" cfsqltype="cf_sql_varchar">,
                         <cfqueryparam value="#arguments.strFirstName#" cfsqltype="cf_sql_varchar">,
@@ -142,7 +144,8 @@
                         <cfqueryparam value="#arguments.strEmailId#" cfsqltype="cf_sql_varchar">,
                         <cfqueryparam value="#session.userId#" cfsqltype="cf_sql_integer">,
                         <cfqueryparam value="#arguments.intPincode#" cfsqltype="cf_sql_integer">,
-                        <cfqueryparam value="#arguments.intPhone#" cfsqltype="cf_sql_varchar">
+                        <cfqueryparam value="#arguments.intPhone#" cfsqltype="cf_sql_varchar">,
+                        <cfqueryparam value="#arguments.aryHobbies#" cfsqltype="cf_sql_varchar">
                     )
                 </cfquery>
                 <cftry>
@@ -160,12 +163,12 @@
     <cffunction name="getContact" access="remote" returnFormat="json">
         <cfargument name="intContactId" type="numeric"  required='true'>
         <cfquery name="forDisplay">
-            select Title,FirstName,LastName,Gender,DOB,Photo,Address,street,Email,pincode,Phone
+            select Title,FirstName,LastName,Gender,DOB,Photo,Address,street,Email,pincode,Phone,Hobbies
             from contactTable
             where contactId =<cfqueryparam value="#arguments.intContactId#" cfsqltype="cf_sql_integer">
             and userId =<cfqueryparam value="#session.userId#" cfsqltype="cf_sql_integer">
         </cfquery>
-        <cfreturn {"success":true,"Title":forDisplay.Title,"FirstName":forDisplay.FirstName,"LastName":forDisplay.LastName,"Gender":forDisplay.Gender,"DOB":forDisplay.DOB,"Address":forDisplay.Address,"Pincode":forDisplay.Pincode,"Email":forDisplay.Email,"Phone":forDisplay.Phone,"Photo":forDisplay.Photo,'Street':forDisplay.Street}>
+        <cfreturn {"success":true,"Title":forDisplay.Title,"FirstName":forDisplay.FirstName,"LastName":forDisplay.LastName,"Gender":forDisplay.Gender,"DOB":forDisplay.DOB,"Address":forDisplay.Address,"Pincode":forDisplay.Pincode,"Email":forDisplay.Email,"Phone":forDisplay.Phone,"Photo":forDisplay.Photo,'Street':forDisplay.Street,'Hobbies':forDisplay.Hobbies}>
     </cffunction>
 
     <cffunction name="deleteContact" access='remote' returnFormat="json">
@@ -204,7 +207,7 @@
         <cfset local.excelColumnNames=ArrayToList(local.excelColumnNames)>
         <cfset local.dbColumnNames=ArrayToList(local.dbColumnNames)>
         <cfset local.allHeader = Listappend(trim(local.excelColumnNames),trim(local.dbColumnNames))>
-        <cfset local.ListRemoveDuplicate=(ListRemoveDuplicates(local.allHeader,",",true))>
+        <cfset local.ListRemoveDuplicate=(ListRemoveDuplicates(local.allHeader,",",true))>      
         <cfif (ListLen(local.dbColumnNames) EQ ListLen(local.ListRemoveDuplicate)) AND (ListLen(local.dbColumnNames) EQ ListLen(trim(local.excelColumnNames)))>
             <cfspreadsheet action="read" src="#variables.FilePath#" query="spreadsheetData" headerrow='1' rows='2-100'> 
             <cfloop query="#spreadsheetData#">
@@ -223,7 +226,7 @@
                     </cfquery>
                     <cfif qryCheckUserMail.recordCount EQ 0>
                         <cfquery name="insertExcel" datasource="demo">
-                            INSERT INTO contactTable(Title,FirstName,LastName,Gender,DOB,Photo,Address,street,Email,userId,pincode,Phone)
+                            INSERT INTO contactTable(Title,FirstName,LastName,Gender,DOB,Photo,Address,street,Email,userId,pincode,Phone,Hobbies)
                             values(
                                 <cfqueryparam value="#spreadsheetData.Title#" cfsqltype="cf_sql_varchar">,
                                 <cfqueryparam value="#spreadsheetData.FirstName#" cfsqltype="cf_sql_varchar">,
@@ -236,7 +239,8 @@
                                 <cfqueryparam value="#spreadsheetData.Email#" cfsqltype="cf_sql_varchar">,
                                 <cfqueryparam value="#session.userId#" cfsqltype="cf_sql_integer">,
                                 <cfqueryparam value="#spreadsheetData.Pincode#" cfsqltype="cf_sql_integer">,
-                                <cfqueryparam value="#spreadsheetData.Phone#" cfsqltype="cf_sql_varchar">
+                                <cfqueryparam value="#spreadsheetData.Phone#" cfsqltype="cf_sql_varchar">,
+                                <cfqueryparam value="#spreadsheetData.Hobbies#" cfsqltype="cf_sql_varchar">
                             )
                         </cfquery>
                     </cfif>
