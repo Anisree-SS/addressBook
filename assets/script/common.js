@@ -281,9 +281,8 @@ $(document).ready(function() {
         var aryHobbies =[]; 
         var selectedHobbies =$('.checkboxStyle');
         for(var i=0,j=0; selectedHobbies[i]; ++i){
-            if(selectedHobbies[i].checked){
+            if(selectedHobbies[i].checked)
                 aryHobbies[j++] = selectedHobbies[i].value;
-            }
         }
         var formData = new FormData();
         formData.append('intContactId', intContactId);
