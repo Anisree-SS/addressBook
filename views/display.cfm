@@ -141,8 +141,54 @@
                                             <input type="text" name="intPhone" id="intPhone" placeholder="Phone number"  class="uploadfile" value="">
                                         </div>
                                     </div>
+                                    <p class="mb-0 text-primary fw-bold mt-2">Hobbies</p>
+                                    <hr  class="mt-0">
+                                    <div class="d-flex justify-content-between mt-2">
+                                        <div>
+                                            <input class='checkboxStyle' type="checkbox" id="Dancing" name="Dancing" value="Dancing">
+                                            <label for="Dancing">Dancing</label>
+                                        </div>                                    
+                                        <div>
+                                            <input class='checkboxStyle' type="checkbox" id="Singing" name="Singing" value="Singing">
+                                            <label for="Singing">Singing</label>
+                                        </div>                                    
+                                        <div>
+                                            <input class='checkboxStyle' type="checkbox" id="Reading" name="Reading" value="Reading">
+                                            <label for="Reading">Reading</label>
+                                        </div>                                    
+                                        <div>
+                                            <input class='checkboxStyle' type="checkbox" id="Traveling" name="Traveling" value="Traveling">
+                                            <label for="Traveling">Traveling</label>
+                                        </div>                                    
+                                        <div>
+                                            <input class='checkboxStyle' type="checkbox" id="Cooking" name="Cooking" value="Cooking">
+                                            <label for="Cooking">Cooking</label>
+                                        </div>                                    
+                                    </div>
+                                    <div class="d-flex justify-content-between mt-2">
+                                        <div>
+                                            <input class='checkboxStyle' type="checkbox" id="Shopping" name="Shopping" value="Shopping">
+                                            <label for="Shopping">Shopping</label>
+                                        </div>                                    
+                                        <div>
+                                            <input class='checkboxStyle' type="checkbox" id="Drawing" name="Drawing" value="Drawing">
+                                            <label for="Drawing">Drawing</label>
+                                        </div>                                    
+                                        <div>
+                                            <input class='checkboxStyle' type="checkbox" id="Painting" name="Painting" value="Painting">
+                                            <label for="Painting">Painting</label>
+                                        </div>                                    
+                                        <div>
+                                            <input class='checkboxStyle' type="checkbox" id="Gardening" name="Gardening" value="Gardening">
+                                            <label for="Gardening">Gardening</label>
+                                        </div>                                    
+                                        <div>
+                                            <input class='checkboxStyle' type="checkbox" id="Photography" name="Photography" value="Photography">
+                                            <label for="Photography">Photography</label>
+                                        </div>                                    
+                                    </div>
                                     <div class="d-flex justify-content-evenly mt-4">
-                                        <input type="button" class="btn btn-outline-dark" data-bs-dismiss="modal" value="CLOSE">
+                                        <input type="button" class="btn btn-outline-dark" data-bs-dismiss="modal" id="closeBtn" value="CLOSE">
                                         <input type="submit" value="SUBMIT" id="saveContact" class="btn btn-outline-primary" name="submit">
                                     </div>
                                 </form>
@@ -234,6 +280,10 @@
                         <div class="d-flex justify-content-start mb-2">
                             <div class="text-primary forPadding col-3">Phone</div>
                             <div class="text-dark forPadding" id="Phone"></div>
+                        </div>
+                        <div class="d-flex justify-content-start mb-2">
+                            <div class="text-primary forPadding col-3">Hobbies</div>
+                            <div class="text-dark forPadding hobby" id="Hobbies"></div>
                         </div>
                     </div>
                     <div class="d-flex justify-content-evenly mt-4">

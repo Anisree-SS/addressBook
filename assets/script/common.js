@@ -109,6 +109,7 @@ $(document).ready(function() {
                     $('#Pincode').html(response.Pincode);
                     $('#EmailId').html(response.Email);
                     $('#Phone').html(response.Phone);
+                    $('#Hobbies').html(response.Hobbies);
                     $('.picture').attr('src','../assets/uploads/'+response.Photo);
                 }
             }
@@ -120,9 +121,16 @@ $(document).ready(function() {
         $("#createForm")[0].reset();
         $('#heading').html("CREATE CONTACT");
         $('.picture').attr('src','../assets/images/profile.png');
+        $("#saveContactValidationMsg").text(""); 
     }); 
 
+    $('#closeBtn').click(function () {
+		$("#createForm")[0].reset();
+	});
+
     $(".editBtn").click(function(){
+        $('.checkboxStyle').attr('checked',false);
+        $("#saveContactValidationMsg").text(""); 
         var intContactId =$(this).attr("data-id"); 
         $('#heading').html("EDIT CONTACT");
         $.ajax({
@@ -134,6 +142,10 @@ $(document).ready(function() {
                 if(response.success){
                     var date =new Date(response.DOB);
                     var strDate = date.getFullYear() + '-' + ('0' + (date.getMonth() + 1)).slice(-2) + '-' + ('0' + date.getDate()).slice(-2);
+                    let arr = response.Hobbies.split(',');
+                    for(i=0;i<arr.length;i++){
+                        $('#'+arr[i]).prop('checked',arr[i]);
+                    }
                     $('#intContactId').prop('value',intContactId);
                     $('#strTitle').prop("value", response.Title);
                     $("#strFirstName").prop("value",response.FirstName);
@@ -266,6 +278,12 @@ $(document).ready(function() {
         var strEmailId=$('#strEmailId').val().trim();
         var intPincode=$('#intPincode').val().trim();
         var filePhoto = $('#filePhoto')[0].files[0];
+        var aryHobbies =[]; 
+        var selectedHobbies =$('.checkboxStyle');
+        for(var i=0,j=0; selectedHobbies[i]; ++i){
+            if(selectedHobbies[i].checked)
+                aryHobbies[j++] = selectedHobbies[i].value;
+        }
         var formData = new FormData();
         formData.append('intContactId', intContactId);
         formData.append('strTitle', strTitle);
@@ -279,6 +297,7 @@ $(document).ready(function() {
         formData.append('intPhone', intPhone);
         formData.append('strEmailId', strEmailId);
         formData.append('intPincode', intPincode);
+        formData.append('aryHobbies', aryHobbies);
         $("#saveContactValidationMsg").html('');
         $.ajax({
             url: '../models/contact.cfc?method=uploadContact',
