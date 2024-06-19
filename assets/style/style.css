@@ -113,14 +113,17 @@ input,select{
     display: flex;
     width:78%;
 }
+
 tr{
     padding: 10px !important;
     margin: 20px 0px;
     height:50px;
 }
+
 th{
     margin: 10px 0px;
 }
+
 td{
     overflow: hidden;
     text-overflow: ellipsis;
@@ -158,4 +161,44 @@ td{
 
 .hobby{
  line-break: anywhere;
+}
+
+.hobbyStyle {
+    position: relative;
+    width: 50%;
+}
+
+.hobbyStyle .selectBox {
+    width: 100%;
+    min-height: 35px;
+    border: 1px solid #8f8c8c;
+    padding: 5px 10px;
+    font-size: 13px;
+    cursor: pointer;
+    background-color: #fff;
+}
+
+.hobbyStyle .selectBox.active {
+    border-bottom: none;
+}
+
+.hobbyStyle select {
+    display: none;
+    position: absolute;
+    background-color: #fff;
+    width: 100%;
+    max-height: 150px;
+    border-top: 1px solid #8f8c8c;
+}
+
+.hobbyStyle select option {
+    padding: 5px 10px;
+    font-size: 12px;
+    cursor: pointer;
+    border-top: 1px solid #fff;
+}
+
+.hobbyStyle .selected {
+    background-color: #337AB7;
+    color: #fff;
 }

@@ -143,49 +143,22 @@
                                     </div>
                                     <p class="mb-0 text-primary fw-bold mt-2">Hobbies</p>
                                     <hr  class="mt-0">
-                                    <div class="d-flex justify-content-between mt-2">
-                                        <div>
-                                            <input class='checkboxStyle' type="checkbox" id="Dancing" name="Dancing" value="Dancing">
-                                            <label for="Dancing">Dancing</label>
-                                        </div>                                    
-                                        <div>
-                                            <input class='checkboxStyle' type="checkbox" id="Singing" name="Singing" value="Singing">
-                                            <label for="Singing">Singing</label>
-                                        </div>                                    
-                                        <div>
-                                            <input class='checkboxStyle' type="checkbox" id="Reading" name="Reading" value="Reading">
-                                            <label for="Reading">Reading</label>
-                                        </div>                                    
-                                        <div>
-                                            <input class='checkboxStyle' type="checkbox" id="Traveling" name="Traveling" value="Traveling">
-                                            <label for="Traveling">Traveling</label>
-                                        </div>                                    
-                                        <div>
-                                            <input class='checkboxStyle' type="checkbox" id="Cooking" name="Cooking" value="Cooking">
-                                            <label for="Cooking">Cooking</label>
-                                        </div>                                    
-                                    </div>
-                                    <div class="d-flex justify-content-between mt-2">
-                                        <div>
-                                            <input class='checkboxStyle' type="checkbox" id="Shopping" name="Shopping" value="Shopping">
-                                            <label for="Shopping">Shopping</label>
-                                        </div>                                    
-                                        <div>
-                                            <input class='checkboxStyle' type="checkbox" id="Drawing" name="Drawing" value="Drawing">
-                                            <label for="Drawing">Drawing</label>
-                                        </div>                                    
-                                        <div>
-                                            <input class='checkboxStyle' type="checkbox" id="Painting" name="Painting" value="Painting">
-                                            <label for="Painting">Painting</label>
-                                        </div>                                    
-                                        <div>
-                                            <input class='checkboxStyle' type="checkbox" id="Gardening" name="Gardening" value="Gardening">
-                                            <label for="Gardening">Gardening</label>
-                                        </div>                                    
-                                        <div>
-                                            <input class='checkboxStyle' type="checkbox" id="Photography" name="Photography" value="Photography">
-                                            <label for="Photography">Photography</label>
-                                        </div>                                    
+                                    <div class="addressInput d-flex flex-column">
+                                        <div class="hobbyStyle" id="hobbies">
+                                            <div class="selectBox hobby"></div>
+                                            <select id="optionsList" multiple>
+                                                <option value="Dancing">Dancing</option>
+                                                <option value="Singing">Singing</option>
+                                                <option value="Reading">Reading</option>
+                                                <option value="Traveling">Traveling</option>
+                                                <option value="Cooking">Cooking</option>
+                                                <option value="Shopping">Shopping</option>
+                                                <option value="Drawing">Drawing</option>
+                                                <option value="Painting">Painting</option>
+                                                <option value="Gardening">Gardening</option>
+                                                <option value="Photography">Photography</option>
+                                            </select>
+                                        </div>
                                     </div>
                                     <div class="d-flex justify-content-evenly mt-4">
                                         <input type="button" class="btn btn-outline-dark" data-bs-dismiss="modal" id="closeBtn" value="CLOSE">

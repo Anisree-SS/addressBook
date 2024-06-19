@@ -49,6 +49,30 @@ $(document).ready(function() {
         return false;
     });
 
+    function updateSelectBox() {
+        var hobbies = [];
+        $('#optionsList option.selected').each(function() {
+            hobbies.push($(this).text());
+        });
+        if (hobbies.length > 0) {
+            $('.selectBox').text(hobbies.join(', '));
+        } else {
+            $('.selectBox').text('Select Options');
+        }
+    }
+
+    $('.hobbyStyle .selectBox').click(function() {
+        $(this).toggleClass('active');
+        $('#optionsList').toggle();
+    });
+
+    $('#optionsList').on('click', 'option', function(event) {
+        event.preventDefault();
+        $(this).toggleClass('selected');
+        this.selected = $(this).hasClass('selected');
+        updateSelectBox();
+    });
+
     $('#createForm').on("submit",function() {
         $("#saveContactValidationMsg").text("");
         var strEmailId=$('#strEmailId').val().trim();
@@ -119,17 +143,13 @@ $(document).ready(function() {
     
     $("#createBtn").click(function() { 
         $("#createForm")[0].reset();
+        $('.selectBox').html("Selete Hobbies");
         $('#heading').html("CREATE CONTACT");
         $('.picture').attr('src','../assets/images/profile.png');
         $("#saveContactValidationMsg").text(""); 
     }); 
 
-    $('#closeBtn').click(function () {
-		$("#createForm")[0].reset();
-	});
-
     $(".editBtn").click(function(){
-        $('.checkboxStyle').attr('checked',false);
         $("#saveContactValidationMsg").text(""); 
         var intContactId =$(this).attr("data-id"); 
         $('#heading').html("EDIT CONTACT");
@@ -142,10 +162,6 @@ $(document).ready(function() {
                 if(response.success){
                     var date =new Date(response.DOB);
                     var strDate = date.getFullYear() + '-' + ('0' + (date.getMonth() + 1)).slice(-2) + '-' + ('0' + date.getDate()).slice(-2);
-                    let arr = response.Hobbies.split(',');
-                    for(i=0;i<arr.length;i++){
-                        $('#'+arr[i]).prop('checked',arr[i]);
-                    }
                     $('#intContactId').prop('value',intContactId);
                     $('#strTitle').prop("value", response.Title);
                     $("#strFirstName").prop("value",response.FirstName);
@@ -157,6 +173,7 @@ $(document).ready(function() {
                     $('#intPincode').prop("value",response.Pincode);
                     $('#strEmailId').prop("value",response.Email);
                     $('#intPhone').prop("value",response.Phone);
+                    $('.selectBox').html(response.Hobbies?response.Hobbies:"No Hobbies");
                     $('.picture').attr('src','../assets/uploads/'+response.Photo);
                 }
             }
@@ -278,11 +295,15 @@ $(document).ready(function() {
         var strEmailId=$('#strEmailId').val().trim();
         var intPincode=$('#intPincode').val().trim();
         var filePhoto = $('#filePhoto')[0].files[0];
-        var aryHobbies =[]; 
-        var selectedHobbies =$('.checkboxStyle');
-        for(var i=0,j=0; selectedHobbies[i]; ++i){
-            if(selectedHobbies[i].checked)
-                aryHobbies[j++] = selectedHobbies[i].value;
+        if(intContactId == 0){
+            var aryHobbies = [];
+            $('#optionsList option.selected').each(function() {
+                aryHobbies.push($(this).val());
+            });
+            if(aryHobbies.length==0)
+                aryHobbies='No hobbies'
+        }else{
+            var aryHobbies=$('.selectBox').html().trim();
         }
         var formData = new FormData();
         formData.append('intContactId', intContactId);
