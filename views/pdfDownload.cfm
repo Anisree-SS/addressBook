@@ -25,13 +25,12 @@
                             <td>#contact.getDOB()#</td>
                             <td>#contact.getAddress()# #contact.getstreet()# #contact.getPincode()#</td>
                             <td>#contact.getEmail()#</td>
-                            <td>#contact.getPhone()#</td>
-                            <td>#contact.getPincode()#</td> 
+                            <td>#contact.getPhone()#</td> 
                             <td>
                                 <cfset hobbies = EntityLoad("hobbyORM", { contact = contact})>
                                 <cfif arrayLen(hobbies)>
-                                    <cfloop array="#hobbies#" index="hobbie">
-                                        #hobbie.gethobby()#,
+                                    <cfloop array="#hobbies#" index="hobby">
+                                        #hobby.gethobby()#,
                                     </cfloop>
                                 </cfif>
                             </td>

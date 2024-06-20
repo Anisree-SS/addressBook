@@ -15,10 +15,10 @@
             <cfset street = contact.getstreet()>
             <cfset pincode = contact.getPincode()>
             <cfset hobbies = EntityLoad("hobbyORM", { contact = contact})>
-            <cfset addHobby=''>
+            <cfset local.addHobby=''>
             <cfif arrayLen(hobbies)>
                 <cfloop array="#hobbies#" index="hobbies">
-                    <cfset addHobby &= hobbies.gethobby()&','>
+                    <cfset local.addHobby &= hobbies.gethobby()&','>
                 </cfloop>
             </cfif>
             <cfset queryAddRow(excelQry, 1)>
@@ -33,7 +33,7 @@
             <cfset querySetCell(excelQry, "Email", email)>
             <cfset querySetCell(excelQry,'PinCode',pincode)>
             <cfset querySetCell(excelQry,'Phone',Phone)>
-            <cfset querySetCell(excelQry,'Hobbies',addHobby)>
+            <cfset querySetCell(excelQry,'Hobbies',local.addHobby)>
         </cfif>
     </cfloop>
     <cfset excelFilePath = ExpandPath("./contactList.xlsx")>
