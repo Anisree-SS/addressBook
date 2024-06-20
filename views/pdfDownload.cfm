@@ -27,7 +27,7 @@
                             <td>#contact.getEmail()#</td>
                             <td>#contact.getPhone()#</td> 
                             <td>
-                                <cfset hobbies = EntityLoad("hobbyORM", { contact = contact})>
+                                <cfset hobbies = EntityLoad("hobbyORM", { contactId =contact  })>
                                 <cfif arrayLen(hobbies)>
                                     <cfloop array="#hobbies#" index="hobby">
                                         #hobby.gethobby()#,
