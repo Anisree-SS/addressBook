@@ -14,7 +14,7 @@
             <cfset address = contact.getAddress()>
             <cfset street = contact.getstreet()>
             <cfset pincode = contact.getPincode()>
-            <cfset hobbies = EntityLoad("hobbyORM", { contact = contact})>
+            <cfset hobbies = EntityLoad("hobbyORM", { contactId = contact})>
             <cfset local.addHobby=''>
             <cfif arrayLen(hobbies)>
                 <cfloop array="#hobbies#" index="hobbies">
