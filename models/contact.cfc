@@ -128,21 +128,49 @@
                 Phone=<cfqueryparam value="#arguments.intPhone#" cfsqltype="cf_sql_varchar">
                 where contactId=<cfqueryparam value="#arguments.intContactId#" cfsqltype="cf_sql_integer">
             </cfquery>
-            <cfquery name="deleteHobby">
+            <cfif arrayLen(local.hobbyArry) GT 0>
+                <cfloop array="#local.hobbyArry#" index="hobby">
+                    <cfquery name="checkHobby">
+                        select hobbyId 
+                        from hobbyTable
+                        where hobbyId =<cfqueryparam value="#hobby#" cfsqltype="cf_sql_integer">
+                        and contactId=<cfqueryparam value="#arguments.intContactId#" cfsqltype="cf_sql_integer">
+                    </cfquery>
+                    <cfif checkHobby.recordCount>
+                        <cfcontinue>  
+                        <cfelse>
+                        <cfquery name="insertHobby">
+                            INSERT INTO hobbyTable(hobbyId,contactId)
+                            VALUES (
+                                <cfqueryparam value="#hobby#" cfsqltype="cf_sql_integer">,
+                                <cfqueryparam value="#arguments.intContactId#" cfsqltype="cf_sql_integer">
+                            )
+                        </cfquery>
+                    </cfif>
+                </cfloop>
+                <cfelse>
+                <cfquery name="deleteHobby">
+                    delete from hobbyTable
+                    where contactId=<cfqueryparam value="#arguments.intContactId#" cfsqltype="cf_sql_integer">
+                </cfquery>    
+            </cfif>
+            <cfdump var="#checkHobby#" abort>
+
+            <!--- <cfquery name="deleteHobby">
                 delete from hobbyTable
                 where contactId=<cfqueryparam value="#arguments.intContactId#" cfsqltype="cf_sql_integer">
-            </cfquery> 
-            <cfif arrayLen(local.hobbyArry) GT 0>
+            </cfquery> --->
+            <!--- <cfif arrayLen(local.hobbyArry) GT 0>
                 <cfloop index="i" from="1" to="#arrayLen(local.hobbyArry)#">
                     <cfquery name="updatehobby">
-                         insert into hobbyTable(contactId,Hobby)
+                        insert into hobbyTable(contactId,Hobby)
                             values(
                                 <cfqueryparam value="#arguments.intContactId#" cfsqltype="cf_sql_integer">,
                                 <cfqueryparam value="#local.hobbyArry[i]#" cfsqltype="cf_sql_varchar">
                             )
                     </cfquery>
                 </cfloop>
-            </cfif>
+            </cfif> --->
             <cfreturn {"success":true, "msg":"Contact updated successfully"}>
             <cfelse>
                 <cfquery name="qrySaveContact" result="qryAddContact">
@@ -166,7 +194,7 @@
                 <cfif arrayLen(local.hobbyArry) GT 0>
                     <cfloop index="i" from="1" to="#arrayLen(local.hobbyArry)#">
                         <cfquery name="qrySaveHobby" result="qryAddHobby">
-                            insert into hobbyTable(contactId,Hobby)
+                            insert into hobbyTable(contactId,hobbyId)
                             values(
                                 <cfqueryparam value="#local.id#" cfsqltype="cf_sql_integer">,
                                 <cfqueryparam value="#local.hobbyArry[i]#" cfsqltype="cf_sql_varchar">
@@ -189,7 +217,7 @@
     <cffunction name="getContact" access="remote" returnFormat="json">
         <cfargument name="intContactId" type="numeric"  required='true'>
         <cfquery name="forDisplay">
-            select c.Title,c.FirstName,c.LastName,c.Gender,c.DOB,c.Photo,c.Address,c.street,c.Email,c.pincode,c.Phone,STRING_AGG(h.Hobby, ',') 
+            select c.Title,c.FirstName,c.LastName,c.Gender,c.DOB,c.Photo,c.Address,c.street,c.Email,c.pincode,c.Phone,STRING_AGG(h.hobbyId, ',') 
             AS Hobby 
             from contactTable c
             Left JOIN hobbyTable h
@@ -276,7 +304,7 @@
                                 <cfqueryparam value="#spreadsheetData.Phone#" cfsqltype="cf_sql_varchar">
                             )
                         </cfquery>
-                        <cfset local.id = insertExcelResult.generatedKey>
+                        <!--- <cfset local.id = insertExcelResult.generatedKey>
                         <cfset local.hobbyArry=ListToArray(spreadsheetData.Hobbies,',')>
                         <cfif arrayLen(local.hobbyArry) GT 0>
                             <cfloop index="i" from="1" to="#arrayLen(local.hobbyArry)#">
@@ -288,7 +316,7 @@
                                     )
                                 </cfquery>
                             </cfloop>
-                        </cfif>
+                        </cfif> --->
                     </cfif>
                 </cfif>
             </cfloop>

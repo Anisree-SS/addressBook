@@ -295,15 +295,17 @@ $(document).ready(function() {
         var strEmailId=$('#strEmailId').val().trim();
         var intPincode=$('#intPincode').val().trim();
         var filePhoto = $('#filePhoto')[0].files[0];
+        var aryHobbies = [];
         if(intContactId == 0){
-            var aryHobbies = [];
             $('#optionsList option.selected').each(function() {
                 aryHobbies.push($(this).val());
             });
             if(aryHobbies.length==0)
                 aryHobbies='No hobbies'
         }else{
-            var aryHobbies=$('.selectBox').html().trim();
+            $('#optionsList option.selected').each(function() {
+                aryHobbies.push($(this).val());
+            });
         }
         var formData = new FormData();
         formData.append('intContactId', intContactId);

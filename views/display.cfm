@@ -147,16 +147,16 @@
                                         <div class="hobbyStyle" id="hobbies">
                                             <div class="selectBox hobby"></div>
                                             <select id="optionsList" multiple>
-                                                <option value="Dancing">Dancing</option>
-                                                <option value="Singing">Singing</option>
-                                                <option value="Reading">Reading</option>
-                                                <option value="Traveling">Traveling</option>
-                                                <option value="Cooking">Cooking</option>
-                                                <option value="Shopping">Shopping</option>
-                                                <option value="Drawing">Drawing</option>
-                                                <option value="Painting">Painting</option>
-                                                <option value="Gardening">Gardening</option>
-                                                <option value="Photography">Photography</option>
+                                                <option value="1">Dancing</option>
+                                                <option value="2">Singing</option>
+                                                <option value="3">Reading</option>
+                                                <option value="4">Traveling</option>
+                                                <option value="5">Cooking</option>
+                                                <option value="6">Shopping</option>
+                                                <option value="7">Drawing</option>
+                                                <option value="8">Painting</option>
+                                                <option value="9">Gardening</option>
+                                                <option value="10">Photography</option>
                                             </select>
                                         </div>
                                     </div>
