@@ -49,7 +49,7 @@ $(document).ready(function() {
         return false;
     });
 
-    function updateSelectBox() {
+    function multiSelect() {
         var hobbies = [];
         $('#optionsList option.selected').each(function() {
             hobbies.push($(this).text());
@@ -70,7 +70,7 @@ $(document).ready(function() {
         event.preventDefault();
         $(this).toggleClass('selected');
         this.selected = $(this).hasClass('selected');
-        updateSelectBox();
+        multiSelect();
     });
 
     $('#createForm').on("submit",function() {
