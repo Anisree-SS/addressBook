@@ -55,9 +55,10 @@ $(document).ready(function() {
             hobbies.push($(this).text());
         });
         if (hobbies.length > 0) {
-            $('.selectBox').text(hobbies.join(', '));
+            $('.selectBox').text(hobbies.join(','));
         } else {
-            $('.selectBox').text('Select Options');
+            $('.selectBox').text('Select Hobbies');
+
         }
     }
 
@@ -295,15 +296,17 @@ $(document).ready(function() {
         var strEmailId=$('#strEmailId').val().trim();
         var intPincode=$('#intPincode').val().trim();
         var filePhoto = $('#filePhoto')[0].files[0];
+        var aryHobbies = [];
         if(intContactId == 0){
-            var aryHobbies = [];
             $('#optionsList option.selected').each(function() {
                 aryHobbies.push($(this).val());
             });
             if(aryHobbies.length==0)
-                aryHobbies='No hobbies'
+                aryHobbies='11';
         }else{
-            var aryHobbies=$('.selectBox').html().trim();
+            $('#optionsList option.selected').each(function() {
+                aryHobbies.push($(this).val());
+            });
         }
         var formData = new FormData();
         formData.append('intContactId', intContactId);
@@ -434,10 +437,10 @@ $(document).ready(function() {
         try {
             var filePhoto = $("#filePhoto")[0].files[0].name;
         } catch (error) {
-            errorMsg+=error;
+            console.log(error);
         }
         $("#saveContactValidationMsg").html('');
-        if((strTitle=='')||(strFirstName=='')||(strLastName=='')||(strGender=='')||(dateDOB=='')||(strAddress=='')||(strStreet=='')||(intPhone=='')||(strEmailId=='')||(intPincode=='')||(errorMsg!='')){
+        if((strTitle=='')||(strFirstName=='')||(strLastName=='')||(strGender=='')||(dateDOB=='')||(strAddress=='')||(strStreet=='')||(intPhone=='')||(strEmailId=='')||(intPincode=='')){
             errorMsg="All fields required";
         }
         else{
