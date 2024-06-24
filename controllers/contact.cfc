@@ -37,7 +37,7 @@ component {
 
     public void function checkLogin(){
         if(session.isLogin){
-           cflocation(url="../views/display.cfm");
+           cflocation(url="./views/display.cfm");
         }
     }
 
