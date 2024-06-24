@@ -144,9 +144,10 @@
                                     <p class="mb-0 text-primary fw-bold mt-2">Hobbies</p>
                                     <hr  class="mt-0">
                                     <div class="addressInput d-flex flex-column">
-                                        <div class="hobbyStyle" id="hobbies">
-                                            <div class="selectBox hobby"></div>
-                                            <select id="optionsList" multiple>
+                                        <!--- <div class="hobbyStyle" id="hobbies">
+                                            <div class="selectBox hobby"></div> --->
+                                            <label class="text-primary" for="Hobbies">Hobbies *</label><br>
+                                            <select multiple="multiple" id="strHobbyList" class="hobbyStyle" value='11'>
                                                 <option value="1">Dancing</option>
                                                 <option value="2">Singing</option>
                                                 <option value="3">Reading</option>
@@ -158,7 +159,7 @@
                                                 <option value="9">Gardening</option>
                                                 <option value="10">Photography</option>
                                             </select>
-                                        </div>
+                                       <!---  </div> --->
                                     </div>
                                     <div class="d-flex justify-content-evenly mt-4">
                                         <input type="button" class="btn btn-outline-dark" data-bs-dismiss="modal" id="closeBtn" value="CLOSE">

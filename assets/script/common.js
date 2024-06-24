@@ -58,11 +58,10 @@ $(document).ready(function() {
             $('.selectBox').text(hobbies.join(','));
         } else {
             $('.selectBox').text('Select Hobbies');
-
         }
     }
 
-    $('.hobbyStyle .selectBox').click(function() {
+    /* $('.hobbyStyle .selectBox').click(function() {
         $(this).toggleClass('active');
         $('#optionsList').toggle();
     });
@@ -72,6 +71,17 @@ $(document).ready(function() {
         $(this).toggleClass('selected');
         this.selected = $(this).hasClass('selected');
         multiSelect();
+    }); */
+
+    $('.editBtn').on('click',function(){
+        $.ajax({
+            url: '../models/contact.cfc?method=ListHobby',
+            type: 'post',
+            success: function(response){
+                console.log(response);
+                console.log(response.list);
+            }
+        });
     });
 
     $('#createForm').on("submit",function() {
@@ -174,7 +184,8 @@ $(document).ready(function() {
                     $('#intPincode').prop("value",response.Pincode);
                     $('#strEmailId').prop("value",response.Email);
                     $('#intPhone').prop("value",response.Phone);
-                    $('.selectBox').html(response.Hobbies?response.Hobbies:"No Hobbies");
+                    $('.hobbyStyle').prop("value",response.HobbyId?response.HobbyId:"No Hobbies");
+                    
                     $('.picture').attr('src','../assets/uploads/'+response.Photo);
                 }
             }
@@ -296,18 +307,7 @@ $(document).ready(function() {
         var strEmailId=$('#strEmailId').val().trim();
         var intPincode=$('#intPincode').val().trim();
         var filePhoto = $('#filePhoto')[0].files[0];
-        var aryHobbies = [];
-        if(intContactId == 0){
-            $('#optionsList option.selected').each(function() {
-                aryHobbies.push($(this).val());
-            });
-            if(aryHobbies.length==0)
-                aryHobbies='11';
-        }else{
-            $('#optionsList option.selected').each(function() {
-                aryHobbies.push($(this).val());
-            });
-        }
+        var aryHobbies = $("#strHobbyList").val();
         var formData = new FormData();
         formData.append('intContactId', intContactId);
         formData.append('strTitle', strTitle);
@@ -556,3 +556,4 @@ $(document).ready(function() {
         });
     }
 });
+

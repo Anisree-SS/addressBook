@@ -151,6 +151,18 @@
                     where contactId = <cfqueryparam value="#arguments.intContactId#" cfsqltype="cf_sql_integer">
                     AND hobbyId NOT IN (<cfqueryparam value="#ArrayToList(local.hobbyArry)#" cfsqltype="cf_sql_integer" list="true">)
                 </cfquery>
+                <cfelse>
+                    <cfquery name="deleteHobby">
+                        delete from hobbyTable
+                        where contactId = <cfqueryparam value="#arguments.intContactId#" cfsqltype="cf_sql_integer">
+                    </cfquery>
+                    <cfquery name="insertHobby">
+                        INSERT INTO hobbyTable(hobbyId,contactId)
+                        VALUES (
+                            <cfqueryparam value="11" cfsqltype="cf_sql_integer">,
+                            <cfqueryparam value="#arguments.intContactId#" cfsqltype="cf_sql_integer">
+                        )
+                    </cfquery>
             </cfif>
             <cfreturn {"success":true, "msg":"Contact updated successfully"}>
             <cfelse>
@@ -201,15 +213,15 @@
     <cffunction name="getContact" access="remote" returnFormat="json">
         <cfargument name="intContactId" type="numeric"  required='true'>
         <cfquery name="forDisplay">
-            select c.Title,c.FirstName,c.LastName,c.Gender,c.DOB,c.Photo,c.Address,c.street,c.Email,c.pincode,c.Phone,STRING_AGG(HL.hobbyName, ',') As Hobbies
+            select c.Title,c.FirstName,c.LastName,c.Gender,c.DOB,c.Photo,c.Address,c.street,c.Email,c.pincode,c.Phone,STRING_AGG(HL.hobbyName, ',') As Hobbies,STRING_AGG(HL.hobbyId,',') As HobbyId
             from hobbyTable HT
             inner join contactTable c ON HT.contactId = c.contactId
             inner join hobbyList HL ON HT.hobbyId = HL.hobbyId
             where c.contactId=<cfqueryparam value="#arguments.intContactId#" cfsqltype="cf_sql_integer">
             and c.userID=<cfqueryparam value="#session.userId#" cfsqltype="cf_sql_integer">
-            group by c.Title,c.FirstName,c.LastName,c.Gender,c.DOB,c.Photo,c.Address,c.street,c.Email,c.pincode,c.Phone;
+            group by c.Title,c.FirstName,c.LastName,c.Gender,c.DOB,c.Photo,c.Address,c.street,c.Email,c.pincode,c.Phone; 
         </cfquery>
-        <cfreturn {"success":true,"Title":forDisplay.Title,"FirstName":forDisplay.FirstName,"LastName":forDisplay.LastName,"Gender":forDisplay.Gender,"DOB":forDisplay.DOB,"Address":forDisplay.Address,"Pincode":forDisplay.Pincode,"Email":forDisplay.Email,"Phone":forDisplay.Phone,"Photo":forDisplay.Photo,'Street':forDisplay.Street,'Hobbies':forDisplay.Hobbies}>
+        <cfreturn {"success":true,"Title":forDisplay.Title,"FirstName":forDisplay.FirstName,"LastName":forDisplay.LastName,"Gender":forDisplay.Gender,"DOB":forDisplay.DOB,"Address":forDisplay.Address,"Pincode":forDisplay.Pincode,"Email":forDisplay.Email,"Phone":forDisplay.Phone,"Photo":forDisplay.Photo,'Street':forDisplay.Street,'Hobbies':forDisplay.Hobbies,'HobbiesId':forDisplay.HobbyId}>
     </cffunction>
 
     <cffunction name="deleteContact" access='remote' returnFormat="json">
@@ -313,5 +325,12 @@
             <cfelse>
                 <cfreturn {'success':false,'msg':'Some columns are missing '}>      
         </cfif>
+    </cffunction>
+    <cffunction name='ListHobby' access='remote' returnFormat='json'>
+        <cfquery name="local.ListHobby">
+            select hobbyId,hobbyName
+            from hobbyList
+        </cfquery>
+        <cfreturn {"list":local.ListHobby}>
     </cffunction>
 </cfcomponent>
