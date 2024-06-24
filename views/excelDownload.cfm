@@ -14,11 +14,12 @@
             <cfset address = contact.getAddress()>
             <cfset street = contact.getstreet()>
             <cfset pincode = contact.getPincode()>
-            <cfset hobbies = EntityLoad("hobbyORM", { contactId = contact})>
             <cfset local.addHobby=''>
+            <cfset hobbies=entityLoad("hobbyORM", { contactId = contact})>
             <cfif arrayLen(hobbies)>
-                <cfloop array="#hobbies#" index="hobbies">
-                    <cfset local.addHobby &= hobbies.gethobby()&','>
+                <cfloop array="#hobbies#" index="hobby">
+                    <cfset hobbyList = EntityLoadByPK("hobbyListORM", hobby.gethobbyId())>
+                    <cfset local.addHobby&=#hobbyList.gethobbyName()#&','>
                 </cfloop>
             </cfif>
             <cfset queryAddRow(excelQry, 1)>

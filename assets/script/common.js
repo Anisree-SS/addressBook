@@ -55,9 +55,10 @@ $(document).ready(function() {
             hobbies.push($(this).text());
         });
         if (hobbies.length > 0) {
-            $('.selectBox').text(hobbies.join(', '));
+            $('.selectBox').text(hobbies.join(','));
         } else {
-            $('.selectBox').text('Select Options');
+            $('.selectBox').text('Select Hobbies');
+
         }
     }
 
@@ -301,7 +302,7 @@ $(document).ready(function() {
                 aryHobbies.push($(this).val());
             });
             if(aryHobbies.length==0)
-                aryHobbies='No hobbies'
+                aryHobbies='11';
         }else{
             $('#optionsList option.selected').each(function() {
                 aryHobbies.push($(this).val());
@@ -436,10 +437,10 @@ $(document).ready(function() {
         try {
             var filePhoto = $("#filePhoto")[0].files[0].name;
         } catch (error) {
-            errorMsg+=error;
+            console.log(error);
         }
         $("#saveContactValidationMsg").html('');
-        if((strTitle=='')||(strFirstName=='')||(strLastName=='')||(strGender=='')||(dateDOB=='')||(strAddress=='')||(strStreet=='')||(intPhone=='')||(strEmailId=='')||(intPincode=='')||(errorMsg!='')){
+        if((strTitle=='')||(strFirstName=='')||(strLastName=='')||(strGender=='')||(dateDOB=='')||(strAddress=='')||(strStreet=='')||(intPhone=='')||(strEmailId=='')||(intPincode=='')){
             errorMsg="All fields required";
         }
         else{

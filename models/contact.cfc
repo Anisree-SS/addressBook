@@ -99,7 +99,7 @@
         <cfargument name="strLastName" required="true" type="string">
         <cfargument name="strGender" required="true" type="string">
         <cfargument name="dateDOB" required="true" type="any">
-        <cfargument name="filePhoto" required="true" type="any">
+        <cfargument name="filePhoto" required="false" type="any">
         <cfargument name="strAddress" required="true" type="string">
         <cfargument name="strStreet" required="true" type="string">
         <cfargument name="strEmailId" required="true" type="string">
@@ -108,9 +108,6 @@
         <cfargument name="aryHobbies" required="true" type="string">
         <cfset local.success = ''>
         <cfset local.hobbyArry=ListToArray(arguments.aryHobbies,',')>
-        <cfset local.path = ExpandPath("../assets/uploads/")>
-        <cffile action="upload" destination="#local.path#" nameConflict="MakeUnique" filefield="filePhoto">
-        <cfset local.profile = cffile.serverFile>
         <cfif arguments.intContactId GT 0>
             <cfquery name="updatePage">
                 update contactTable 
@@ -119,7 +116,6 @@
                 LastName=<cfqueryparam value="#arguments.strLastName#" cfsqltype="cf_sql_varchar">,
                 Gender=<cfqueryparam value="#arguments.strGender#" cfsqltype="cf_sql_varchar">,
                 DOB=<cfqueryparam value="#arguments.dateDOB#" cfsqltype="cf_sql_date">,
-                Photo=<cfqueryparam value="#local.profile#" cfsqltype="cf_sql_varchar">,
                 Address=<cfqueryparam value="#arguments.strAddress#" cfsqltype="cf_sql_varchar">,
                 Street=<cfqueryparam value="#arguments.strStreet#" cfsqltype="cf_sql_varchar">,
                 Email=<cfqueryparam value="#arguments.strEmailId#" cfsqltype="cf_sql_varchar">,
@@ -131,7 +127,7 @@
             <cfif arrayLen(local.hobbyArry) GT 0>
                 <cfloop array="#local.hobbyArry#" index="hobby">
                     <cfquery name="checkHobby">
-                        select hobbyId 
+                        select 1 
                         from hobbyTable
                         where hobbyId =<cfqueryparam value="#hobby#" cfsqltype="cf_sql_integer">
                         and contactId=<cfqueryparam value="#arguments.intContactId#" cfsqltype="cf_sql_integer">
@@ -148,31 +144,19 @@
                         </cfquery>
                     </cfif>
                 </cfloop>
-                <cfelse>
+            </cfif>
+            <cfif arrayLen(local.hobbyArry) GT 0>
                 <cfquery name="deleteHobby">
                     delete from hobbyTable
-                    where contactId=<cfqueryparam value="#arguments.intContactId#" cfsqltype="cf_sql_integer">
-                </cfquery>    
+                    where contactId = <cfqueryparam value="#arguments.intContactId#" cfsqltype="cf_sql_integer">
+                    AND hobbyId NOT IN (<cfqueryparam value="#ArrayToList(local.hobbyArry)#" cfsqltype="cf_sql_integer" list="true">)
+                </cfquery>
             </cfif>
-            <cfdump var="#checkHobby#" abort>
-
-            <!--- <cfquery name="deleteHobby">
-                delete from hobbyTable
-                where contactId=<cfqueryparam value="#arguments.intContactId#" cfsqltype="cf_sql_integer">
-            </cfquery> --->
-            <!--- <cfif arrayLen(local.hobbyArry) GT 0>
-                <cfloop index="i" from="1" to="#arrayLen(local.hobbyArry)#">
-                    <cfquery name="updatehobby">
-                        insert into hobbyTable(contactId,Hobby)
-                            values(
-                                <cfqueryparam value="#arguments.intContactId#" cfsqltype="cf_sql_integer">,
-                                <cfqueryparam value="#local.hobbyArry[i]#" cfsqltype="cf_sql_varchar">
-                            )
-                    </cfquery>
-                </cfloop>
-            </cfif> --->
             <cfreturn {"success":true, "msg":"Contact updated successfully"}>
             <cfelse>
+                <cfset local.path = ExpandPath("../assets/uploads/")>
+                <cffile action="upload" destination="#local.path#" nameConflict="MakeUnique" filefield="filePhoto">
+                <cfset local.profile = cffile.serverFile>
                 <cfquery name="qrySaveContact" result="qryAddContact">
                     insert into contactTable(Title,FirstName,LastName,Gender,DOB,Photo,Address,street,Email,userId,pincode,Phone)
                     values(
@@ -217,15 +201,15 @@
     <cffunction name="getContact" access="remote" returnFormat="json">
         <cfargument name="intContactId" type="numeric"  required='true'>
         <cfquery name="forDisplay">
-            select c.Title,c.FirstName,c.LastName,c.Gender,c.DOB,c.Photo,c.Address,c.street,c.Email,c.pincode,c.Phone,STRING_AGG(h.hobbyId, ',') 
-            AS Hobby 
-            from contactTable c
-            Left JOIN hobbyTable h
-            ON c.contactId=h.contactId
+            select c.Title,c.FirstName,c.LastName,c.Gender,c.DOB,c.Photo,c.Address,c.street,c.Email,c.pincode,c.Phone,STRING_AGG(HL.hobbyName, ',') As Hobbies
+            from hobbyTable HT
+            inner join contactTable c ON HT.contactId = c.contactId
+            inner join hobbyList HL ON HT.hobbyId = HL.hobbyId
             where c.contactId=<cfqueryparam value="#arguments.intContactId#" cfsqltype="cf_sql_integer">
+            and c.userID=<cfqueryparam value="#session.userId#" cfsqltype="cf_sql_integer">
             group by c.Title,c.FirstName,c.LastName,c.Gender,c.DOB,c.Photo,c.Address,c.street,c.Email,c.pincode,c.Phone;
         </cfquery>
-        <cfreturn {"success":true,"Title":forDisplay.Title,"FirstName":forDisplay.FirstName,"LastName":forDisplay.LastName,"Gender":forDisplay.Gender,"DOB":forDisplay.DOB,"Address":forDisplay.Address,"Pincode":forDisplay.Pincode,"Email":forDisplay.Email,"Phone":forDisplay.Phone,"Photo":forDisplay.Photo,'Street':forDisplay.Street,'Hobbies':forDisplay.Hobby}>
+        <cfreturn {"success":true,"Title":forDisplay.Title,"FirstName":forDisplay.FirstName,"LastName":forDisplay.LastName,"Gender":forDisplay.Gender,"DOB":forDisplay.DOB,"Address":forDisplay.Address,"Pincode":forDisplay.Pincode,"Email":forDisplay.Email,"Phone":forDisplay.Phone,"Photo":forDisplay.Photo,'Street':forDisplay.Street,'Hobbies':forDisplay.Hobbies}>
     </cffunction>
 
     <cffunction name="deleteContact" access='remote' returnFormat="json">
@@ -304,25 +288,30 @@
                                 <cfqueryparam value="#spreadsheetData.Phone#" cfsqltype="cf_sql_varchar">
                             )
                         </cfquery>
-                        <!--- <cfset local.id = insertExcelResult.generatedKey>
+                        <cfset local.id = insertExcelResult.generatedKey>
                         <cfset local.hobbyArry=ListToArray(spreadsheetData.Hobbies,',')>
                         <cfif arrayLen(local.hobbyArry) GT 0>
                             <cfloop index="i" from="1" to="#arrayLen(local.hobbyArry)#">
+                                <cfquery name="qryGetHobbyId">
+                                    select hobbyId 
+                                    from hobbyList
+                                    where hobbyName=<cfqueryparam value="#local.hobbyArry[i]#" cfsqltype="cf_sql_varchar">
+                                </cfquery>
                                 <cfquery name="qrySaveHobby" result="qryAddHobby">
-                                    insert into hobbyTable(contactId,Hobby)
+                                    insert into hobbyTable(contactId,hobbyId)
                                     values(
                                         <cfqueryparam value="#local.id#" cfsqltype="cf_sql_integer">,
-                                        <cfqueryparam value="#local.hobbyArry[i]#" cfsqltype="cf_sql_varchar">
+                                        <cfqueryparam value="#qryGetHobbyId.hobbyId#" cfsqltype="cf_sql_integer">
                                     )
                                 </cfquery>
                             </cfloop>
-                        </cfif> --->
+                        </cfif>
                     </cfif>
                 </cfif>
             </cfloop>
             <cfreturn {'success':true,'msg':'Contacts updated successfully'}>
             <cfelse>
-                <cfreturn {'success':false,'msg':'Uploaded Excel is not the sheet we need'}>      
+                <cfreturn {'success':false,'msg':'Some columns are missing '}>      
         </cfif>
     </cffunction>
 </cfcomponent>
