@@ -106,6 +106,9 @@
         <cfargument name="intPhone" required="true" type="numeric">
         <cfargument name="intPincode" required="true" type="numeric">
         <cfargument name="aryHobbies" required="true" type="string">
+        <cfif len(trim(arguments.aryHobbies)) EQ 0>
+            <cfset local.hobby="No hobbies">
+        </cfif>
         <cfset local.success = ''>
         <cfset local.hobbyArry=ListToArray(arguments.aryHobbies,',')>
         <cfif arguments.intContactId GT 0>
@@ -132,9 +135,7 @@
                         where hobbyId =<cfqueryparam value="#hobby#" cfsqltype="cf_sql_integer">
                         and contactId=<cfqueryparam value="#arguments.intContactId#" cfsqltype="cf_sql_integer">
                     </cfquery>
-                    <cfif checkHobby.recordCount>
-                        <cfcontinue>  
-                        <cfelse>
+                    <cfif checkHobby.recordCount EQ 0>
                         <cfquery name="insertHobby">
                             INSERT INTO hobbyTable(hobbyId,contactId)
                             VALUES (
@@ -144,22 +145,25 @@
                         </cfquery>
                     </cfif>
                 </cfloop>
-            </cfif>
-            <cfif arrayLen(local.hobbyArry) GT 0>
-                <cfquery name="deleteHobby">
+                <cfquery name="local.deleteHobby">
                     delete from hobbyTable
                     where contactId = <cfqueryparam value="#arguments.intContactId#" cfsqltype="cf_sql_integer">
                     AND hobbyId NOT IN (<cfqueryparam value="#ArrayToList(local.hobbyArry)#" cfsqltype="cf_sql_integer" list="true">)
                 </cfquery>
                 <cfelse>
-                    <cfquery name="deleteHobby">
+                    <cfquery name="local.deleteHobby">
                         delete from hobbyTable
                         where contactId = <cfqueryparam value="#arguments.intContactId#" cfsqltype="cf_sql_integer">
                     </cfquery>
-                    <cfquery name="insertHobby">
+                    <cfquery name="local.findHobbyId">
+                        select hobbyId
+                        from hobbyList
+                        where hobbyName =<cfqueryparam value="#local.hobby#" cfsqltype="cf_sql_varchar">
+                    </cfquery>
+                    <cfquery name="local.insertHobby">
                         INSERT INTO hobbyTable(hobbyId,contactId)
                         VALUES (
-                            <cfqueryparam value="11" cfsqltype="cf_sql_integer">,
+                            <cfqueryparam value="#local.findHobbyId.hobbyId#" cfsqltype="cf_sql_integer">,
                             <cfqueryparam value="#arguments.intContactId#" cfsqltype="cf_sql_integer">
                         )
                     </cfquery>
@@ -197,6 +201,19 @@
                             )
                         </cfquery>
                     </cfloop>
+                    <cfelse>
+                        <cfquery name="local.findHobbyId">
+                            select hobbyId
+                            from hobbyList
+                            where hobbyName =<cfqueryparam value="#local.hobby#" cfsqltype="cf_sql_varchar">
+                        </cfquery>
+                        <cfquery name="local.insertHobby">
+                            INSERT INTO hobbyTable(hobbyId,contactId)
+                            VALUES (
+                                <cfqueryparam value="#local.findHobbyId.hobbyId#" cfsqltype="cf_sql_integer">,
+                                <cfqueryparam value="#local.id#" cfsqltype="cf_sql_integer">
+                            )
+                        </cfquery>
                 </cfif>
                 <cftry>
                     <cfif qryAddContact.recordCount>
@@ -326,11 +343,11 @@
                 <cfreturn {'success':false,'msg':'Some columns are missing '}>      
         </cfif>
     </cffunction>
-    <cffunction name='ListHobby' access='remote' returnFormat='json'>
+    <cffunction name='ListHobby' access='remote' returnFormat="json">
         <cfquery name="local.ListHobby">
             select hobbyId,hobbyName
             from hobbyList
         </cfquery>
-        <cfreturn {"list":local.ListHobby}>
+        <cfreturn local.ListHobby>
     </cffunction>
 </cfcomponent>

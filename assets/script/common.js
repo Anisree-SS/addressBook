@@ -49,41 +49,28 @@ $(document).ready(function() {
         return false;
     });
 
-    function multiSelect() {
-        var hobbies = [];
-        $('#optionsList option.selected').each(function() {
-            hobbies.push($(this).text());
-        });
-        if (hobbies.length > 0) {
-            $('.selectBox').text(hobbies.join(','));
-        } else {
-            $('.selectBox').text('Select Hobbies');
-        }
-    }
-
-    /* $('.hobbyStyle .selectBox').click(function() {
-        $(this).toggleClass('active');
-        $('#optionsList').toggle();
-    });
-
-    $('#optionsList').on('click', 'option', function(event) {
-        event.preventDefault();
-        $(this).toggleClass('selected');
-        this.selected = $(this).hasClass('selected');
-        multiSelect();
-    }); */
-
-    $('.editBtn').on('click',function(){
-        $.ajax({
-            url: '../models/contact.cfc?method=ListHobby',
-            type: 'post',
-            success: function(response){
-                console.log(response);
-                console.log(response.list);
-            }
-        });
-    });
-
+    $('.forHobbyBtn').on('click', function() {
+        $('#strHobbyList').find('option').remove();
+		$.ajax({
+			url: '../models/contact.cfc?method=ListHobby',
+			type: 'post',
+            dataType: 'json',
+			success: function(response) {
+				if (response.DATA || response.DATA.length > 0) {
+					for (var i = 0; i < response.DATA.length; i++) {
+						var hobbyId = response.DATA[i][0];
+						var hobbyName = response.DATA[i][1];
+                        let optionHTML = `<option value="${hobbyId}"> ${hobbyName} </option>`;
+                        $('#strHobbyList').append(optionHTML); 
+					}
+				}
+			},
+			error: function(xhr, status, error) {
+				console.log("Error occurred while fetching hobbies:", error);
+			}
+		});
+	});
+	
     $('#createForm').on("submit",function() {
         $("#saveContactValidationMsg").text("");
         var strEmailId=$('#strEmailId').val().trim();
@@ -184,8 +171,10 @@ $(document).ready(function() {
                     $('#intPincode').prop("value",response.Pincode);
                     $('#strEmailId').prop("value",response.Email);
                     $('#intPhone').prop("value",response.Phone);
-                    $('.hobbyStyle').prop("value",response.HobbyId?response.HobbyId:"No Hobbies");
-                    
+                    var hobbyValues=response.HobbiesId;
+                    $.each(hobbyValues.split(","), function(i,e){
+                        $("#strHobbyList option[value='" + e + "']").prop("selected", true);
+                    });
                     $('.picture').attr('src','../assets/uploads/'+response.Photo);
                 }
             }
