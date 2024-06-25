@@ -60,8 +60,10 @@ $(document).ready(function() {
 					for (var i = 0; i < response.DATA.length; i++) {
 						var hobbyId = response.DATA[i][0];
 						var hobbyName = response.DATA[i][1];
-                        let optionHTML = `<option value="${hobbyId}"> ${hobbyName} </option>`;
-                        $('#strHobbyList').append(optionHTML); 
+                        if(hobbyName!="No hobbies"){
+                            let optionHTML = `<option value="${hobbyId}"> ${hobbyName} </option>`;
+                            $('#strHobbyList').append(optionHTML); 
+                        }
 					}
 				}
 			},
