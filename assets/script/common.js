@@ -53,17 +53,14 @@ $(document).ready(function() {
         $('#strHobbyList').find('option').remove();
 		$.ajax({
 			url: '../models/contact.cfc?method=ListHobby',
-			type: 'post',
             dataType: 'json',
 			success: function(response) {
-				if (response.DATA || response.DATA.length > 0) {
-					for (var i = 0; i < response.DATA.length; i++) {
-						var hobbyId = response.DATA[i][0];
-						var hobbyName = response.DATA[i][1];
-                        if(hobbyName!="No hobbies"){
-                            let optionHTML = `<option value="${hobbyId}"> ${hobbyName} </option>`;
-                            $('#strHobbyList').append(optionHTML); 
-                        }
+				if (response.hobbyId.length === response.hobbyName.length) {
+					for (var i = 0; i < response.hobbyId.length; i++) {
+						var hobbyId = response.hobbyId[i];
+						var hobbyName = response.hobbyName[i];
+                        var optionList = `<option value="${hobbyId}"> ${hobbyName} </option>`;
+                        $('#strHobbyList').append(optionList);  
 					}
 				}
 			},

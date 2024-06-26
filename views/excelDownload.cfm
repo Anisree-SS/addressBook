@@ -19,7 +19,7 @@
             <cfif arrayLen(hobbies)>
                 <cfloop array="#hobbies#" index="hobby">
                     <cfset hobbyList = EntityLoadByPK("hobbyListORM", hobby.gethobbyId())>
-                    <cfset local.addHobby&=#hobbyList.gethobbyName()#&','>
+                    <cfset local.addHobby&=','&#hobbyList.gethobbyName()#>
                 </cfloop>
             </cfif>
             <cfset queryAddRow(excelQry, 1)>
