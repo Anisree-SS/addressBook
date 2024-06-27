@@ -55,14 +55,9 @@ $(document).ready(function() {
 			url: '../models/contact.cfc?method=ListHobby',
             dataType: 'json',
 			success: function(response) {
-				if (response.hobbyId.length === response.hobbyName.length) {
-					for (var i = 0; i < response.hobbyId.length; i++) {
-						var hobbyId = response.hobbyId[i];
-						var hobbyName = response.hobbyName[i];
-                        var optionList = `<option value="${hobbyId}"> ${hobbyName} </option>`;
-                        $('#strHobbyList').append(optionList);  
-					}
-				}
+                $.each(response, function(index, hobbies) {
+                    $('#strHobbyList').append('<option value="' + hobbies.hobbyId + '">' + hobbies.hobbyName + '</option>');
+                });				
 			},
 			error: function(xhr, status, error) {
 				console.log("Error occurred while fetching hobbies:", error);

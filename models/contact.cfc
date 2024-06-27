@@ -333,17 +333,14 @@
             select hobbyId,hobbyName
             from hobbyList
         </cfquery>
-        <!--- <cfreturn local.ListHobby>  --->
-        <cfset local.hobbyId = []>
-        <cfset local.hobbyNames = []>
+        <cfset hobbyList = []> 
         <cfloop query="local.ListHobby">
-            <cfset arrayAppend(local.hobbyId,local.ListHobby.hobbyId)>
-            <cfset arrayAppend(local.hobbyNames, local.ListHobby.hobbyName)>
+            <cfset hobby = {
+                "hobbyId": local.ListHobby.hobbyId,
+                "hobbyName": local.ListHobby.hobbyName
+            }>
+            <cfset arrayAppend(hobbyList, hobby)>
         </cfloop>
-        <cfset hobbyDatas = {
-            "hobbyId": local.hobbyId,
-            "hobbyName":local.hobbyNames
-        }>
-        <cfreturn serializeJSON(hobbyDatas)>
+        <cfreturn serializeJSON(hobbyList)>
     </cffunction>
 </cfcomponent>
