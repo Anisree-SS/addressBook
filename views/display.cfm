@@ -23,7 +23,7 @@
                 #UCase(session.fullName)#
             </div>  
             <div class="d-flex justify-content-center mb-2">                
-                <button type="button" class="btn-primary btn modalBtn" data-bs-toggle="modal" data-bs-target="##myModal" id="createBtn">
+                <button type="button" class="btn-primary btn modalBtn forHobbyBtn" data-bs-toggle="modal" data-bs-target="##myModal" id="createBtn">
                     CREATE CONTACT
                 </button>
             </div>
@@ -144,21 +144,9 @@
                                     <p class="mb-0 text-primary fw-bold mt-2">Hobbies</p>
                                     <hr  class="mt-0">
                                     <div class="addressInput d-flex flex-column">
-                                        <div class="hobbyStyle" id="hobbies">
-                                            <div class="selectBox hobby"></div>
-                                            <select id="optionsList" multiple>
-                                                <option value="1">Dancing</option>
-                                                <option value="2">Singing</option>
-                                                <option value="3">Reading</option>
-                                                <option value="4">Traveling</option>
-                                                <option value="5">Cooking</option>
-                                                <option value="6">Shopping</option>
-                                                <option value="7">Drawing</option>
-                                                <option value="8">Painting</option>
-                                                <option value="9">Gardening</option>
-                                                <option value="10">Photography</option>
-                                            </select>
-                                        </div>
+                                        <label class="text-primary" for="Hobbies">Hobbies *</label><br>
+                                        <select multiple="multiple" id="strHobbyList" class="hobbyStyle">
+                                        </select>
                                     </div>
                                     <div class="d-flex justify-content-evenly mt-4">
                                         <input type="button" class="btn btn-outline-dark" data-bs-dismiss="modal" id="closeBtn" value="CLOSE">
@@ -198,7 +186,7 @@
                                 <td>#contact.getEmail()#</td>
                                 <td>#contact.getPhone()#</td>
                                 <td>
-                                    <button type="button" class="btn btn-outline-primary modalBtn editBtn" data-bs-toggle="modal" data-bs-target="##myModal" data-id="#contact.getContactID()#">EDIT</button>
+                                    <button type="button" class="btn btn-outline-primary modalBtn editBtn forHobbyBtn" data-bs-toggle="modal" data-bs-target="##myModal" data-id="#contact.getContactID()#">EDIT</button>
                                 </td>
                                 <td>
                                     <button type="button" class="btn btn-outline-primary modalBtn deleteBtn" data-bs-toggle="modal" data-id="#contact.getContactID()#">DELETE</button>

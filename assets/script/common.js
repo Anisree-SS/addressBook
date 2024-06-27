@@ -49,31 +49,22 @@ $(document).ready(function() {
         return false;
     });
 
-    function multiSelect() {
-        var hobbies = [];
-        $('#optionsList option.selected').each(function() {
-            hobbies.push($(this).text());
-        });
-        if (hobbies.length > 0) {
-            $('.selectBox').text(hobbies.join(','));
-        } else {
-            $('.selectBox').text('Select Hobbies');
-
-        }
-    }
-
-    $('.hobbyStyle .selectBox').click(function() {
-        $(this).toggleClass('active');
-        $('#optionsList').toggle();
-    });
-
-    $('#optionsList').on('click', 'option', function(event) {
-        event.preventDefault();
-        $(this).toggleClass('selected');
-        this.selected = $(this).hasClass('selected');
-        multiSelect();
-    });
-
+    $('.forHobbyBtn').on('click', function() {
+        $('#strHobbyList').find('option').remove();
+		$.ajax({
+			url: '../models/contact.cfc?method=ListHobby',
+            dataType: 'json',
+			success: function(response) {
+                $.each(response, function(index, hobbies) {
+                    $('#strHobbyList').append('<option value="' + hobbies.hobbyId + '">' + hobbies.hobbyName + '</option>');
+                });				
+			},
+			error: function(xhr, status, error) {
+				console.log("Error occurred while fetching hobbies:", error);
+			}
+		});
+	});
+	
     $('#createForm').on("submit",function() {
         $("#saveContactValidationMsg").text("");
         var strEmailId=$('#strEmailId').val().trim();
@@ -174,7 +165,10 @@ $(document).ready(function() {
                     $('#intPincode').prop("value",response.Pincode);
                     $('#strEmailId').prop("value",response.Email);
                     $('#intPhone').prop("value",response.Phone);
-                    $('.selectBox').html(response.Hobbies?response.Hobbies:"No Hobbies");
+                    var hobbyValues=response.HobbiesId;
+                    $.each(hobbyValues.split(","), function(i,e){
+                        $("#strHobbyList option[value='" + e + "']").prop("selected", true);
+                    });
                     $('.picture').attr('src','../assets/uploads/'+response.Photo);
                 }
             }
@@ -296,18 +290,7 @@ $(document).ready(function() {
         var strEmailId=$('#strEmailId').val().trim();
         var intPincode=$('#intPincode').val().trim();
         var filePhoto = $('#filePhoto')[0].files[0];
-        var aryHobbies = [];
-        if(intContactId == 0){
-            $('#optionsList option.selected').each(function() {
-                aryHobbies.push($(this).val());
-            });
-            if(aryHobbies.length==0)
-                aryHobbies='11';
-        }else{
-            $('#optionsList option.selected').each(function() {
-                aryHobbies.push($(this).val());
-            });
-        }
+        var aryHobbies = $("#strHobbyList").val();
         var formData = new FormData();
         formData.append('intContactId', intContactId);
         formData.append('strTitle', strTitle);
@@ -556,3 +539,4 @@ $(document).ready(function() {
         });
     }
 });
+
