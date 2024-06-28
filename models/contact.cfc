@@ -384,13 +384,7 @@
                                     </cfquery>
                                 </cfloop>
                             </cfif>
-                            <cfquery name="local.setResult">
-                                insert into resultsTable(contactId,Result)
-                                        values(
-                                            <cfqueryparam value="#local.id#" cfsqltype="cf_sql_integer">,
-                                            <cfqueryparam value="Added" cfsqltype="cf_sql_varchar">
-                                        )
-                            </cfquery>
+                            <cfset local.resultError="Added">
                         </cfif>
                         <cfelse>
                             <cfquery name="local.getContactId">
@@ -457,14 +451,16 @@
                                         where contactId = <cfqueryparam value="#local.getContactId.contactId#" cfsqltype="cf_sql_integer">
                                     </cfquery>
                             </cfif>
-                        <cfquery name="local.setResult">
-                            insert into resultsTable(contactId,Result)
-                                    values(
-                                        <cfqueryparam value="#local.getContactId.contactId#" cfsqltype="cf_sql_integer">,
-                                        <cfqueryparam value="Updated" cfsqltype="cf_sql_varchar">
-                                    )
-                        </cfquery>
+                            <cfset local.id=local.getContactId.contactId>
+                            <cfset local.resultError="Updated">
                     </cfif>
+                    <cfquery name="local.setResult">
+                        insert into resultsTable(contactId,Result)
+                                values(
+                                    <cfqueryparam value="#local.id#" cfsqltype="cf_sql_integer">,
+                                    <cfqueryparam value="#local.resultError#" cfsqltype="cf_sql_varchar">
+                                )
+                    </cfquery>
                     <cfelse>
                         <cfquery name="local.missingData">
                             INSERT INTO missingTable(Title,FirstName,LastName,Gender,DOB,Photo,Address,street,Email,userId,pincode,Phone,Result)
