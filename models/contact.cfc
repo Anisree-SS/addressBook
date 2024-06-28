@@ -283,52 +283,56 @@
             </cfquery>
             <cfloop query="#spreadsheetData#">
                 <cfset local.resultError=''>
-                <cfif len(trim(spreadsheetData.Title)) EQ 0>
-                    <cfset local.resultError&=','&'Title missing'>
-                </cfif>
-                <cfif len(trim(spreadsheetData.FirstName)) EQ 0>
-                    <cfset local.resultError&=','&'FirstName missing'>
-                </cfif>
-                <cfif len(trim(spreadsheetData.LastName)) EQ 0>
-                    <cfset local.resultError&=','&'LastName missing'>
-                </cfif> 
-                <cfif len(trim(spreadsheetData.Gender)) EQ 0>
-                    <cfset local.resultError&=','&'Gender missing'>
-                </cfif> 
-                <cfif len(trim(spreadsheetData.DOB)) EQ 0>
-                    <cfset local.resultError&=','&'DOB missing'>
-                </cfif> 
-                <cfif len(trim(spreadsheetData.Photo)) EQ 0>
-                    <cfset local.resultError&=','&'Photo missing'>
-                </cfif> 
-                <cfif len(trim(spreadsheetData.Address)) EQ 0>
-                    <cfset local.resultError&=','&'Address missing'>
-                </cfif> 
-                <cfif len(trim(spreadsheetData.street)) EQ 0>
-                    <cfset local.resultError&=','&'street missing'>
-                </cfif>
-                <cfif len(trim(spreadsheetData.Email)) EQ 0>
-                    <cfset local.resultError&=','&'Email missing'>
-                </cfif>
-                <cfif len(trim(spreadsheetData.Pincode)) EQ 0>
-                    <cfset local.resultError&=','&'Pincode missing'>
-                </cfif>
-                <cfif len(trim(spreadsheetData.Phone)) EQ 0>
-                    <cfset local.resultError&=','&'Phone missing'>
-                </cfif>
-                <cfquery name="local.qryHobbyList">
-                    select hobbyName
-                    from hobbyList
-                </cfquery>
-                <cfset local.hobbyList=valueList(local.qryHobbyList.hobbyName)>
-                <cfset local.count = 0>
-                <cfloop list="#spreadsheetData.Hobbies#" index="local.hobby">
-                    <cfif NOT ListFind(local.hobbyList, local.hobby)>
-                        <cfset local.count+=1>
-                    </cfif>
-                </cfloop>
-                <cfif local.count NEQ 0>
-                    <cfset local.resultError&=','&'Unvalid Hobbies'>
+                <cfif len(trim(spreadsheetData.Title)) EQ 0 and len(trim(spreadsheetData.FirstName)) EQ 0 and len(trim(spreadsheetData.LastName)) EQ 0 and len(trim(spreadsheetData.Gender)) EQ 0 and len(trim(spreadsheetData.DOB)) EQ 0 and len(trim(spreadsheetData.Photo)) EQ 0 and len(trim(spreadsheetData.Address)) EQ 0 and len(trim(spreadsheetData.street)) EQ 0 and len(trim(spreadsheetData.Email)) EQ 0 and len(trim(spreadsheetData.Pincode)) EQ 0 and len(trim(spreadsheetData.Phone)) EQ 0 and len(trim(spreadsheetData.Hobbies)) EQ 0 >
+                    <cfset local.resultError &= "Empty row">
+                    <cfelse>
+                        <cfif len(trim(spreadsheetData.Title)) EQ 0>
+                            <cfset local.resultError&=','&'Title missing'>
+                        </cfif>
+                        <cfif len(trim(spreadsheetData.FirstName)) EQ 0>
+                            <cfset local.resultError&=','&'FirstName missing'>
+                        </cfif>
+                        <cfif len(trim(spreadsheetData.LastName)) EQ 0>
+                            <cfset local.resultError&=','&'LastName missing'>
+                        </cfif> 
+                        <cfif len(trim(spreadsheetData.Gender)) EQ 0>
+                            <cfset local.resultError&=','&'Gender missing'>
+                        </cfif> 
+                        <cfif len(trim(spreadsheetData.DOB)) EQ 0>
+                            <cfset local.resultError&=','&'DOB missing'>
+                        </cfif> 
+                        <cfif len(trim(spreadsheetData.Photo)) EQ 0>
+                            <cfset local.resultError&=','&'Photo missing'>
+                        </cfif> 
+                        <cfif len(trim(spreadsheetData.Address)) EQ 0>
+                            <cfset local.resultError&=','&'Address missing'>
+                        </cfif> 
+                        <cfif len(trim(spreadsheetData.street)) EQ 0>
+                            <cfset local.resultError&=','&'street missing'>
+                        </cfif>
+                        <cfif len(trim(spreadsheetData.Email)) EQ 0>
+                            <cfset local.resultError&=','&'Email missing'>
+                        </cfif>
+                        <cfif len(trim(spreadsheetData.Pincode)) EQ 0>
+                            <cfset local.resultError&=','&'Pincode missing'>
+                        </cfif>
+                        <cfif len(trim(spreadsheetData.Phone)) EQ 0>
+                            <cfset local.resultError&=','&'Phone missing'>
+                        </cfif>
+                        <cfquery name="local.qryHobbyList">
+                            select hobbyName
+                            from hobbyList
+                        </cfquery>
+                        <cfset local.hobbyList=valueList(local.qryHobbyList.hobbyName)>
+                        <cfset local.count = 0>
+                        <cfloop list="#spreadsheetData.Hobbies#" index="local.hobby">
+                            <cfif NOT ListFind(local.hobbyList, local.hobby)>
+                                <cfset local.count+=1>
+                            </cfif>
+                        </cfloop>
+                        <cfif local.count NEQ 0>
+                            <cfset local.resultError&=','&'Unvalid Hobbies'>
+                        </cfif>
                 </cfif>
                 <cfif len(local.resultError) EQ 0>
                     <cfquery name='qryCheckContact'>
