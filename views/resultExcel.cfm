@@ -1,9 +1,8 @@
 <cfoutput>
-    <cfset local.contactData = EntityLoad("displayORM")>
+    <cfset local.contactData = EntityLoad("displayORM", {userId="#session.userId#"})>
     <cfset local.missingData=EntityLoad("missingDataORM")>
     <cfset local.excelQry = queryNew("Title,FirstName,LastName,Gender,DOB,Photo,Address,street,Email,pincode,Phone,Hobbies,Results","varchar,varchar,varchar,varchar,varchar,varchar,varchar,varchar,varchar,varchar,varchar,varchar,varchar")> 
     <cfloop array=#local.missingData# index="local.missing">
-        <cfif session.userId EQ local.missing.getuserId()>
             <cfset queryAddRow(local.excelQry, 1)>
             <cfset querySetCell(local.excelQry, "Title", local.missing.getTitle())>
             <cfset querySetCell(local.excelQry, "FirstName", local.missing.getFirstName())>
@@ -18,7 +17,6 @@
             <cfset querySetCell(local.excelQry,'Phone',local.missing.getPhone())>
             <cfset querySetCell(local.excelQry,'Hobbies',local.missing.getHobbies())>
             <cfset querySetCell(local.excelQry,'Results',local.missing.getResult())>
-        </cfif>
     </cfloop>
     <cfloop array=#local.contactData# index='local.contact'>
         <cfif session.userId EQ local.contact.getuserId()>

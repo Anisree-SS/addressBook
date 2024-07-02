@@ -36,7 +36,7 @@
                     <div class="modal-dialog modal-lg bgColor p-2 d-flex w-50">
                         <div class="modal-content border-0">
                             <div class="d-flex justify-content-end m-3 mb-0 mt-4 gap-3">
-                                <button onclick="window.location.href = 'excelDownload.cfm';" class="btn btn-outline-success p-1">Template with data</button>
+                                <button onclick="window.location.href = 'views/excelDownload.cfm';" class="btn btn-outline-success p-1">Template with data</button>
                                 <button onclick="window.location.href = 'views/excelHeader.cfm';" class="btn btn-outline-info p-1">Plain Template</button>
                             </div> 
                             <div class="m-3 mb-0 border-bottom">
