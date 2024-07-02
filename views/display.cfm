@@ -27,22 +27,25 @@
                     CREATE CONTACT
                 </button>
             </div>
+<!---       Excel upload       --->
             <div class="d-flex justify-content-center mb-2">
                 <button type="button" class="btn-primary btn modalBtn" data-bs-toggle="modal" data-bs-target="##uploadModel" id="uploadExcel">
                     UPLOAD EXCEL
                 </button>
                 <div class="modal bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" id="uploadModel">
-                    <div class="modal-dialog bgColor p-2 d-flex">
+                    <div class="modal-dialog modal-lg bgColor p-2 d-flex w-50">
                         <div class="modal-content border-0">
-                            <div class="m-5 mb-2 bgColor">
-                                <center>
-                                    <h6 class="modal-title text-primary fw-bold p-1">UPLOAD CONTACTS</h6>
-                                </center>
+                            <div class="d-flex justify-content-end m-3 mb-0 mt-4 gap-3">
+                                <button onclick="window.location.href = 'excelDownload.cfm';" class="btn btn-outline-success p-1">Template with data</button>
+                                <button onclick="window.location.href = 'views/excelHeader.cfm';" class="btn btn-outline-info p-1">Plain Template</button>
+                            </div> 
+                            <div class="m-3 mb-0 border-bottom">
+                                <h6 class="modal-title text-primary fw-bold p-1">UPLOAD EXCEL</h6>
                             </div>
                             <center>
                                 <p class="errorMsgHeight mb-0" id="uploadError"></p>
                             </center>
-                            <div class="modal-body mt-0">
+                            <div class="modal-body mt-0 d-flex justify-content-start pt-3 pb-5">
                                 <form action='display.cfm' method='post' enctype='multipart/form-data' id='uploadContact'>
                                     <div class="d-flex justify-content-center mb-4">
                                         <div>
@@ -50,8 +53,8 @@
                                             <input type="file" name="fileExcel" id="fileExcel" class="uploadfile" value=""> 
                                         </div>
                                     </div>
-                                    <div class="d-flex justify-content-evenly mt-4">
-                                        <input type="button" class="btn btn-outline-dark" data-bs-dismiss="modal" value="CLOSE">
+                                    <div class="d-flex justify-content-start mt-4 gap-5">
+                                        <input type="button" class="btn btn-outline-dark" data-bs-dismiss="modal" value="CLOSE" id="excelClose">
                                         <input type="submit" value="SUBMIT" class="btn btn-outline-primary" name="submit">
                                     </div>
                                </form>
@@ -59,6 +62,7 @@
                         </div>
                     </div>
                 </div>
+<!--- End excel --->
                 <div class="modal bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" id="myModal">
                     <div class="modal-dialog modal-lg bgColor p-2 d-flex w-75">
                         <div class="modal-content border-0">
@@ -71,7 +75,7 @@
                                 <p class="errorMsgHeight mb-0" id="saveContactValidationMsg"></p>
                             </center>
                             <div class="modal-body mt-0">
-                                <form action="display.cfm" method="post" id="createForm" enctype="multipart/form-data">
+                                <form action="views/display.cfm" method="post" id="createForm" enctype="multipart/form-data">
                                     <p class="mb-0 text-primary fw-bold">Personal Contact</p>
                                     <hr class="mt-0">
                                     <div class="d-flex justify-content-between mb-4">

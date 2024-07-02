@@ -39,7 +39,7 @@
     </cfloop>
     <cfset excelFilePath = ExpandPath("./contactList.xlsx")>
     <cfspreadsheet action="write" filename="#excelFilePath#" query="excelQry" sheetname="contacts">
-    <cfheader name="Content-Disposition" value="attachment; filename=contactList.xlsx">
+    <cfheader name="Content-Disposition" value="attachment; filename=Template_with_data.xlsx">
     <cfcontent type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" file="#excelFilePath#" deleteFile="true">
 </cfoutput>
 </body>

@@ -207,7 +207,7 @@ $(document).ready(function() {
                 success: function(response) {
                     if(response.success){
                         $('#uploadError').html(response.msg).css("color", "green");
-                        window.location="../views/display.cfm";
+                        window.location='views/resultExcel.cfm';
                     }
                     else{
                         $('#uploadError').html(response.msg).css("color", "red");
@@ -216,6 +216,10 @@ $(document).ready(function() {
             });
         } 
         return false;
+    });
+
+    $('#excelClose').on('click',function(){
+        window.location='../views/display.cfm';
     });
 
     $('#googleLogin').on('click', function() {
