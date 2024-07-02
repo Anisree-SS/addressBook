@@ -75,7 +75,7 @@
                                 <p class="errorMsgHeight mb-0" id="saveContactValidationMsg"></p>
                             </center>
                             <div class="modal-body mt-0">
-                                <form action="display.cfm" method="post" id="createForm" enctype="multipart/form-data">
+                                <form action="views/display.cfm" method="post" id="createForm" enctype="multipart/form-data">
                                     <p class="mb-0 text-primary fw-bold">Personal Contact</p>
                                     <hr class="mt-0">
                                     <div class="d-flex justify-content-between mb-4">

@@ -219,7 +219,7 @@ $(document).ready(function() {
     });
 
     $('#excelClose').on('click',function(){
-        window.location='views/display.cfm';
+        window.location='../views/display.cfm';
     });
 
     $('#googleLogin').on('click', function() {
