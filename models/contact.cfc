@@ -331,7 +331,7 @@
                             </cfif>
                         </cfloop>
                         <cfif local.count NEQ 0>
-                            <cfset local.resultError&=','&'Unvalid Hobbies'>
+                            <cfset local.resultError&=','&'Invalid Hobbies'>
                         </cfif>
                 </cfif>
                 <cfif len(local.resultError) EQ 0>
