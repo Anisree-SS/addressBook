@@ -88,5 +88,17 @@ component {
         }
         return {"success":false,'msg':'Something went wrong!!!'}
     }
+
+    remote any function excelDownloadFunction() returnFormat='json'{
+        session.excelName=true;
+        return { "success": true};
+    }
+
+    remote any function excelDownloadCommon() returnFormat='json'{
+        session.excelName=false;
+        return { "success": true};
+    }
+
 }
+
 

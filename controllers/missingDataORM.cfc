@@ -14,5 +14,7 @@ component persistent="true" table="missingTable" {
     property name="userId";
     property name="Result";
     property name="Hobbies";
+    property name="fileName";
+
 }
 
