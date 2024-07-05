@@ -321,6 +321,7 @@
                             <cfset arrayAppend(local.hobbyIdAry,"#local.getHobbyId.hobbyId#")>
                         <cfelse>
                             <cfset count+=1>
+                            <cfbreak>
                         </cfif>
                     </cfloop>
                     <cfif local.count NEQ 0>
