@@ -26,6 +26,7 @@ component
 		session.profileURL=false;
 		session.excelName=false;
 		session.fileName='';
+		session.resultFile='';
 	}
 
 	function onRequestStart( String scriptName ){

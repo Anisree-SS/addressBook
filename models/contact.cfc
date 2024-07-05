@@ -270,11 +270,7 @@
         <cfset arrayAppend(local.dbColumnNames,'Hobbies')>
         <cfif arrayLen(local.excelColumnNames) Eq arrayLen(local.dbColumnNames)>
             <cfspreadsheet action="read" src="#variables.FilePath#" query="spreadsheetData" headerrow='1' excludeHeaderRow = "true"> 
-            <cfquery name="checkFileName">
-                delete from missingTable
-                where fileName=<cfqueryparam value="#session.fileName#" cfsqltype="cf_sql_varchar">
-                AND userId=<cfqueryparam value="#session.userId#" cfsqltype="cf_sql_integer">
-            </cfquery>
+            <cfset local.excelRow=[]>
             <cfloop query="#spreadsheetData#">
                 <cfset local.resultError=''>
                 <cfif len(trim(spreadsheetData.Title)) EQ 0 and len(trim(spreadsheetData.FirstName)) EQ 0 and len(trim(spreadsheetData.LastName)) EQ 0 and len(trim(spreadsheetData.Gender)) EQ 0 and len(trim(spreadsheetData.DOB)) EQ 0 and len(trim(spreadsheetData.Photo)) EQ 0 and len(trim(spreadsheetData.Address)) EQ 0 and len(trim(spreadsheetData.street)) EQ 0 and len(trim(spreadsheetData.Email)) EQ 0 and len(trim(spreadsheetData.Pincode)) EQ 0 and len(trim(spreadsheetData.Phone)) EQ 0 and len(trim(spreadsheetData.Hobbies)) EQ 0 >
@@ -313,23 +309,18 @@
                     <cfif len(trim(spreadsheetData.Phone)) EQ 0>
                         <cfset local.resultError&=','&'Phone missing'>
                     </cfif>
-                    <cfquery name="local.qryHobbyList">
-                        select hobbyName
-                        from hobbyList
-                    </cfquery>
-                    <cfset local.hobbyList=valueList(local.qryHobbyList.hobbyName)>
                     <cfset local.count = 0>
                     <cfset local.hobbyIdAry=[]>
                     <cfloop list="#spreadsheetData.Hobbies#" index="local.hobby">
-                        <cfif NOT ListFind(local.hobbyList, local.hobby)>
-                            <cfset local.count+=1>
-                        <cfelse>
-                            <cfquery name="local.getHobbyId">
-                                select hobbyId 
-                                from hobbyList
-                                where hobbyName=<cfqueryparam value="#local.hobby#" cfsqltype="cf_sql_varchar">
-                            </cfquery>
+                        <cfquery name="local.getHobbyId">
+                            select hobbyId 
+                            from hobbyList
+                            where hobbyName=<cfqueryparam value="#local.hobby#" cfsqltype="cf_sql_varchar">
+                        </cfquery>
+                        <cfif local.getHobbyId.recordCount>
                             <cfset arrayAppend(local.hobbyIdAry,"#local.getHobbyId.hobbyId#")>
+                        <cfelse>
+                            <cfset count+=1>
                         </cfif>
                     </cfloop>
                     <cfif local.count NEQ 0>
@@ -423,37 +414,44 @@
                         <cfset local.id=local.qryCheckContact.contactId>
                         <cfset local.resultError="Updated">
                     </cfif>
-                    <cfquery name="local.setResult">
-                        insert into resultsTable(contactId,Result,fileName)
-                                values(
-                                    <cfqueryparam value="#local.id#" cfsqltype="cf_sql_integer">,
-                                    <cfqueryparam value="#local.resultError#" cfsqltype="cf_sql_varchar">,
-                                    <cfqueryparam value="#session.fileName#" cfsqltype="cf_sql_varchar">
-                                )
-                    </cfquery>
-                <cfelse>
-                    <cfquery name="local.missingData">
-                        INSERT INTO missingTable(Title,FirstName,LastName,Gender,DOB,Photo,Address,street,Email,userId,pincode,Phone,Result,Hobbies,fileName)
-                            values(
-                                <cfqueryparam value="#spreadsheetData.Title#" cfsqltype="cf_sql_varchar">,
-                                <cfqueryparam value="#spreadsheetData.FirstName#" cfsqltype="cf_sql_varchar">,
-                                <cfqueryparam value="#spreadsheetData.LastName#" cfsqltype="cf_sql_varchar">,
-                                <cfqueryparam value="#spreadsheetData.Gender#" cfsqltype="cf_sql_varchar">,
-                                <cfqueryparam value="#spreadsheetData.DOB#" cfsqltype="cf_sql_date">,
-                                <cfqueryparam value="#spreadsheetData.Photo#" cfsqltype="cf_sql_varchar">,
-                                <cfqueryparam value="#spreadsheetData.Address#" cfsqltype="cf_sql_varchar">,
-                                <cfqueryparam value="#spreadsheetData.street#" cfsqltype="cf_sql_varchar">,
-                                <cfqueryparam value="#spreadsheetData.Email#" cfsqltype="cf_sql_varchar">,
-                                <cfqueryparam value="#session.userId#" cfsqltype="cf_sql_integer">,
-                                <cfqueryparam value="#spreadsheetData.Pincode#" cfsqltype="cf_sql_varchar">,
-                                <cfqueryparam value="#spreadsheetData.Phone#" cfsqltype="cf_sql_varchar">,
-                                <cfqueryparam value="#local.resultError#" cfsqltype="cf_sql_varchar">,
-                                <cfqueryparam value="#spreadsheetData.Hobbies#" cfsqltype="cf_sql_varchar">,
-                                <cfqueryparam value="#session.fileName#" cfsqltype="cf_sql_varchar">
-                            )
-                    </cfquery>
-                </cfif>                
+                </cfif>    
+                <cfset local.results = {
+                    "Title": spreadsheetData.Title,
+                    "FirstName": spreadsheetData.FirstName,
+                    "LastName": spreadsheetData.LastName,
+                    "Gender": spreadsheetData.Gender,
+                    "DOB": spreadsheetData.DOB,
+                    "Photo": spreadsheetData.Photo,
+                    "Address": spreadsheetData.Address,
+                    "street": spreadsheetData.street,
+                    "Pincode": spreadsheetData.Pincode,
+                    "Email":spreadsheetData.Email,
+                    "Phone": spreadsheetData.Phone,
+                    "Hobbies": spreadsheetData.Hobbies,
+                    "Result":local.resultError
+                }>    
+                <cfset arrayAppend(local.excelRow, local.results)>
             </cfloop>
+            <cfset local.excelQry = queryNew("Title,FirstName,LastName,Gender,DOB,Photo,Address,street,Email,pincode,Phone,Hobbies,Results","varchar,varchar,varchar,varchar,varchar,varchar,varchar,varchar,varchar,varchar,varchar,varchar,varchar")> 
+            <cfloop array="#local.excelRow#" index="local.element">
+                <cfset queryAddRow(local.excelQry, 1)>
+                <cfset querySetCell(local.excelQry, "Title", local.element.Title)>
+                <cfset querySetCell(local.excelQry, "FirstName", local.element.FirstName)>
+                <cfset querySetCell(local.excelQry, "LastName", local.element.LastName)>
+                <cfset querySetCell(local.excelQry,"Gender",local.element.Gender)>
+                <cfset querySetCell(local.excelQry,"DOB",local.element.DOB)>
+                <cfset querySetCell(local.excelQry, "Photo",local.element.Photo)>
+                <cfset querySetCell(local.excelQry,'Address',local.element.Address)>
+                <cfset querySetCell(local.excelQry,'Street',local.element.street)>
+                <cfset querySetCell(local.excelQry, "PinCode", local.element.Pincode)>
+                <cfset querySetCell(local.excelQry,'Email',local.element.Email)>
+                <cfset querySetCell(local.excelQry,'Phone',local.element.Phone)>
+                <cfset querySetCell(local.excelQry,'Hobbies',local.element.Hobbies)>
+                <cfset querySetCell(local.excelQry,'Results',local.element.Result)>
+            </cfloop>
+            <cfset local.excelFilePath = ExpandPath("../assets/downloads/contactList.xlsx")>
+            <cfspreadsheet action="write" filename="#local.excelFilePath#" query="local.excelQry" sheetname="results" overwrite="true">
+            <cfset session.resultFile=local.excelFilePath>
             <cfreturn {'success':true,'msg':'Contacts updated successfully'}>
         <cfelse>
             <cfreturn {'success':false,'msg':'Some columns are missing '}>      
