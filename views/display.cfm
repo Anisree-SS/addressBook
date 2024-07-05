@@ -7,7 +7,7 @@
         <a href='pdfDownload.cfm'>
             <img src="../assets/images/pdf.png" alt="pdf format" class="downloadIcon" title='PDF Download'>
         </a>
-        <a href="excelDownload.cfm">
+        <a id="excelBtn">
             <img src="../assets/images/excel.png" alt="excel format" class="downloadIcon" title='Excel Download'>
         </a>
         <button id='printBtn' class="btn btn-outline-none p-0">
@@ -32,11 +32,11 @@
                 <button type="button" class="btn-primary btn modalBtn" data-bs-toggle="modal" data-bs-target="##uploadModel" id="uploadExcel">
                     UPLOAD EXCEL
                 </button>
-                <div class="modal bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" id="uploadModel">
+                <div class="modal bd-example-modal-lg" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" id="uploadModel">
                     <div class="modal-dialog modal-lg bgColor p-2 d-flex w-50">
                         <div class="modal-content border-0">
                             <div class="d-flex justify-content-end m-3 mb-0 mt-4 gap-3">
-                                <button onclick="window.location.href = 'excelDownload.cfm';" class="btn btn-outline-success p-1">Template with data</button>
+                                <button class="btn btn-outline-success p-1" id="excelDownload">Template with data</button>
                                 <button onclick="window.location.href = 'views/excelHeader.cfm';" class="btn btn-outline-info p-1">Plain Template</button>
                             </div> 
                             <div class="m-3 mb-0 border-bottom">

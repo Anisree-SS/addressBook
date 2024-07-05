@@ -222,6 +222,30 @@ $(document).ready(function() {
         window.location='../views/display.cfm';
     });
 
+    $('#excelDownload').on('click',function(){
+        $.ajax({
+            url: '../controllers/contact.cfc?method=excelDownloadFunction',
+            type:'post',
+            dataType: 'json',
+            success: function(response) {
+                if(response.success)
+                    window.location='../views/excelDownload.cfm';
+            }
+        });
+    });
+
+    $('#excelBtn').on('click',function(){
+        $.ajax({
+            url: '../controllers/contact.cfc?method=excelDownloadCommon',
+            type:'post',
+            dataType: 'json',
+            success: function(response) {
+                if(response.success)
+                    window.location='../views/excelDownload.cfm';
+            }
+        });
+    });
+
     $('#googleLogin').on('click', function() {
         signIn();
     });
