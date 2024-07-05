@@ -271,6 +271,7 @@
         <cfif arrayLen(local.excelColumnNames) Eq arrayLen(local.dbColumnNames)>
             <cfspreadsheet action="read" src="#variables.FilePath#" query="spreadsheetData" headerrow='1' excludeHeaderRow = "true"> 
             <cfset local.excelRow=[]>
+            <cfset local.updateExcelRow=[]>
             <cfloop query="#spreadsheetData#">
                 <cfset local.resultError=''>
                 <cfif len(trim(spreadsheetData.Title)) EQ 0 and len(trim(spreadsheetData.FirstName)) EQ 0 and len(trim(spreadsheetData.LastName)) EQ 0 and len(trim(spreadsheetData.Gender)) EQ 0 and len(trim(spreadsheetData.DOB)) EQ 0 and len(trim(spreadsheetData.Photo)) EQ 0 and len(trim(spreadsheetData.Address)) EQ 0 and len(trim(spreadsheetData.street)) EQ 0 and len(trim(spreadsheetData.Email)) EQ 0 and len(trim(spreadsheetData.Pincode)) EQ 0 and len(trim(spreadsheetData.Phone)) EQ 0 and len(trim(spreadsheetData.Hobbies)) EQ 0 >
@@ -412,26 +413,45 @@
                                 where contactId = <cfqueryparam value="#local.qryCheckContact.contactId#" cfsqltype="cf_sql_integer">
                             </cfquery>
                         </cfif>
-                        <cfset local.id=local.qryCheckContact.contactId>
                         <cfset local.resultError="Updated">
                     </cfif>
+                    <cfset local.resultsUpdate = {
+                        "Title": spreadsheetData.Title,
+                        "FirstName": spreadsheetData.FirstName,
+                        "LastName": spreadsheetData.LastName,
+                        "Gender": spreadsheetData.Gender,
+                        "DOB": spreadsheetData.DOB,
+                        "Photo": spreadsheetData.Photo,
+                        "Address": spreadsheetData.Address,
+                        "street": spreadsheetData.street,
+                        "Pincode": spreadsheetData.Pincode,
+                        "Email":spreadsheetData.Email,
+                        "Phone": spreadsheetData.Phone,
+                        "Hobbies": spreadsheetData.Hobbies,
+                        "Result":local.resultError
+                    }>    
+                    <cfset arrayAppend(local.updateExcelRow, local.resultsUpdate)>
+                <cfelse>
+                    <cfset local.results = {
+                        "Title": spreadsheetData.Title,
+                        "FirstName": spreadsheetData.FirstName,
+                        "LastName": spreadsheetData.LastName,
+                        "Gender": spreadsheetData.Gender,
+                        "DOB": spreadsheetData.DOB,
+                        "Photo": spreadsheetData.Photo,
+                        "Address": spreadsheetData.Address,
+                        "street": spreadsheetData.street,
+                        "Pincode": spreadsheetData.Pincode,
+                        "Email":spreadsheetData.Email,
+                        "Phone": spreadsheetData.Phone,
+                        "Hobbies": spreadsheetData.Hobbies,
+                        "Result":local.resultError
+                    }>    
+                    <cfset arrayAppend(local.excelRow, local.results)>
                 </cfif>    
-                <cfset local.results = {
-                    "Title": spreadsheetData.Title,
-                    "FirstName": spreadsheetData.FirstName,
-                    "LastName": spreadsheetData.LastName,
-                    "Gender": spreadsheetData.Gender,
-                    "DOB": spreadsheetData.DOB,
-                    "Photo": spreadsheetData.Photo,
-                    "Address": spreadsheetData.Address,
-                    "street": spreadsheetData.street,
-                    "Pincode": spreadsheetData.Pincode,
-                    "Email":spreadsheetData.Email,
-                    "Phone": spreadsheetData.Phone,
-                    "Hobbies": spreadsheetData.Hobbies,
-                    "Result":local.resultError
-                }>    
-                <cfset arrayAppend(local.excelRow, local.results)>
+            </cfloop>
+            <cfloop array="#local.updateExcelRow#" index="local.index">
+                <cfset arrayAppend(local.excelRow,local.index)>
             </cfloop>
             <cfset local.excelQry = queryNew("Title,FirstName,LastName,Gender,DOB,Photo,Address,street,Email,pincode,Phone,Hobbies,Results","varchar,varchar,varchar,varchar,varchar,varchar,varchar,varchar,varchar,varchar,varchar,varchar,varchar")> 
             <cfloop array="#local.excelRow#" index="local.element">
@@ -450,7 +470,9 @@
                 <cfset querySetCell(local.excelQry,'Hobbies',local.element.Hobbies)>
                 <cfset querySetCell(local.excelQry,'Results',local.element.Result)>
             </cfloop>
-            <cfset local.excelFilePath = ExpandPath("../assets/downloads/contactList.xlsx")>
+            <cfset local.requestID = createUUID()>
+            <cfset local.uniqueFileName="contactList"&local.requestID&".xlsx">
+            <cfset local.excelFilePath = ExpandPath("/assets/downloads/#local.uniqueFileName#")>
             <cfspreadsheet action="write" filename="#local.excelFilePath#" query="local.excelQry" sheetname="results" overwrite="true">
             <cfset session.resultFile=local.excelFilePath>
             <cfreturn {'success':true,'msg':'Contacts updated successfully'}>

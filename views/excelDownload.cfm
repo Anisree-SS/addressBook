@@ -1,4 +1,4 @@
-<cfset variables.excelFileName= session.excelName?"Template_with_data.xlsx":"contacts_List.xlsx">
+<!--- <cfset variables.excelFileName= session.excelName?"Template_with_data.xlsx":"contacts_List.xlsx"> --->
 <cfoutput>
     <cfset contacts = EntityLoad("displayORM" , {userId="#session.userId#"})>
     <cfset excelQry = queryNew("Title,FirstName,LastName,Gender,DOB,Photo,Address,street,Email,pincode,Phone,Hobbies","varchar,varchar,varchar,varchar,varchar,varchar,varchar,varchar,varchar,varchar,varchar,varchar")> 
@@ -38,7 +38,7 @@
     </cfloop>
     <cfset excelFilePath = ExpandPath("./contactList.xlsx")>
     <cfspreadsheet action="write" filename="#excelFilePath#" query="excelQry" sheetname="contacts">
-    <cfheader name="Content-Disposition" value="attachment; filename=#variables.excelFileName#">
+    <cfheader name="Content-Disposition" value="attachment; filename=#url.pageName#">
     <cfcontent type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" file="#excelFilePath#" deleteFile="true">
 </cfoutput>
 </body>
