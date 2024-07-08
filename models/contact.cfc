@@ -228,10 +228,6 @@
 
     <cffunction name="deleteContact" access='remote' returnFormat="json">
         <cfargument name="intContactId" type="numeric" required='true'>
-        <cfquery name="deleteResult">
-            delete from resultsTable
-            where contactId=<cfqueryparam value="#arguments.intContactId#" cfsqltype="cf_sql_integer">
-        </cfquery>
         <cfquery name="deleteHobby">
             delete from hobbyTable
             where contactId=<cfqueryparam value="#arguments.intContactId#" cfsqltype="cf_sql_integer">
