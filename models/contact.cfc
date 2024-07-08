@@ -449,22 +449,9 @@
             <cfloop array="#local.updateExcelRow#" index="local.index">
                 <cfset arrayAppend(local.excelRow,local.index)>
             </cfloop>
-            <cfset local.excelQry = queryNew("Title,FirstName,LastName,Gender,DOB,Photo,Address,street,Email,pincode,Phone,Hobbies,Results","varchar,varchar,varchar,varchar,varchar,varchar,varchar,varchar,varchar,varchar,varchar,varchar,varchar")> 
+            <cfset local.excelQry = queryNew("Title,FirstName,LastName,Gender,DOB,Photo,Address,street,Email,pincode,Phone,Hobbies,Result","varchar,varchar,varchar,varchar,varchar,varchar,varchar,varchar,varchar,varchar,varchar,varchar,varchar")> 
             <cfloop array="#local.excelRow#" index="local.element">
-                <cfset queryAddRow(local.excelQry, 1)>
-                <cfset querySetCell(local.excelQry, "Title", local.element.Title)>
-                <cfset querySetCell(local.excelQry, "FirstName", local.element.FirstName)>
-                <cfset querySetCell(local.excelQry, "LastName", local.element.LastName)>
-                <cfset querySetCell(local.excelQry,"Gender",local.element.Gender)>
-                <cfset querySetCell(local.excelQry,"DOB",local.element.DOB)>
-                <cfset querySetCell(local.excelQry, "Photo",local.element.Photo)>
-                <cfset querySetCell(local.excelQry,'Address',local.element.Address)>
-                <cfset querySetCell(local.excelQry,'Street',local.element.street)>
-                <cfset querySetCell(local.excelQry, "PinCode", local.element.Pincode)>
-                <cfset querySetCell(local.excelQry,'Email',local.element.Email)>
-                <cfset querySetCell(local.excelQry,'Phone',local.element.Phone)>
-                <cfset querySetCell(local.excelQry,'Hobbies',local.element.Hobbies)>
-                <cfset querySetCell(local.excelQry,'Results',local.element.Result)>
+                <cfset queryAddRow(local.excelQry, local.element)>
             </cfloop>
             <cfset local.requestID = createUUID()>
             <cfset local.uniqueFileName="contactList"&local.requestID&".xlsx">
