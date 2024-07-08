@@ -449,10 +449,7 @@
             <cfloop array="#local.updateExcelRow#" index="local.index">
                 <cfset arrayAppend(local.excelRow,local.index)>
             </cfloop>
-            <cfset local.excelQry = queryNew("Title,FirstName,LastName,Gender,DOB,Photo,Address,street,Email,pincode,Phone,Hobbies,Result","varchar,varchar,varchar,varchar,varchar,varchar,varchar,varchar,varchar,varchar,varchar,varchar,varchar")> 
-            <cfloop array="#local.excelRow#" index="local.element">
-                <cfset queryAddRow(local.excelQry, local.element)>
-            </cfloop>
+            <cfset local.excelQry = queryNew("Title,FirstName,LastName,Gender,DOB,Photo,Address,street,Email,pincode,Phone,Hobbies,Result","varchar,varchar,varchar,varchar,varchar,varchar,varchar,varchar,varchar,varchar,varchar,varchar,varchar",local.excelRow)> 
             <cfset local.requestID = createUUID()>
             <cfset local.uniqueFileName="contactList"&local.requestID&".xlsx">
             <cfset local.excelFilePath = ExpandPath("/assets/downloads/#local.uniqueFileName#")>
