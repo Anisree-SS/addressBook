@@ -7,7 +7,7 @@
         <a href='pdfDownload.cfm'>
             <img src="../assets/images/pdf.png" alt="pdf format" class="downloadIcon" title='PDF Download'>
         </a>
-        <a id="excelBtn">
+        <a href='views/excelDownload.cfm?pageName=contacts_List.xlsx'>
             <img src="../assets/images/excel.png" alt="excel format" class="downloadIcon" title='Excel Download'>
         </a>
         <button id='printBtn' class="btn btn-outline-none p-0">
@@ -36,7 +36,7 @@
                     <div class="modal-dialog modal-lg bgColor p-2 d-flex w-50">
                         <div class="modal-content border-0">
                             <div class="d-flex justify-content-end m-3 mb-0 mt-4 gap-3">
-                                <button class="btn btn-outline-success p-1" id="excelDownload">Template with data</button>
+                                <button onclick="window.location.href = 'views/excelDownload.cfm?pageName=Template_with_data.xlsx';" class="btn btn-outline-success p-1">Template with data</button>
                                 <button onclick="window.location.href = 'views/excelHeader.cfm';" class="btn btn-outline-info p-1">Plain Template</button>
                             </div> 
                             <div class="m-3 mb-0 border-bottom">
